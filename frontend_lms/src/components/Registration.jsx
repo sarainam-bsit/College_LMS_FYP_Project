@@ -18,7 +18,8 @@ const Registration = () => {
     const [errorMessage, setErrorMessage] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
     const [showOTP, setShowOTP] = useState(false);
-    const [studentId, setStudentId] = useState(null);
+    const [userEmail, setUserEmail] = useState(null);
+
 
     const handleChange = (event) => {
         setstudentData({
@@ -33,6 +34,7 @@ const Registration = () => {
 
     const submitForm = async (e) => {
         e.preventDefault();
+        setUserEmail(studentData.Student_Email);
 
         const studentFormData = new FormData();
         studentFormData.append('Reg_No', studentData.Reg_No);
@@ -56,7 +58,13 @@ const Registration = () => {
                 setSuccessMessage(response.data.message);
 
                 if (response.data.student_id) {
-                    setStudentId(response.data.student_id);
+                    // If backend sends Student_Email in response, use that:
+                    if (response.data.Student_Email) {
+                        setUserEmail(response.data.Student_Email);
+                    } else {
+                        // fallback to frontend state:
+                        setUserEmail(studentData.Student_Email);
+                    }
                     setTimeout(() => {
                         setShowOTP(true);
                     }, 1000);
@@ -214,8 +222,11 @@ const Registration = () => {
                             </div>
                             <OTPverification
                                 show={showOTP}
-                                onClose={() => setShowOTP(false)}
-                                studentId={studentId}
+                                onClose={() => {
+                                    setShowOTP(false);
+                                    setUserEmail(null);  // reset karna bhi acha hota hai
+                                }}
+                                email={userEmail}
                             />
                             <div className="d-flex mt-3 justify-content-center align-items-center gap-2">
                                 <p className="mb-0">Already have an Account?</p>

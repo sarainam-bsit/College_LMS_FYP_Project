@@ -8,6 +8,8 @@ import random, datetime
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import check_password
+from .constants import LOGIN_MESSAGES
 
 
 @csrf_exempt
@@ -85,87 +87,151 @@ def student_register(request):
     }, status=status.HTTP_200_OK)
 @csrf_exempt
 @api_view(['POST'])
-def verify_OTP(request):
+def verify_otp(request):
     OTP = request.data.get('OTP_Digits')
     resend = request.data.get('resend')
-    student_id = request.data.get('student_id')  # React se aa raha hai
+    email = request.data.get('Email')  # Email instead of user_id
 
-    if not student_id:
-        return Response({"error": "Student ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+    if not email:
+        return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
 
+    user = None
+    user_type = None
+
+    # Try to find user in Student model (unverified)
     try:
-        student = Student.objects.get(id=student_id, Is_Verified=False)
+        user = Student.objects.get(Student_Email=email, Is_Verified=False)
+        user_type = 'student'
     except Student.DoesNotExist:
-        return Response({"error": "Student not found or already verified"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user = Teacher.objects.get(Teacher_Email=email, Teacher_Is_Verified=False)
+            user_type = 'teacher'
+        except Teacher.DoesNotExist:
+            return Response({"error": "User not found or already verified"}, status=status.HTTP_400_BAD_REQUEST)
 
-    # ✅ Resend OTP
     if resend == "true":
         new_OTP = str(random.randint(100000, 999999))
-        student.OTP_Digits = new_OTP
-        student.OTP_Expiry = timezone.now() + datetime.timedelta(minutes=10)
-        student.save()
+        if user_type == 'student':
+            user.OTP_Digits = new_OTP
+            user.OTP_Expiry = timezone.now() + datetime.timedelta(minutes=10)
+            email = user.Student_Email
+        else:
+            user.Teacher_OTP_Digits = new_OTP
+            user.Teacher_OTP_Expiry = timezone.now() + datetime.timedelta(minutes=10)
+            email = user.Teacher_Email
+
+        user.save()
 
         send_mail(
             subject="Your New OTP Code",
-            message=f"Your new OTP is {new_OTP}. It will expire in 10 minute.",
+            message=f"Your new OTP is {new_OTP}. It will expire in 10 minutes.",
             from_email="CollegeLMS.gcbskp.edu.pk",
-            recipient_list=[student.Student_Email],
+            recipient_list=[email],
             fail_silently=False,
         )
-        return Response({"message": f"New OTP sent to {student.Student_Email}"}, status=status.HTTP_200_OK)
+        return Response({"message": f"New OTP sent to {email}"}, status=status.HTTP_200_OK)
 
-    # ✅ Verify OTP
-    if OTP and student.OTP_Digits == OTP and student.OTP_Expiry and student.OTP_Expiry > timezone.now():
-        student.Is_Verified = True
-        student.Is_Registered = True
-        student.OTP_Digits = None
-        student.OTP_Expiry = None
-        student.save()
-        return Response({"message": f"OTP verified successfully for {student.Student_Email}"}, status=status.HTTP_200_OK)
+    # Verify OTP flow
+    if user_type == 'student':
+        otp_valid = OTP and user.OTP_Digits == OTP and user.OTP_Expiry and user.OTP_Expiry > timezone.now()
+        if otp_valid:
+            user.Is_Verified = True
+            user.Is_Registered = True
+            user.OTP_Digits = None
+            user.OTP_Expiry = None
+            user.save()
+            return Response({"message": f"OTP verified successfully for {user.Student_Email}"}, status=status.HTTP_200_OK)
+    else:
+        otp_valid = OTP and user.Teacher_OTP_Digits == OTP and user.Teacher_OTP_Expiry and user.Teacher_OTP_Expiry > timezone.now()
+        if otp_valid:
+            user.Teacher_Is_Verified = True
+            user.Teacher_OTP_Digits = None
+            user.Teacher_OTP_Expiry = None
+            user.save()
+            return Response({"message": f"OTP verified successfully for {user.Teacher_Email}"}, status=status.HTTP_200_OK)
 
     return Response({"error": "Invalid or expired OTP"}, status=status.HTTP_400_BAD_REQUEST)
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework import status
-from django.contrib.auth.hashers import check_password
-from .models import Student, Teacher
 
+USER_ROLES = {
+    'STUDENT': 'student',
+    'TEACHER': 'teacher',
+}
 @csrf_exempt
 @api_view(['POST'])
-def Login(request):
-    data = request.data
-    role = data.get('Role')
-    email = data.get('Email')
-    password = data.get('Password')
+def login_view(request):
+    Email = request.data.get('Email')
+    Password = request.data.get('Password')
+    Role = request.data.get('Role')
 
-    # if not role or not email or not password:
-    #     return Response({'error': 'Role, Email, and Password are required'}, status=status.HTTP_400_BAD_REQUEST)
+    errors = {}
+    handle_fields = ['Email', 'Password', 'Role']
 
-    # ---------- Student Login ----------
-    if role == "Student":
+    # 1. Empty fields check
+    for field in handle_fields:
+        values = request.data.get(field)
+        if not values or values.strip() == '':
+            errors[field] = f"{field} is required."
+
+    if errors:
+        return Response({"errors": errors}, status=status.HTTP_400_BAD_REQUEST)
+
+    # 2. Role check
+    if Role not in [USER_ROLES['STUDENT'], USER_ROLES['TEACHER']]:
+        return Response({"errors": {"general": "Role not found."}}, status=status.HTTP_404_NOT_FOUND)
+
+    # 3. Student Login
+    if Role == USER_ROLES['STUDENT']:
         try:
-            student = Student.objects.get(Student_Email=email)
-            if check_password(password, student.Student_Password) and student.Is_Registered and student.Is_Verified:
-                return Response({'message': 'Login successful (Student)'}, status=status.HTTP_200_OK)
-            else:
-                return Response({'error': 'Invalid password or account not verified'}, status=status.HTTP_400_BAD_REQUEST)
+            student = Student.objects.get(Student_Email=Email)
         except Student.DoesNotExist:
-            return Response({'error': 'Student account not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"errors": {"Email": "Email not found."}}, status=status.HTTP_404_NOT_FOUND)
 
-    # ---------- Teacher Login ----------
-    elif role == "Teacher":
+        if not student.Student_Password and not student.Is_Registered and not student.Is_Verified:
+            return Response({"errors": {"general": LOGIN_MESSAGES['Registration_Page']}}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not check_password(Password, student.Student_Password):
+            return Response({"errors": {"Password": "Invalid password."}}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": LOGIN_MESSAGES['Student_Dashboard']}, status=status.HTTP_200_OK)
+
+    # 4. Teacher Login
+    elif Role == USER_ROLES['TEACHER']:
         try:
-            teacher = Teacher.objects.get(Teacher_Email=email)
-            if check_password(password, teacher.Teacher_Password):
-                return Response({'message': 'Login successful (Teacher)'}, status=status.HTTP_200_OK)
-            else:
-                return Response({'error': 'Invalid password'}, status=status.HTTP_400_BAD_REQUEST)
+            teacher = Teacher.objects.get(Teacher_Email=Email)
         except Teacher.DoesNotExist:
-            return Response({'error': 'Teacher account not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"errors": {"Email": "Email not found."}}, status=status.HTTP_404_NOT_FOUND)
+        print(f"Teacher_Is_Verified value for {teacher.Teacher_Email}: {teacher.Teacher_Is_Verified}")
+        if not teacher.Teacher_Is_Verified and not teacher.Teacher_Password:
+    # Password set karo pehle
+            teacher.Teacher_Password = make_password(Password)
+            OTP = str(random.randint(100000, 999999))
+            teacher.Teacher_OTP_Digits = OTP
+            teacher.Teacher_OTP_Expiry = timezone.now() + datetime.timedelta(minutes=5)
+            teacher.Teacher_Is_Verified = False
+            teacher.save()
 
-    else:
-        return Response({'error': 'Invalid Role'}, status=status.HTTP_400_BAD_REQUEST)
+    # ✅ Email send
+            send_mail(
+            subject="Your OTP Code",
+            message=f"Your OTP is {OTP}. It will expire in 5 minute.",
+            from_email="CollegeLMS.gcbskp.edu.pk",
+            recipient_list=[teacher.Teacher_Email],
+            fail_silently=False,
+        )
+
+
+    # Phir response bhejo OTP verify karne ke liye
+            return Response({
+            "errors": {"general": LOGIN_MESSAGES['Verify_OTP']},
+            "teacher_id": teacher.id
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if not check_password(Password, teacher.Teacher_Password):
+            return Response({"errors": {"Password": "Invalid password."}}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": LOGIN_MESSAGES['Teacher_Dashboard']}, status=status.HTTP_200_OK)
+
+
+
 
         
       

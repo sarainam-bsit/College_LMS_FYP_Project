@@ -30,6 +30,8 @@ class Student(models.Model):
         ('Teacher', 'Teacher')
     ]
     
+   
+    
     Role = models.CharField(max_length=100, choices=Role_CHOICES)
     Program = models.CharField(max_length=100, choices=PROGRAM_CHOICES)
     Semester = models.CharField(max_length=100, choices=SEMESTER_CHOICES)
@@ -74,6 +76,7 @@ class Student(models.Model):
 
     def __str__(self):
         return f"{self.Student_Name} ({self.Program} - Semester {self.Semester})"
+
     
 class Teacher(models.Model):
     Role_CHOICES = [
@@ -84,6 +87,9 @@ class Teacher(models.Model):
     Teacher_Name = models.CharField(max_length=100)
     Teacher_Email = models.EmailField(unique=True)
     Teacher_Password = models.CharField(max_length=128, blank=True, null=True) 
+    Teacher_OTP_Digits = models.CharField(max_length=6, blank=True, null=True)
+    Teacher_OTP_Expiry = models.DateTimeField(blank=True, null=True)
+    Teacher_Is_Verified = models.BooleanField(default=False)
         
 
 

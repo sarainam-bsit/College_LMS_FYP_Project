@@ -68,6 +68,7 @@ const Main = () => {
       <Route path="/uploadlectures" element={isLoggedIn ? <UploadLectures /> : <Navigate to="/login" />} />
       <Route path="/uploadgrades" element={isLoggedIn ? <UploadGrades /> : <Navigate to="/login" />} />
       <Route path='/OTPverification' element = {<OTPverification/>}/>
+      
     </Routes>
   );
 };

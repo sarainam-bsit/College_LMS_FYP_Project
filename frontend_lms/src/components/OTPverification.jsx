@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const BaseUrl = 'http://127.0.0.1:8000/Account/verify_OTP/';
+const BaseUrl = 'http://127.0.0.1:8000/Account/verify_OTP_api/';
 
-const OTPverification = ({ show, onClose, studentId }) => {
+const OTPverification = ({ show, onClose, email }) => {
     const [OTPData, setOTPData] = useState({ OTP_Digits: '' });
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const navigate = useNavigate();
-
 
     useEffect(() => {
         if (show) {
@@ -21,43 +20,52 @@ const OTPverification = ({ show, onClose, studentId }) => {
         setOTPData({ ...OTPData, [event.target.name]: event.target.value });
     };
 
-    // ✅ Submit OTP
     const submitForm = async (e) => {
         e.preventDefault();
+
+        if (!OTPData.OTP_Digits) {
+            setErrorMessage("Please enter OTP.");
+            return;
+        }
+
         try {
             const response = await axios.post(BaseUrl, {
                 OTP_Digits: OTPData.OTP_Digits,
-                student_id: studentId
+                Email: email
+                
             });
+
             setSuccessMessage(response.data.message);
             setErrorMessage('');
             setOTPData({ OTP_Digits: '' });
+
+            // Redirect after short delay
             setTimeout(() => {
                 navigate("/login");
             }, 1000);
 
         } catch (error) {
             setSuccessMessage('');
-            setErrorMessage(error.response?.data?.error || "Something went wrong!");
+            setErrorMessage(error.response?.data?.error );
         }
     };
 
-    // ✅ Resend OTP
     const resendOTP = async () => {
         try {
             const response = await axios.post(BaseUrl, {
                 resend: "true",
-                student_id: studentId
+                Email: email
+              
             });
+
             setSuccessMessage(response.data.message);
             setErrorMessage('');
         } catch (error) {
             setSuccessMessage('');
-            setErrorMessage(error.response?.data?.error || "Failed to resend OTP!");
+            setErrorMessage(error.response?.data?.error );
         }
     };
 
-    // ✅ Modal ko conditionally render karo, hooks ko nahi
     if (!show) return null;
 
     return (
@@ -69,10 +77,11 @@ const OTPverification = ({ show, onClose, studentId }) => {
                         <button type="button" className="btn-close" onClick={onClose}></button>
                     </div>
                     <div className="modal-body">
-                        {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
-                        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+                        {successMessage && <p style={{ color: 'green', fontWeight: 'bold' }}>{successMessage}</p>}
+                        {errorMessage && <p style={{ color: 'red', fontWeight: 'bold' }}>{errorMessage}</p>}
+
                         <div className="mt-3">
-                            <label htmlFor="6DigitOTP">Enter 6 digit OTP</label>
+                            <label htmlFor="6DigitOTP" className="form-label">Enter 6 digit OTP</label>
                             <input
                                 type="number"
                                 name="OTP_Digits"
@@ -80,7 +89,7 @@ const OTPverification = ({ show, onClose, studentId }) => {
                                 onChange={handleChange}
                                 className="form-control"
                                 id="6DigitOTP"
-                                placeholder="6 digit OTP"
+                                placeholder="Enter OTP"
                                 required
                             />
                         </div>
