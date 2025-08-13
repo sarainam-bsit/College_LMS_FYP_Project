@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-%y*h)4mns3c2bwup_@8ye!zv5nxl*pa5qwmx%p74o(=s0bwk84
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -42,18 +42,22 @@ INSTALLED_APPS = [
     'import_export',
     'admin_extra_buttons',
     'rest_framework',
+    'Departments',
+    'Courses',
+    
    
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     "corsheaders.middleware.CorsMiddleware",
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'backend_api.urls'
@@ -82,7 +86,7 @@ WSGI_APPLICATION = 'backend_api.wsgi.application'
 DATABASES = {
     'default': {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",
+        "NAME": "College_LMS",
         "USER": "postgres",
         "PASSWORD": "123456",
         "HOST": "localhost",
@@ -131,7 +135,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-CORS_ALLOW_ALL_ORIGINS = True
+
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
@@ -139,3 +143,15 @@ REST_FRAMEWORK = {
     ],
 }
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+]
+
+CORS_ALLOW_CREDENTIALS = True
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]

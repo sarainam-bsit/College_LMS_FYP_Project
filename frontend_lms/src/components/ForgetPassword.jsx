@@ -1,0 +1,134 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import ForgetPasswordOTP from './ForgetPasswordOTP';
+
+const ForgetPassword = () => {
+    const [emailData, setEmailData] = useState({
+        Email: '',
+    });
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
+    const [showOTP, setShowOTP] = useState(false);
+
+    useEffect(() => {
+        document.title = 'Forget_Password';
+    }, []);
+
+    const handleChange = (event) => {
+        setEmailData({
+            ...emailData,
+            [event.target.name]: event.target.value
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const ForgetFormData = new FormData();
+        ForgetFormData.append('Email', emailData.Email);
+
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/Account/forget_password/', { Email: emailData.Email }, { withCredentials: true });
+            setMessage(response.data.message);
+            setError('');
+            setTimeout(() => {
+                setShowOTP(true);
+            }, 1000);
+        } catch (err) {
+            setError(err.response?.data?.error);
+            setMessage('');
+        }
+    };
+
+    return (
+        <>
+            <style>{`
+                .forget-container {
+                    max-width: 400px;
+                    margin: 60px auto;
+                    padding: 25px 30px;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                    background-color: #fff;
+                    font-family: 'Segoe UI', sans-serif;
+                }
+                .forget-heading {
+                    text-align: center;
+                    margin-bottom: 20px;
+                    color: #333;
+                    font-size: 1.5rem;
+                }
+                .forget-input {
+                    width: 100%;
+                    padding: 12px 15px;
+                    margin: 8px 0 5px 0;
+                    border-radius: 6px;
+                    border: 1.5px solid #ccc;
+                    font-size: 16px;
+                    outline: none;
+                    transition: border-color 0.3s;
+                }
+                .forget-input:focus {
+                    border-color: #d2691e;
+                }
+                .forget-button {
+                    background-color: #d2691e;
+                    color: white;
+                    border: none;
+                    padding: 12px 20px;
+                    font-size: 16px;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    transition: 0.3s ease;
+                    width: 100%;
+                    font-weight: bold;
+                }
+                .forget-button:hover {
+                    background-color: #b85c18;
+                    transform: scale(1.03);
+                }
+                .message {
+                    color: green;
+                    text-align: center;
+                    margin-bottom: 10px;
+                    font-size: 0.95rem;
+                }
+                .error {
+                    color: red;
+                    margin-left: 9px;
+                    margin-bottom: 10px;
+                    font-size: 0.95rem;
+                }
+            `}</style>
+
+            <div className="forget-container">
+                <h2 className="forget-heading">Forget Password</h2>
+                {message && <div className="message">{message}</div>}
+                
+
+                <form onSubmit={handleSubmit}>
+                    <label style={{ fontWeight: '500', marginBottom: '5px', display: 'block' }}>Email:</label>
+                    <input
+                        type="email"
+                        name='Email'
+                        value={emailData.Email}
+                        onChange={handleChange}
+                        placeholder="Enter your registered email"
+                        className="forget-input"
+                    />
+                    {error && <div className="error">{error}</div>}
+                    <button type="submit" className="forget-button">
+                        Send Reset Link
+                    </button>
+
+                    <ForgetPasswordOTP
+                        show={showOTP}
+                        onClose={() => setShowOTP(false)}
+                        email={emailData.Email}
+                    />
+                </form>
+            </div>
+        </>
+    );
+};
+
+export default ForgetPassword;

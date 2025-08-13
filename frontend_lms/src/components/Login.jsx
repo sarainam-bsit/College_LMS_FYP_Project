@@ -3,11 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import OTPverification from "./OTPverification";
 import Home from './Home';
-import { LOGIN_RESPONSE } from './constants';
+
 
 const BASE_URL = 'http://127.0.0.1:8000/Account/Login_api/';
 
-const Login = () => {
+const Login = ({ setIsLoggedIn, setUserRole }) => {
     const [loginData, setLoginData] = useState({
         Email: '',
         Password: '',
@@ -45,37 +45,60 @@ const Login = () => {
 
         try {
             const response = await axios.post(BASE_URL, formData);
+            console.log('Login response:', response.data);
 
-            setSuccessMessage(response.data.message);
+            const role = response.data.role;
             setLoginData({ Email: '', Password: '', Role: '' });
             setErrorMessage({});
 
-            if (response.data.message === LOGIN_RESPONSE.Student_Dashboard) {
-                navigate('/home');
-            } else if (response.data.message === LOGIN_RESPONSE.Teacher_Dashboard) {
-                navigate('/TeacherDashboard');
+            if (role === 'student' || role === 'teacher') {
+                localStorage.setItem('userRole', role);
+                localStorage.setItem('isLoggedIn', 'true');
+                setIsLoggedIn(true);
+                setUserRole(role);
+                setSuccessMessage(response.data?.message);
+
+                if (role === 'student') {
+
+
+                    setTimeout(() => {
+                        navigate('/home', { state: { successMessage: response.data.message } });
+                    }, 1000);
+
+                } else if (role === 'teacher') {
+                    setTimeout(() => {
+                        navigate('/TeacherDashboard',{ state: { successMessage: response.data.message } });
+                    }, 1000);
+                }
+            } else {
+                setErrorMessage({ general: 'Unknown role received' });
             }
         } catch (error) {
             setSuccessMessage('');
-            const backendErrors = error.response?.data?.errors || {};
-            setErrorMessage(backendErrors);
+            const backendErrors = error.response?.data || {};
+
+
 
             // Backend response errors
 
 
-            setErrorMessage(backendErrors);
 
-            if (backendErrors.general === LOGIN_RESPONSE.Verify_OTP) {
 
-                setShowOTP(true);
-                setUserEmail(loginData.Email);
+            if (backendErrors.errorcode === 'VERIFY_OTP') {
+                setTimeout(() => {
+                    setShowOTP(true);
+                    setUserEmail(loginData.Email);
+                }, 1000)
+
                 // if (error.response?.data?.teacher_id) {
                 //     setUserEmail(error.response.data.teacher_id);
                 // }
-            }
-
-            if (backendErrors.general === LOGIN_RESPONSE.Registration_Page) {
-                navigate('/registration');
+            } else if (backendErrors.errorcode === 'REGISTRATION_REQUIRED') {
+                setTimeout(() => {
+                    navigate('/registration', { state: { fromLogin: true } });
+                }, 1000);
+            } else {
+                setErrorMessage(backendErrors.errors || {})
             }
         }
     };
@@ -158,16 +181,17 @@ const Login = () => {
                 <Home />
                 <div className="login-overlay">
                     <div className="login-card">
-                        <form onSubmit={submitForm}>
+                        <form >
                             <h2>Login</h2>
 
-                            {errorMessage.general && (
-                                <div className="alert alert-danger">{errorMessage.general}</div>
-                            )}
+
 
                             {successMessage && (
-                                <div className="alert alert-success">{successMessage}</div>
+                                <div style={{ backgroundColor: 'lightgreen', padding: '10px', marginBottom: '10px', borderRadius: '5px' }}>
+                                    {successMessage}
+                                </div>
                             )}
+
 
                             <div className="mt-3">
                                 <label className='LoginLabel'>Email</label>
@@ -231,7 +255,7 @@ const Login = () => {
                                 </p>
                             </div>
 
-                            <button type="submit" className="LoginBtn btn btn-warning">Submit</button>
+                            <button onClick={submitForm} type="submit" className="LoginBtn btn btn-warning">Submit</button>
 
                             <OTPverification
                                 show={showOTP}
@@ -240,15 +264,15 @@ const Login = () => {
                                     setUserEmail(null);  // reset karna bhi acha hota hai
                                 }}
                                 email={userEmail}
+                                setIsLoggedIn={setIsLoggedIn}
+                            //  role={response.data.role} 
 
                             />
 
-                            <div className="d-flex mt-3 justify-content-center align-items-center gap-2">
-                                <p className="mb-0">If you have no Account?</p>
-                                <p className="mb-0">
-                                    <Link to="/registration" className="text-warning">Register</Link>
-                                </p>
-                            </div>
+                            {errorMessage.general && (
+                                <div className="alert alert-danger">{errorMessage.general}</div>
+                            )}
+
                         </form>
                     </div>
                 </div>

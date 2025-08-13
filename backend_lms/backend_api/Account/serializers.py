@@ -1,4 +1,4 @@
-from .models import Student
+from .models import Student, Teacher
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 
@@ -18,6 +18,14 @@ class StudentRegistrationSerializer(serializers.ModelSerializer):
         if 'Student_Password' in validated_data:
             validated_data['Student_Password'] = make_password(validated_data['Student_Password'])
         return super().update(instance, validated_data)
-                
+
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ['Student_Name', 'Roll_No']
+class TeacherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Teacher
+        fields = ['id','Teacher_Name',]
             
             

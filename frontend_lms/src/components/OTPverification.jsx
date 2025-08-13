@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const BaseUrl = 'http://127.0.0.1:8000/Account/verify_OTP_api/';
 
-const OTPverification = ({ show, onClose, email }) => {
+const OTPverification = ({ show, onClose, email, setIsLoggedIn }) => {
     const [OTPData, setOTPData] = useState({ OTP_Digits: '' });
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
@@ -31,22 +31,35 @@ const OTPverification = ({ show, onClose, email }) => {
         try {
             const response = await axios.post(BaseUrl, {
                 OTP_Digits: OTPData.OTP_Digits,
-                Email: email
-                
+                Email: email,
+
+
             });
 
             setSuccessMessage(response.data.message);
             setErrorMessage('');
             setOTPData({ OTP_Digits: '' });
+            const role = response.data.role || ''; // pehle define karo
+            if (role) {
+                localStorage.setItem('role', role);
+            }
 
             // Redirect after short delay
             setTimeout(() => {
-                navigate("/login");
-            }, 1000);
+                localStorage.setItem("isLoggedIn", "true");  // Save here!
+                setIsLoggedIn(true);
 
+                if (role === 'student') {
+                    navigate('/home');
+                } else if (role === 'teacher') {
+                    navigate('/TeacherDashboard');
+                } else {
+                    navigate('/login');
+                }
+            }, 1000);
         } catch (error) {
             setSuccessMessage('');
-            setErrorMessage(error.response?.data?.error );
+            setErrorMessage(error.response?.data?.error);
         }
     };
 
@@ -55,14 +68,14 @@ const OTPverification = ({ show, onClose, email }) => {
             const response = await axios.post(BaseUrl, {
                 resend: "true",
                 Email: email
-              
+
             });
 
             setSuccessMessage(response.data.message);
             setErrorMessage('');
         } catch (error) {
             setSuccessMessage('');
-            setErrorMessage(error.response?.data?.error );
+            setErrorMessage(error.response?.data?.error);
         }
     };
 

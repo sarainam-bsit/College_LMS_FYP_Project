@@ -2,11 +2,14 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import Home from './Home';
 import OTPverification from "./OTPverification";
 const BaseUrl = 'http://127.0.0.1:8000/Account/register_api/';
 
-const Registration = () => {
+const Registration = ({ setIsLoggedIn }) => {
+    const isLoggedIn = !!localStorage.getItem("authToken");
+
     const [studentData, setstudentData] = useState({
         Reg_No: '',
         Roll_No: '',
@@ -31,6 +34,10 @@ const Registration = () => {
     useEffect(() => {
         document.title = 'Student Registration';
     }, []);
+    if (isLoggedIn) {
+        // Agar login hai to registration page block
+        return <Navigate to="/home" replace />;
+    }
 
     const submitForm = async (e) => {
         e.preventDefault();
@@ -45,7 +52,9 @@ const Registration = () => {
 
         try {
             const response = await axios.post(BaseUrl, studentFormData);
+
             if (response.status === 200) {
+                // localStorage.setItem('userRole', 'student'); 
                 setstudentData({
                     Reg_No: '',
                     Roll_No: '',
@@ -84,6 +93,58 @@ const Registration = () => {
                 setErrorMessage({ general: "Something went wrong!" });
             }
             setstudentData({ ...studentData, status: 'error' });
+        }
+    };
+    const styles = {
+        backgroundWrapper: {
+            position: 'relative',
+            height: '100vh',
+            overflow: 'hidden'
+        },
+        registerOverlay: {
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'rgba(0, 0, 0, 0.59)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            pointerEvents: 'all',
+            zIndex: 2000
+        },
+        registerCard: {
+            backdropFilter: 'blur(15px)',
+            background: 'rgba(255, 255, 255, 0.15)',
+            borderRadius: '20px',
+            padding: '30px',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+            width: '95%',
+            maxWidth: '600px',
+            color: '#fff'
+        },
+        registerHeading: {
+            color: '#fff',
+            textAlign: 'center',
+            marginBottom: '20px',
+            background: 'rgba(0,0,0,0.5)',
+            padding: '10px',
+            borderRadius: '12px'
+        },
+        registerInput: {
+            background: 'rgba(255, 255, 255, 0.2)',
+            border: 'none',
+            color: 'white'
+        },
+        registerInputPlaceholder: {
+            color: '#ddd'
+        },
+        registerInputFocus: {
+            background: 'rgba(255, 255, 255, 0.3)',
+            border: '1px solid #ff9800',
+            boxShadow: '0 0 8px #ff9800',
+            color: 'white'
         }
     };
 
@@ -197,8 +258,10 @@ const Registration = () => {
                                 <div className="col-12 col-md-6">
                                     <input type="password" name='Student_Password' value={studentData.Student_Password} onChange={handleChange} className="registerInput form-control" placeholder="Enter password" required />
                                     {errorMessage.Student_Password && (
-                                        <small style={{ color: 'red' }}>
-                                            {Array.isArray(errorMessage.Student_Password) ? errorMessage.Student_Password[0] : errorMessage.Student_Password}
+                                        <small style={{ color: 'red', whiteSpace: 'pre-line', display: 'block' }}>
+                                            {Array.isArray(errorMessage.Student_Password)
+                                                ? errorMessage.Student_Password.join('\n')
+                                                : errorMessage.Student_Password}
                                         </small>
                                     )}
                                 </div>
@@ -227,11 +290,9 @@ const Registration = () => {
                                     setUserEmail(null);  // reset karna bhi acha hota hai
                                 }}
                                 email={userEmail}
+                                setIsLoggedIn={setIsLoggedIn}
                             />
-                            <div className="d-flex mt-3 justify-content-center align-items-center gap-2">
-                                <p className="mb-0">Already have an Account?</p>
-                                <p className="mb-0"><Link to="/login" className="text-warning">Login</Link></p>
-                            </div>
+
                         </form>
                     </div>
                 </div>

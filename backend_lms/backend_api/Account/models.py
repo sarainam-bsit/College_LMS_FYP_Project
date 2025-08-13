@@ -1,26 +1,10 @@
 from django.db import models
+from Departments.models import CourseCategories
+
 
 class Student(models.Model):
-    PROGRAM_CHOICES = [
-        ('BSIT', 'BS Information Technology'),
-        ('BSZoo', 'BS Zoology'),
-        ('BSEcon', 'BS Economics'),
-        ('BSEng', 'BS English'),
-        ('BSUrd', 'BS Urdu'),
-        ('BSMaths', 'BS Mathematics'),
-        ('BSPS', 'BS Political Science'),
-        ('BSstat', 'BS Statistics')
-    ]
-    SEMESTER_CHOICES = [
-        ('1', 'Semester 1'),
-        ('2', 'Semester 2'),
-        ('3', 'Semester 3'),
-        ('4', 'Semester 4'),
-        ('5', 'Semester 5'),
-        ('6', 'Semester 6'),
-        ('7', 'Semester 7'),
-        ('8', 'Semester 8')
-    ]
+   
+  
     GENDER_CHOICES = [
         ('Male', 'Male'),
         ('Female', 'Female')
@@ -33,8 +17,8 @@ class Student(models.Model):
    
     
     Role = models.CharField(max_length=100, choices=Role_CHOICES)
-    Program = models.CharField(max_length=100, choices=PROGRAM_CHOICES)
-    Semester = models.CharField(max_length=100, choices=SEMESTER_CHOICES)
+    Department = models.ForeignKey('Departments.Department', blank=True, null=True, related_name='students', on_delete=models.SET_NULL)
+    Course_Category = models.ForeignKey('Departments.CourseCategories',blank=True, null=True, on_delete=models.CASCADE)
     Reg_No= models.CharField(max_length=100, unique=True)
     Roll_No = models.CharField(max_length=100, unique=True)
     Student_Name = models.CharField(max_length=100)
@@ -66,16 +50,10 @@ class Student(models.Model):
     Is_Verified = models.BooleanField(default=False)
     
     
-    def promote_to_next_semester(self):
-        semesters = ['1', '2', '3', '4', '5', '6', '7', '8']
-        if self.Is_Passed and self.Semester != '8':  
-            current_index = semesters.index(self.Semester)
-            self.Semester = semesters[current_index + 1]
-            self.Is_Passed = False
-            self.save()
+    
 
     def __str__(self):
-        return f"{self.Student_Name} ({self.Program} - Semester {self.Semester})"
+        return f"{self.Student_Name} ({self.Department} - Semester {self.Course_Category})"
 
     
 class Teacher(models.Model):
@@ -87,9 +65,11 @@ class Teacher(models.Model):
     Teacher_Name = models.CharField(max_length=100)
     Teacher_Email = models.EmailField(unique=True)
     Teacher_Password = models.CharField(max_length=128, blank=True, null=True) 
+    Department = models.ForeignKey('Departments.Department', blank=True, null=True, related_name='teachers', on_delete=models.SET_NULL)
     Teacher_OTP_Digits = models.CharField(max_length=6, blank=True, null=True)
     Teacher_OTP_Expiry = models.DateTimeField(blank=True, null=True)
     Teacher_Is_Verified = models.BooleanField(default=False)
-        
+    def __str__(self):
+        return self.Teacher_Name
 
 

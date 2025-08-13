@@ -22,10 +22,11 @@ const ITsemester1courses = () => {
                 <table className="table mt-5">
                     <thead>
                         <tr>
+                            <th scope="col">Departments</th>
+                            <th scope="col">C. Category</th>
                             <th scope="col">C. Code</th>
                             <th scope="col">Course Title</th>
                             <th scope="col">Teachers</th>
-                            <th scope="col">Departments</th>
                             <th scope="col">Lectures</th>
                         </tr>
                     </thead>

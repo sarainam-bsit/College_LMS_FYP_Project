@@ -1,8 +1,26 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Navbar from './Navbar';
 import { Link } from 'react-router-dom';
 import Footer from './Footer';
 const BSprogram = () => {
+  const [departments, setDepartments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(()=>{
+    fetch("http://127.0.0.1:8000/dept/dept_api/")
+    .then(response => response.json())
+    .then(data =>{
+      setDepartments(data);
+      setLoading(false);
+    })
+    .catch(error =>{
+      console.error('Error fetching department:', error);
+      setLoading(false);
+    });
+  }, []);
+  if (loading){
+    return <p>Loading departments...</p>;
+  }
+
   return (
     <>
       <style>{`
@@ -24,118 +42,21 @@ const BSprogram = () => {
           </div>
         </div>
         <div className="row row-cols-1 row-cols-md-3 g-4 mt-4 mb-4">
-          <div className="col">
-            <Link to="/semesterIT" className='text-decoration-none'>
+          {departments.map(dept =>(
+          <div className="col" key={dept.id}>
+            <Link to={`/semesterIT`} className='text-decoration-none'>
               <div className="card">
                 <div className="card-body">
-                  <img src="/degree.jpg" className="image card-img-top img-fluid" alt="..." style={{ height: '200px', objectFit: 'cover' }} />
+                  <img src={dept.Department_Image} className="image card-img-top img-fluid" alt="..." style={{ height: '200px', objectFit: 'cover' }} />
                   <div className="card-body">
-                    <Link to="/semesterIT" className='text-danger'><h5 className="hover card-title fw-bold">BS Information Technology</h5></Link>
-                    <p className="card-text">Semester wise courses, Lectures, Timetable, Teachers Details, Assignments, Quizzes and Grades.</p>
+                    <Link to={`/categories/${dept.id}`} className='text-danger'><h5 className="hover card-title fw-bold">{dept.Department_Name}</h5></Link>
+                    <p className="card-text">{dept.Discription}</p>
                   </div>
                 </div>
               </div>
             </Link>
           </div>
-          <div className="col">
-            <div className="card">
-              <div className="card-body">
-                <img src="/degree.jpg" className="image card-img-top img-fluid" alt="..." style={{ height: '200px', objectFit: 'cover' }} />
-                <div className="card-body">
-                  <Link to="" className='text-danger'><h5 className="hover card-title fw-bold">BS Zoology</h5></Link>
-                  <p className="card-text">Semester wise courses, Lectures, Timetable, Teachers Details, Assignments, Quizzes and Grades.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col">
-            <div className="card">
-              <div className="card-body">
-                <img src="/degree.jpg" className="image card-img-top img-fluid" alt="..." style={{ height: '200px', objectFit: 'cover' }} />
-                <div className="card-body">
-                  <Link to="" className='text-danger'><h5 className="hover card-title fw-bold">BS Maths</h5></Link>
-                  <p className="card-text">Semester wise courses, Lectures, Timetable, Teachers Details, Assignments, Quizzes and Grades.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col">
-            <div className="card">
-              <div className="card-body">
-                <img src="/degree.jpg" className="image card-img-top img-fluid" alt="..." style={{ height: '200px', objectFit: 'cover' }} />
-                <div className="card-body">
-                  <Link to="" className='text-danger'><h5 className="hover card-title fw-bold">BS Physics</h5></Link>
-                  <p className="card-text">Semester wise courses, Lectures, Timetable, Teachers Details, Assignments, Quizzes and Grades.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col">
-            <div className="card">
-              <div className="card-body">
-                <img src="/degree.jpg" className="image card-img-top img-fluid" alt="..." style={{ height: '200px', objectFit: 'cover' }} />
-                <div className="card-body">
-                  <Link to="" className='text-danger'><h5 className="hover card-title fw-bold">BS Chemistry</h5></Link>
-                  <p className="card-text">Semester wise courses, Lectures, Timetable, Teachers Details, Assignments, Quizzes and Grades.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col">
-            <div className="card">
-              <div className="card-body">
-                <img src="/degree.jpg" className="image card-img-top img-fluid" alt="..." style={{ height: '200px', objectFit: 'cover' }} />
-                <div className="card-body">
-                  <Link to="" className='text-danger'><h5 className="hover card-title fw-bold">BS English</h5></Link>
-                  <p className="card-text">Semester wise courses, Lectures, Timetable, Teachers Details, Assignments, Quizzes and Grades.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col">
-            <div className="card">
-              <div className="card-body">
-                <img src="/degree.jpg" className="image card-img-top img-fluid" alt="..." style={{ height: '200px', objectFit: 'cover' }} />
-                <div className="card-body">
-                  <Link to="" className='text-danger'><h5 className="hover card-title fw-bold">BS Urdu</h5></Link>
-                  <p className="card-text">Semester wise courses, Lectures, Timetable, Teachers Details, Assignments, Quizzes and Grades.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col">
-            <div className="card">
-              <div className="card-body">
-                <img src="/degree.jpg" className="image card-img-top img-fluid" alt="..." style={{ height: '200px', objectFit: 'cover' }} />
-                <div className="card-body">
-                  <Link to="" className='text-danger'><h5 className="hover card-title fw-bold">BS Islamiyat</h5></Link>
-                  <p className="card-text">Semester wise courses, Lectures, Timetable, Teachers Details, Assignments, Quizzes and Grades.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col">
-            <div className="card">
-              <div className="card-body">
-                <img src="/degree.jpg" className="image card-img-top img-fluid" alt="..." style={{ height: '200px', objectFit: 'cover' }} />
-                <div className="card-body">
-                  <Link to="" className='text-danger'><h5 className="hover card-title fw-bold">BS Economics</h5></Link>
-                  <p className="card-text">Semester wise courses, Lectures, Timetable, Teachers Details, Assignments, Quizzes and Grades.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col">
-            <div className="card">
-              <div className="card-body">
-                <img src="/degree.jpg" className="image card-img-top img-fluid" alt="..." style={{ height: '200px', objectFit: 'cover' }} />
-                <div className="card-body">
-                  <Link to="" className='text-danger '><h5 className="hover card-title fw-bold">Short Courses</h5></Link>
-                  <p className="card-text">Web Development, Graphic Designing, Digital Marketing, MS Office & Computer Basics.</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
       <Footer />
