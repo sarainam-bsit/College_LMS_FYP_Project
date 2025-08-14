@@ -10,5 +10,5 @@ class Course(models.Model):
     C_Title = models.CharField(max_length=100)
     Teacher = models.ForeignKey(Teacher, blank=True, null=True, on_delete=models.SET_NULL)
     def __str__(self):
-        return f"{self.C_Code} ({self.C_Title})"
+        return f"{self.C_Code} ({self.C_Title}) - {self.C_Department}"
         

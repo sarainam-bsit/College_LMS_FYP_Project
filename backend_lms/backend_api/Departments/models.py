@@ -37,6 +37,6 @@ class CourseCategories(models.Model):
     Category_Name = models.CharField(max_length=100, choices=CATEGORY_Name_CHOICES )  # e.g. "ICS Part 1", "BSIT Semester 1", "Web Development Basics"
     
     def __str__(self):
-        return f"{self.Category_Type} ({self.Category_Name})"
+        return f"{self.Related_Department} - {self.Category_Type} ({self.Category_Name})"
    
 

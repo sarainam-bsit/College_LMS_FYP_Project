@@ -10,10 +10,9 @@ import BSprogram from './BSprogram';
 import CourseCategories from './CourseCategories';
 import Categorypage from './Categorypage';
 import ITsemester1timetable from './ITsemesters/ITsemester1timetable';
-import ITsemester1courses from './ITsemesters/ITsemester1courses';
 import ITsemester1AQ from './ITsemesters/ITsemester1AQ';
 import ITsemester1grades from './ITsemesters/ITsemester1grades';
-import ITsemester1lectures from './ITsemesters/ITsemester1lectures';
+import Lectures from './Lectures';
 import Library from './Library/Library';
 import Libraryform from './Library/Libraryform';
 import Feedbackform from './Feedbackform';
@@ -36,6 +35,8 @@ import Navbar from './Navbar';
 import TeacherNavbar from './Teacher/TeacherNavbar';
 import CourseCategoriesAdmin from "./Admin/CourseCategoriesAdmin";
 import DepartmentAdmin from './Admin/DepartmentAdmin';
+import CoursesAdmin from './Admin/CoursesAdmin';
+import StudentCourses from './StudentCourses';
 
 
 
@@ -115,12 +116,12 @@ const [userRole, setUserRole] = useState(() => localStorage.getItem("userRole"))
       <Route path="/contact" element={<ProtectedRoute><Contactus /></ProtectedRoute>} />
       <Route path="/programs" element={<ProtectedRoute><BSprogram /></ProtectedRoute>} />
       <Route path="/categories/:deptId" element={<ProtectedRoute><CourseCategories /></ProtectedRoute>} />
-      <Route path="/Categorypage/:categoryName" element={<ProtectedRoute><Categorypage /></ProtectedRoute>} />
+      <Route path="/department/:departmentId/category/:categoryId" element={<ProtectedRoute><Categorypage /></ProtectedRoute>} />
       <Route path="/ITsemester1timetable" element={<ProtectedRoute><ITsemester1timetable /></ProtectedRoute>} />
-      <Route path="/ITsemester1courses" element={<ProtectedRoute><ITsemester1courses /></ProtectedRoute>} />
+      <Route path="/department/:departmentId/category/:categoryId/courses" element={<ProtectedRoute><StudentCourses /></ProtectedRoute>} />
       <Route path="/ITsemester1AQ" element={<ProtectedRoute><ITsemester1AQ /></ProtectedRoute>} />
       <Route path="/ITsemester1grades" element={<ProtectedRoute><ITsemester1grades /></ProtectedRoute>} />
-      <Route path="/ITsemester1lectures" element={<ProtectedRoute><ITsemester1lectures /></ProtectedRoute>} />
+      <Route path="/course/:courseId/lectures" element={<ProtectedRoute><Lectures /></ProtectedRoute>} />
       <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
       <Route path="/libraryform" element={<ProtectedRoute><Libraryform /></ProtectedRoute>} />
       <Route path="/librarycard" element={<ProtectedRoute><Librarycard /></ProtectedRoute>} />
@@ -138,6 +139,8 @@ const [userRole, setUserRole] = useState(() => localStorage.getItem("userRole"))
       <Route path='/OTPverification' element={<ProtectedRoute><OTPverification /></ProtectedRoute>} />
       <Route path="/admin/departments" element={<DepartmentAdmin />} />
       <Route path="/admin/course-categories" element={<CourseCategoriesAdmin />} />
+      <Route path="/admin/courses" element={<CoursesAdmin />} />
+
       
     </Routes>
     </>

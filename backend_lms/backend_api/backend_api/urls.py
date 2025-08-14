@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('Account/', include('Account.urls')),    # your Account app
     path('dept/', include('Departments.urls')), 
+    path('Course/', include('Courses.urls')), 
     
 ]
 if settings.DEBUG:
