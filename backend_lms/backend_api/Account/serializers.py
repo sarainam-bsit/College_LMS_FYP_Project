@@ -7,7 +7,7 @@ class StudentRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = [
-            'Reg_No', 'Roll_No', 'Student_Email', 'Student_Password', 'Re_enter_Password', 'Is_Registered', 'Is_Verified'
+            'id','Reg_No', 'Roll_No', 'Student_Email', 'Student_Password', 'Re_enter_Password', 'Is_Registered', 'Is_Verified'
         ]
         read_only_fields = ['Is_Registered', 'Is_Verified' ]
     def update(self, instance, validated_data):
@@ -22,10 +22,10 @@ class StudentRegistrationSerializer(serializers.ModelSerializer):
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = ['Student_Name', 'Roll_No']
+        fields = ['id','Student_Name', 'Roll_No', 'Reg_No', 'Student_CNIC', 'Father_CNIC_No', 'Student_Email', 'Student_Gender']
 class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teacher
-        fields = ['id','Teacher_Name',]
+        fields = ['id','Teacher_Name', 'department_id',]
             
             

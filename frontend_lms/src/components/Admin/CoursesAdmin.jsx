@@ -3,10 +3,11 @@ import axios from 'axios';
 
 const CoursesAdmin = () => {
   const [courses, setCourses] = useState([]);
-  const [dropdowns, setDropdowns] = useState({ departments: [], categories: [], teachers: [] });
-  const [form, setForm] = useState({ C_Department: '', C_Category: '', Teacher: '', C_Code: '', C_Title: '' });
+  const [dropdowns, setDropdowns] = useState({ categories: [], teachers: [] });
+  const [form, setForm] = useState({ C_Category: '', Teacher: '', C_Code: '', C_Title: '', Credit_Hour: 0 });
   const [editId, setEditId] = useState(null);
 
+  // Fetch courses
   const fetchCourses = async () => {
     try {
       const res = await axios.get('http://127.0.0.1:8000/Course/courses/');
@@ -16,11 +17,11 @@ const CoursesAdmin = () => {
     }
   };
 
+  // Fetch dropdowns
   const fetchDropdowns = async () => {
     try {
       const res = await axios.get('http://127.0.0.1:8000/Course/courses/dropdowns/');
       setDropdowns({
-        departments: res.data.departments,
         categories: res.data.categories,
         teachers: res.data.teachers
       });
@@ -45,7 +46,7 @@ const CoursesAdmin = () => {
       } else {
         await axios.post('http://127.0.0.1:8000/Course/courses/', form);
       }
-      setForm({ C_Department: '', C_Category: '', Teacher: '', C_Code: '', C_Title: '' });
+      setForm({ C_Category: '', Teacher: '', C_Code: '', C_Title: '', Credit_Hour: 0 });
       fetchCourses();
     } catch (err) {
       console.error(err);
@@ -56,18 +57,23 @@ const CoursesAdmin = () => {
   const handleEdit = (course) => {
     setEditId(course.id);
     setForm({
-      C_Department: course.C_Department,
-      C_Category: course.C_Category,
-      Teacher: course.Teacher,
+      C_Category: course.C_Category, // category ID
+      Teacher: course.Teacher,       // teacher ID
       C_Code: course.C_Code,
       C_Title: course.C_Title,
+      Credit_Hour: course.Credit_Hour,
     });
   };
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure?')) return;
-    await axios.delete(`http://127.0.0.1:8000/Course/courses/${id}/`);
-    fetchCourses();
+    try {
+      await axios.delete(`http://127.0.0.1:8000/Course/courses/${id}/`);
+      fetchCourses();
+    } catch (err) {
+      console.error(err);
+      alert('Error deleting course.');
+    }
   };
 
   return (
@@ -78,26 +84,33 @@ const CoursesAdmin = () => {
       <div className="card mb-4 shadow-sm">
         <div className="card-body">
           <form className="row g-3" onSubmit={handleSubmit}>
-            <div className="col-md-4">
-              <select name="C_Department" value={form.C_Department} onChange={handleChange} className="form-select" required>
-                <option value="">Select Department</option>
-                {dropdowns.departments.map(dep => (
-                  <option key={dep.id} value={dep.id}>{dep.Department_Name}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="col-md-4">
-              <select name="C_Category" value={form.C_Category} onChange={handleChange} className="form-select" required>
+            {/* Category Dropdown */}
+            <div className="col-md-6">
+              <select
+                name="C_Category"
+                value={form.C_Category}
+                onChange={handleChange}
+                className="form-select"
+                required
+              >
                 <option value="">Select Category</option>
                 {dropdowns.categories.map(cat => (
-                  <option key={cat.id} value={cat.id}>{`${cat.Category_Type} (${cat.Category_Name})`}</option>
+                  <option key={cat.id} value={cat.id}>
+                    {cat.Related_Department_Name} - {cat.Category_Type} ({cat.Category_Name})
+                  </option>
                 ))}
               </select>
             </div>
 
-            <div className="col-md-4">
-              <select name="Teacher" value={form.Teacher} onChange={handleChange} className="form-select" required>
+            {/* Teacher Dropdown */}
+            <div className="col-md-6">
+              <select
+                name="Teacher"
+                value={form.Teacher}
+                onChange={handleChange}
+                className="form-select"
+                required
+              >
                 <option value="">Select Teacher</option>
                 {dropdowns.teachers.map(t => (
                   <option key={t.id} value={t.id}>{t.Teacher_Name}</option>
@@ -105,20 +118,31 @@ const CoursesAdmin = () => {
               </select>
             </div>
 
+            {/* Course Code */}
             <div className="col-md-6">
               <input type="text" name="C_Code" placeholder="Course Code" value={form.C_Code} onChange={handleChange} className="form-control" required/>
             </div>
 
+            {/* Credit Hour */}
             <div className="col-md-6">
+              <input type="number" name="Credit_Hour" placeholder="Credit Hour" value={form.Credit_Hour} onChange={handleChange} className="form-control" required/>
+            </div>
+
+            {/* Course Title */}
+            <div className="col-md-12">
               <input type="text" name="C_Title" placeholder="Course Title" value={form.C_Title} onChange={handleChange} className="form-control" required/>
             </div>
 
+            {/* Buttons */}
             <div className="col-12 d-flex gap-2">
               <button type="submit" className={`btn ${editId ? 'btn-warning' : 'btn-primary'}`}>
                 {editId ? 'Update Course' : 'Add Course'}
               </button>
               {editId && (
-                <button type="button" className="btn btn-secondary" onClick={() => { setEditId(null); setForm({ C_Department: '', C_Category: '', Teacher: '', C_Code: '', C_Title: '' }); }}>
+                <button type="button" className="btn btn-secondary" onClick={() => { 
+                  setEditId(null); 
+                  setForm({ C_Category: '', Teacher: '', C_Code: '', C_Title: '', Credit_Hour: 0 }); 
+                }}>
                   Cancel
                 </button>
               )}
@@ -127,14 +151,14 @@ const CoursesAdmin = () => {
         </div>
       </div>
 
-      {/* Table */}
+      {/* Courses Table */}
       <div className="table-responsive card shadow-sm">
         <table className="table table-striped table-hover mb-0">
           <thead className="table-primary">
             <tr>
               <th>Code</th>
+              <th>Credit Hour</th>
               <th>Title</th>
-              <th>Department</th>
               <th>Category</th>
               <th>Teacher</th>
               <th>Actions</th>
@@ -144,8 +168,8 @@ const CoursesAdmin = () => {
             {courses.map(course => (
               <tr key={course.id}>
                 <td>{course.C_Code}</td>
+                <td>{course.Credit_Hour}</td>
                 <td>{course.C_Title}</td>
-                <td>{course.C_Department_Name || ''}</td>
                 <td>{course.C_Category_Full || ''}</td>
                 <td>{course.Teacher_Name || ''}</td>
                 <td className="d-flex gap-2">

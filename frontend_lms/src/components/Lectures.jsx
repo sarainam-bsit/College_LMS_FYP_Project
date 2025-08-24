@@ -1,65 +1,137 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import Navbar from './Navbar';
-const ITsemester1lectures = () => {
+import axios from 'axios';
+
+const Lectures = () => {
+  const { courseId } = useParams();
+  const [lectures, setLectures] = useState([]);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [selectedTitle, setSelectedTitle] = useState('');
+  const videoRef = useRef(null); // ✅ video element ka ref
+
+  useEffect(() => {
+    const fetchLectures = async () => {
+      try {
+        const res = await axios.get(
+          `http://127.0.0.1:8000/Lecture/lectures/by_course/?course_id=${courseId}`
+        );
+        setLectures(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchLectures();
+  }, [courseId]);
+
+  const openModal = (lecture) => {
+    setSelectedVideo(lecture.Video);
+    setSelectedTitle(lecture.Title);
+  };
+
+  const closeModal = () => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0; // ✅ video reset
+    }
+  };
+
   return (
     <>
-
-
-
       <Navbar />
-      <div className="container p-1" style={{ marginTop: "80px", minHeight: "90vh" }}>
-        <div className="row justify-content-center">
-          <div className="col-10 col-sm-8 col-md-6">
-            <h2 className="heading text-center mt-4 bg-dark text-white py-1 px-3 mx-auto rounded shadow-lg" style={{ maxWidth: '400px' }}>Lectures</h2>
-          </div>
-        </div>
+      <div
+        className="container p-1"
+        style={{ marginTop: '80px', minHeight: '90vh' }}
+      >
+        <h2 className="text-center mt-4">Lectures</h2>
+
         <div className="table-responsive">
-          <table className="table mt-5">
+          <table className="table mt-4">
             <thead>
               <tr>
-                <th scope="col">C. Code</th>
-                <th scope="col">Course Title</th>
-                <th scope="col">Time</th>
-                <th scope="col">Date</th>
-                <th scope="col">Videos</th>
-
-
+                <th>C. Code</th>
+                <th>C. Name</th>
+                <th>Title</th>
+                <th>Time</th>
+                <th>Date</th>
+                <th>Videos</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">DI-342</th>
-                <td>Web Development</td>
-                <td>8:30</td>
-                <td>23-06-24</td>
-                <td><button className="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#videoModal">
-                 <i className="fa-solid fa-play"></i>
-                </button></td>
-
-              </tr>
-
+              {lectures.length > 0 ? (
+                lectures.map((lec) => (
+                  <tr key={lec.id}>
+                    <td>{lec.Lec_course_code}</td>
+                    <td>{lec.Lec_course_name}</td>
+                    <td>{lec.Title}</td>
+                    <td>{lec.Time}</td>
+                    <td>{lec.Date}</td>
+                    <td>
+                      {lec.Video ? (
+                        <button
+                          className="btn btn-sm btn-danger"
+                          data-bs-toggle="modal"
+                          data-bs-target="#videoModal"
+                          onClick={() => openModal(lec)}
+                        >
+                          <i className="fa-solid fa-play"></i>
+                        </button>
+                      ) : (
+                        'No Video'
+                      )}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={6} className="text-center">
+                    No lectures found
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
-      </div>
-      <div className="modal fade modal-xl" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="videoModalLabel">Lecture 1</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div className="modal-body">
-              <div className="ratio ratio-16x9">
-                <iframe src="https://www.youtube.com/embed/oFWsidurgFQ" title="youtube video" allowfullscreen></iframe>
+
+        {/* Video Modal */}
+        <div
+          className="modal fade modal-xl"
+          id="videoModal"
+          tabIndex="-1"
+          aria-labelledby="videoModalLabel"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">{selectedTitle}</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  onClick={closeModal} // ✅ close button click par stop
+                ></button>
+              </div>
+              <div className="modal-body">
+                {selectedVideo ? (
+                  <div className="ratio ratio-16x9">
+                    <video
+                      ref={videoRef} // ✅ videoRef attach
+                      controls
+                      src={selectedVideo}
+                      style={{ width: '100%' }}
+                    />
+                  </div>
+                ) : (
+                  <p>No video available</p>
+                )}
               </div>
             </div>
-
           </div>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default ITsemester1lectures
+export default Lectures;

@@ -44,7 +44,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'Departments',
     'Courses',
-    
+    'Lectures',
+    'Assignments_and_Quizzes',
+    'TimeTable',
+    'Grades',
+    'FeeVoucher',
+    'Library',
    
 ]
 
@@ -142,6 +147,7 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',  
     ],
+    
 }
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 MEDIA_URL = '/media/'

@@ -1,0 +1,51 @@
+/* Links */
+.custom-link {
+  color: #ffffff;
+  font-weight: 500;
+  margin: 2px 0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+.custom-link:hover {
+  background-color: #1a1a1a;
+  color: #17a2b8;
+}
+
+.active-link {
+  background-color: #17a2b8;
+  color: #000000 !important;
+  border-left: 4px solid #ffffff;
+}
+
+/* Logout button */
+.logout-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background-color: #c82333;
+}
+
+/* Offcanvas menu spacing */
+.custom-menu .nav-item {
+  margin-bottom: 5px;
+}
+.custom-toggler:focus,
+.custom-toggler:active {
+  outline: none;      /* Remove default focus outline */
+  box-shadow: none;   /* Remove default focus/active shadow */
+}
+
+/* Optional: enlarge button on click */
+.custom-toggler:active {
+  transform: scale(1.1);
+  transition: transform 0.1s ease-in-out;
+}

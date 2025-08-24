@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 const BaseUrl = 'http://127.0.0.1:8000/Account/verify_OTP_api/';
 
-const OTPverification = ({ show, onClose, email, setIsLoggedIn }) => {
+const OTPverification = ({ show, onClose, email, setIsLoggedIn, setUserRole }) => {
     const [OTPData, setOTPData] = useState({ OTP_Digits: '' });
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
@@ -46,13 +46,18 @@ const OTPverification = ({ show, onClose, email, setIsLoggedIn }) => {
 
             // Redirect after short delay
             setTimeout(() => {
-                localStorage.setItem("isLoggedIn", "true");  // Save here!
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("userRole", role);  // Save here!
                 setIsLoggedIn(true);
+                setUserRole(role);
 
                 if (role === 'student') {
+                    
                     navigate('/home');
                 } else if (role === 'teacher') {
+                  
                     navigate('/TeacherDashboard');
+
                 } else {
                     navigate('/login');
                 }

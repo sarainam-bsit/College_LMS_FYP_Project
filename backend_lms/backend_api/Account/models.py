@@ -13,11 +13,17 @@ class Student(models.Model):
         ('Student', 'Student'),
         ('Teacher', 'Teacher')
     ]
-    
-   
+    STATUS_CHOICES = [
+    ("Pass", "Pass"),
+    ("Fail", "Fail"),
+    ("Supply", "Supply"),
+]
+    DEGREE_CHOICES = [
+        ("Running", "Running"),
+        ("Complete", "Complete"),
+    ]
     
     Role = models.CharField(max_length=100, choices=Role_CHOICES)
-    Department = models.ForeignKey('Departments.Department', blank=True, null=True, related_name='students', on_delete=models.SET_NULL)
     Course_Category = models.ForeignKey('Departments.CourseCategories',blank=True, null=True, on_delete=models.CASCADE)
     Reg_No= models.CharField(max_length=100, unique=True)
     Roll_No = models.CharField(max_length=100, unique=True)
@@ -44,16 +50,23 @@ class Student(models.Model):
     Intermediate_Year = models.PositiveIntegerField(blank=True, null=True)
     Intermediate_Session = models.CharField(max_length=100, blank=True, null=True)
     Is_Registered = models.BooleanField(default=False)
-    Is_Passed = models.BooleanField(default=False)
+    # Is_Semester_Student = models.BooleanField(default=False)
     OTP_Digits = models.CharField(max_length=6, blank=True, null=True)
     OTP_Expiry = models.DateTimeField(blank=True, null=True)
     Is_Verified = models.BooleanField(default=False)
+    can_access_Course = models.BooleanField(default=False)
+    Fee_Status = models.BooleanField(default=False)
+    Supply_Fee_Status = models.BooleanField(default=False)
+    Status = models.CharField(max_length=10, choices=STATUS_CHOICES, blank=True, null=True)
+    Supply_Courses = models.JSONField(default=list, blank=True)
+    Degree_Status = models.CharField(max_length=20, choices=DEGREE_CHOICES, default="Running")
+    
     
     
     
 
     def __str__(self):
-        return f"{self.Student_Name} ({self.Department} - Semester {self.Course_Category})"
+        return f"{self.Student_Name} ({self.Course_Category})"
 
     
 class Teacher(models.Model):

@@ -48,7 +48,7 @@ const TeacherNavbar = ({ isLoggedIn, handleLogout }) => {
                 <Link className="nav-link" to="/uploadlectures">Upload Lectures</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="">Upload Assignments and Quizzes </Link>
+                <Link className="nav-link" to="/UploadTasks">Upload Assignments and Quizzes </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/uploadgrades">Upload Grades</Link>

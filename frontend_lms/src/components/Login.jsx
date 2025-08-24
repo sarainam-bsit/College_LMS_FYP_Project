@@ -37,7 +37,6 @@ const Login = ({ setIsLoggedIn, setUserRole }) => {
         setSuccessMessage('');
         setUserEmail(loginData.Email);
 
-        // FormData with append as required
         const formData = new FormData();
         formData.append('Email', loginData.Email);
         formData.append('Password', loginData.Password);
@@ -47,27 +46,27 @@ const Login = ({ setIsLoggedIn, setUserRole }) => {
             const response = await axios.post(BASE_URL, formData);
             console.log('Login response:', response.data);
 
-            const role = response.data.role;
+            const role = response.data.role;  // backend se role
             setLoginData({ Email: '', Password: '', Role: '' });
             setErrorMessage({});
 
             if (role === 'student' || role === 'teacher') {
                 localStorage.setItem('userRole', role);
                 localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('studentId', response.data.student_id); 
+                localStorage.setItem('teacherId', response.data.teacher_id); 
                 setIsLoggedIn(true);
-                setUserRole(role);
+                setUserRole(role);  // ✅ ye hi important hai
+
                 setSuccessMessage(response.data?.message);
 
                 if (role === 'student') {
-
-
                     setTimeout(() => {
                         navigate('/home', { state: { successMessage: response.data.message } });
                     }, 1000);
-
                 } else if (role === 'teacher') {
                     setTimeout(() => {
-                        navigate('/TeacherDashboard',{ state: { successMessage: response.data.message } });
+                        navigate('/TeacherDashboard', { state: { successMessage: response.data.message } });
                     }, 1000);
                 }
             } else {
@@ -77,28 +76,17 @@ const Login = ({ setIsLoggedIn, setUserRole }) => {
             setSuccessMessage('');
             const backendErrors = error.response?.data || {};
 
-
-
-            // Backend response errors
-
-
-
-
             if (backendErrors.errorcode === 'VERIFY_OTP') {
                 setTimeout(() => {
                     setShowOTP(true);
                     setUserEmail(loginData.Email);
-                }, 1000)
-
-                // if (error.response?.data?.teacher_id) {
-                //     setUserEmail(error.response.data.teacher_id);
-                // }
+                }, 1000);
             } else if (backendErrors.errorcode === 'REGISTRATION_REQUIRED') {
                 setTimeout(() => {
                     navigate('/registration', { state: { fromLogin: true } });
                 }, 1000);
             } else {
-                setErrorMessage(backendErrors.errors || {})
+                setErrorMessage(backendErrors.errors || {});
             }
         }
     };
@@ -261,12 +249,11 @@ const Login = ({ setIsLoggedIn, setUserRole }) => {
                                 show={showOTP}
                                 onClose={() => {
                                     setShowOTP(false);
-                                    setUserEmail(null);  // reset karna bhi acha hota hai
+                                    setUserEmail(null);
                                 }}
                                 email={userEmail}
                                 setIsLoggedIn={setIsLoggedIn}
-                            //  role={response.data.role} 
-
+                                setUserRole={setUserRole}   // ✅ add this line
                             />
 
                             {errorMessage.general && (

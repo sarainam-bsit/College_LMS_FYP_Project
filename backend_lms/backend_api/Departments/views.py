@@ -43,4 +43,21 @@ class CategoriesViewSet(viewsets.ModelViewSet):
         categories = CourseCategories.objects.filter(Related_Department_id=dept_id)
         serializer = CourseCategoriesSerializer(categories, many=True)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'])
+    def by_teacher(self, request):
+        teacher_id = request.query_params.get("teacher_id")
+        if not teacher_id:
+            return Response({"error": "teacher_id required"}, status=400)
+
+        # get unique categories from teacher's courses
+        categories = CourseCategories.objects.filter(
+            course__Teacher__id=teacher_id
+        ).distinct()
+
+        if not categories.exists():
+            return Response({"message": "No categories found for this teacher"}, status=404)
+
+        serializer = self.get_serializer(categories, many=True)
+        return Response(serializer.data)
    

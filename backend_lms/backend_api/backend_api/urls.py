@@ -23,7 +23,12 @@ urlpatterns = [
     path('Account/', include('Account.urls')),    # your Account app
     path('dept/', include('Departments.urls')), 
     path('Course/', include('Courses.urls')), 
-    
+    path('Lecture/', include('Lectures.urls')), 
+    path('Tasks/', include('Assignments_and_Quizzes.urls')), 
+    path('TimeTable/', include('TimeTable.urls')), 
+    path('Grade/', include('Grades.urls')), 
+    path('fee/', include('FeeVoucher.urls')), 
+    path('library/', include('Library.urls')), 
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

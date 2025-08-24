@@ -1,13 +1,15 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 
 const Categorypage = () => {
-  const { departmentId, categoryId } = useParams(); 
+  const { departmentId, categoryId } = useParams();
   const [categoryName, setCategoryName] = useState("");
+  // const studentId = localStorage.getItem("studentId");
+
   // departmentId = "IT", categoryName = "Semester 1" for example
-   useEffect(() => {
+  useEffect(() => {
     if (!categoryId) return;
 
     // Fetch category name by ID
@@ -47,18 +49,19 @@ const Categorypage = () => {
 
         <div className="card mt-3">
           <div className="card-body">
+
             <Link
-  to={`/department/${departmentId}/category/${categoryId}/courses`}
-  className='text-danger'
->
-  <h4 className='headinghover fw-bold text-center'>Courses</h4>
-</Link>
+              to={`/department/${departmentId}/category/${categoryId}/courses`}
+              className='text-danger'
+            >
+              <h4 className='headinghover fw-bold text-center'>Courses</h4>
+            </Link>
           </div>
         </div>
 
         <div className="card mt-3">
           <div className="card-body">
-            <Link to={`/department/${departmentId}/category/${categoryId}/assignments`} className='text-danger'>
+            <Link to={`/department/${departmentId}/category/${categoryId}/tasks`} className='text-danger'>
               <h4 className='headinghover fw-bold text-center'>Assignments & Quizzes</h4>
             </Link>
           </div>
@@ -66,7 +69,7 @@ const Categorypage = () => {
 
         <div className="card mt-3">
           <div className="card-body">
-            <Link to={`/department/${departmentId}/category/${categoryId}/grades`} className='text-danger'>
+            <Link to={`/studentgrades`} className='text-danger'>
               <h4 className='headinghover fw-bold text-center'>Grades</h4>
             </Link>
           </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link} from "react-router-dom";
 import Feedback from "../Feedback";
 import Footer from "../Footer";
-import TeacherNavbar from "./TeacherNavbar";
+
 import { useLocation } from 'react-router-dom';
 
 const TeacherDashboard = () => {
@@ -29,7 +29,7 @@ const TeacherDashboard = () => {
   return (
        <>
        
-     <TeacherNavbar />
+     
     <div className="container-fluid p-0" style={{ marginTop: "65px", minHeight: "90vh" }}>
       <div className="card text-bg-dark border-0">
         {successMessage && (

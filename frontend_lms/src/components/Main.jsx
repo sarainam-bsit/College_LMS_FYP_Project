@@ -9,9 +9,7 @@ import Profile from './Profile';
 import BSprogram from './BSprogram';
 import CourseCategories from './CourseCategories';
 import Categorypage from './Categorypage';
-import ITsemester1timetable from './ITsemesters/ITsemester1timetable';
-import ITsemester1AQ from './ITsemesters/ITsemester1AQ';
-import ITsemester1grades from './ITsemesters/ITsemester1grades';
+
 import Lectures from './Lectures';
 import Library from './Library/Library';
 import Libraryform from './Library/Libraryform';
@@ -28,17 +26,32 @@ import Challanform from './FeeVoucher/Challanform';
 import TeacherDashboard from './Teacher/TeacherDashboard';
 import UploadLectures from './Teacher/UploadLectures';
 import UploadGrades from './Teacher/UploadGrades';
+import UploadTasks from './Teacher/UploadTasks';
+import StudentCourses from './StudentCourses';
+import StudentTasks from './StudentTasks';
 import OTPverification from './OTPverification';
 import ForgetPassword from './ForgetPassword';
 import ResetPassword from './Resetpassword';
 import Navbar from './Navbar';
-import TeacherNavbar from './Teacher/TeacherNavbar';
 import CourseCategoriesAdmin from "./Admin/CourseCategoriesAdmin";
 import DepartmentAdmin from './Admin/DepartmentAdmin';
 import CoursesAdmin from './Admin/CoursesAdmin';
-import StudentCourses from './StudentCourses';
-
-
+import AdminTimetable from './Admin/AdminTimeTable';
+import StudentTimetable from './StudentTimetable';
+import TeacherDepartment from './Teacher/TeacherDepartment';
+import TeacherCategory from './Teacher/TeacherCategory';
+import TeacherCategoryDetails from './Teacher/TeacherCategoryDetails';
+import TeacherTimetable from './Teacher/TeacherTimetable';
+import TeacherCourses from './Teacher/TeacherCourses';
+import TeacherLecture from './Teacher/TeacherLectures';
+import TeacherTaskDetail from './Teacher/TeacherTaskDetail';
+import TeacherTasks from './Teacher/TeacherTasks';
+import TeacherGradesStudent from './Teacher/TeacherGradesStudent';
+import TeacherGradesStuDetail from './Teacher/TeacherGradesStuDetail';
+import UploadStudentGrades from './Teacher/UploadStudentGrades';
+import StudentGrades from './StudentGrades';
+import AdminFeeVoucher from './Admin/AdminFeeVoucher';
+import AdminLibraryApplications from './Admin/AdminLibraryApplications';
 
 // ProtectedRoute component
 function ProtectedRoute({ children }) {
@@ -61,88 +74,109 @@ function RegistrationRoute({ children }) {
 
 const Main = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem("isLoggedIn") === "true");
-const [userRole, setUserRole] = useState(() => localStorage.getItem("userRole"));
-  
+  const [userRole, setUserRole] = useState(() => localStorage.getItem("userRole"));
 
   useEffect(() => {
-  const savedRole = localStorage.getItem('userRole');
-  if (savedRole) {
-    setUserRole(savedRole);
-  }
-  const loggedIn = localStorage.getItem('isLoggedIn');
-  setIsLoggedIn(loggedIn === 'true');
-}, []);
-  
+    const savedRole = localStorage.getItem('userRole');
+    if (savedRole) setUserRole(savedRole);
 
+    const loggedIn = localStorage.getItem('isLoggedIn');
+    setIsLoggedIn(loggedIn === 'true');
+  }, []);
 
-    const handleLogout = () => {
+  const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("userRole");
     setIsLoggedIn(false);
     setUserRole(null);
   };
-  
 
   return (
     <>
-    {/* Show Navbar only when logged in */}
+      {/* Navbar */}
       {isLoggedIn && (
-  userRole === 'student' ? (
-    <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
-  ) : (
-    <TeacherNavbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
-  )
-)}
+        <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} role={userRole} />
+      )}
 
-    {/* <Navbar setIsLoggedIn={setIsLoggedIn} /> */}
-{/*     */}
-    <Routes>
-     
-      {/* Login & Reset */}
-      <Route path="/login" element={isLoggedIn ? <Navigate to="/" /> : <Login setIsLoggedIn={setIsLoggedIn} />} />
-      <Route path="/reset" element={<ForgetPassword />} />
-      <Route path="/reset_password" element={<ResetPassword />} />
+      {/* Routes */}
+      <Routes>
+        {/* Login & Reset */}
+        <Route
+  path="/login"
+  element={
+    isLoggedIn ? (
+      <Navigate to="/" />
+    ) : (
+      <Login setIsLoggedIn={setIsLoggedIn} setUserRole={setUserRole} />
+    )
+  }
+/>
+        <Route path="/reset" element={<ForgetPassword />} />
+        <Route path="/reset_password" element={<ResetPassword />} />
 
-      {/* Registration only if navigated from login */}
-      <Route path="/registration" element={<RegistrationRoute><Registration setIsLoggedIn={setIsLoggedIn} /></RegistrationRoute>} />
-      <Route path="/reset" element={<ForgetPassword />} />
+        {/* Registration */}
+<Route
+  path="/registration"
+  element={
+    <RegistrationRoute>
+      <Registration setIsLoggedIn={setIsLoggedIn} setUserRole={setUserRole} />
+    </RegistrationRoute>
+  }
+/>
+        {/* Protected Pages */}
+        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/feevoucher" element={<ProtectedRoute><Feevoucher /></ProtectedRoute>} />
+        <Route path="/contact" element={<ProtectedRoute><Contactus /></ProtectedRoute>} />
+        <Route path="/programs" element={<ProtectedRoute><BSprogram /></ProtectedRoute>} />
+        <Route path="/teacher/programs" element={<ProtectedRoute><TeacherDepartment /></ProtectedRoute>} />
+        <Route path="/teacher/teacherlecture/:courseId" element={<ProtectedRoute><TeacherLecture /></ProtectedRoute>} />
+        <Route path="/teacher/department/:deptId/categories" element={<ProtectedRoute><TeacherCategory /></ProtectedRoute>} />
+        <Route path="/teacher/department/:departmentId/category/:categoryId" element={<ProtectedRoute><TeacherCategoryDetails /></ProtectedRoute>} />
+        <Route path="/teacher/department/:departmentId/category/:categoryId/timetable" element={<ProtectedRoute><TeacherTimetable /></ProtectedRoute>} />
+        <Route path="/teacher/department/:departmentId/category/:categoryId/courses" element={<ProtectedRoute><TeacherCourses /></ProtectedRoute>} />
+        <Route path="/teacher/department/:departmentId/category/:categoryId/TaskDetail" element={<ProtectedRoute><TeacherTaskDetail /></ProtectedRoute>} />
+        <Route path="/teacher/teachertask/:courseId" element={<ProtectedRoute><TeacherTasks /></ProtectedRoute>} />
+        <Route path="/categories/:deptId" element={<ProtectedRoute><CourseCategories /></ProtectedRoute>} />
+        <Route path="/teacher/department/:departmentId/category/:categoryId/gradeStudents" element={<ProtectedRoute><TeacherGradesStudent /></ProtectedRoute>} />
+        <Route path="/department/:departmentId/category/:categoryId" element={<ProtectedRoute><Categorypage /></ProtectedRoute>} />
+        <Route path="/department/:departmentId/category/:categoryId/timetable" element={<ProtectedRoute><StudentTimetable /></ProtectedRoute>} />
+        <Route path="/department/:departmentId/category/:categoryId/courses" element={<ProtectedRoute><StudentCourses /></ProtectedRoute>} />
+        <Route path="/department/:departmentId/category/:categoryId/tasks" element={<ProtectedRoute><StudentTasks /></ProtectedRoute>} />
 
-      {/* All Protected Pages */}
-      <Route path="/" element={<ProtectedRoute><Home  /></ProtectedRoute>} />
-      <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-      <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
-      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-      <Route path="/feevoucher" element={<ProtectedRoute><Feevoucher /></ProtectedRoute>} />
-      <Route path="/contact" element={<ProtectedRoute><Contactus /></ProtectedRoute>} />
-      <Route path="/programs" element={<ProtectedRoute><BSprogram /></ProtectedRoute>} />
-      <Route path="/categories/:deptId" element={<ProtectedRoute><CourseCategories /></ProtectedRoute>} />
-      <Route path="/department/:departmentId/category/:categoryId" element={<ProtectedRoute><Categorypage /></ProtectedRoute>} />
-      <Route path="/ITsemester1timetable" element={<ProtectedRoute><ITsemester1timetable /></ProtectedRoute>} />
-      <Route path="/department/:departmentId/category/:categoryId/courses" element={<ProtectedRoute><StudentCourses /></ProtectedRoute>} />
-      <Route path="/ITsemester1AQ" element={<ProtectedRoute><ITsemester1AQ /></ProtectedRoute>} />
-      <Route path="/ITsemester1grades" element={<ProtectedRoute><ITsemester1grades /></ProtectedRoute>} />
-      <Route path="/course/:courseId/lectures" element={<ProtectedRoute><Lectures /></ProtectedRoute>} />
-      <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
-      <Route path="/libraryform" element={<ProtectedRoute><Libraryform /></ProtectedRoute>} />
-      <Route path="/librarycard" element={<ProtectedRoute><Librarycard /></ProtectedRoute>} />
-      <Route path="/feedbackform" element={<ProtectedRoute><Feedbackform /></ProtectedRoute>} />
-      <Route path="/hostel" element={<ProtectedRoute><Hostel /></ProtectedRoute>} />
-      <Route path="/singlerooms" element={<ProtectedRoute><Singlerooms /></ProtectedRoute>} />
-      <Route path="/doublerooms" element={<ProtectedRoute><Doublerooms /></ProtectedRoute>} />
-      <Route path="/dormitoryrooms" element={<ProtectedRoute><Dormitoryrooms /></ProtectedRoute>} />
-      <Route path="/hosteladmissionform" element={<ProtectedRoute><HostelAdmissionForm /></ProtectedRoute>} />
-      <Route path="/hostelcancelform" element={<ProtectedRoute><Hostelcancelform /></ProtectedRoute>} />
-      <Route path="/challanform" element={<ProtectedRoute><Challanform /></ProtectedRoute>} />
-      <Route path="/TeacherDashboard" element={<ProtectedRoute><TeacherDashboard /></ProtectedRoute>} />
-      <Route path="/uploadlectures" element={<ProtectedRoute><UploadLectures /></ProtectedRoute>} />
-      <Route path="/uploadgrades" element={<ProtectedRoute><UploadGrades /></ProtectedRoute>} />
-      <Route path='/OTPverification' element={<ProtectedRoute><OTPverification /></ProtectedRoute>} />
-      <Route path="/admin/departments" element={<DepartmentAdmin />} />
-      <Route path="/admin/course-categories" element={<CourseCategoriesAdmin />} />
-      <Route path="/admin/courses" element={<CoursesAdmin />} />
+        <Route path="/teacher/coursestudents/:courseId" element={<ProtectedRoute><TeacherGradesStuDetail /></ProtectedRoute>} />
+        <Route path="/teacher/uploadstudentgrades" element={<ProtectedRoute><UploadStudentGrades /></ProtectedRoute>} />
+        <Route path="/feevoucher" element={<ProtectedRoute><Feevoucher /></ProtectedRoute>} />
+        <Route path="/course/:courseId/lectures" element={<ProtectedRoute><Lectures /></ProtectedRoute>} />
+        <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
+        <Route path="/libraryform" element={<ProtectedRoute><Libraryform /></ProtectedRoute>} />
+        <Route path="/librarycard" element={<ProtectedRoute><Librarycard /></ProtectedRoute>} />
+        <Route path="/feedbackform" element={<ProtectedRoute><Feedbackform /></ProtectedRoute>} />
 
-      
-    </Routes>
+        <Route path="/studentgrades" element={<ProtectedRoute><StudentGrades /></ProtectedRoute>} />
+        <Route path="/hostel" element={<ProtectedRoute><Hostel /></ProtectedRoute>} />
+        <Route path="/singlerooms" element={<ProtectedRoute><Singlerooms /></ProtectedRoute>} />
+        <Route path="/doublerooms" element={<ProtectedRoute><Doublerooms /></ProtectedRoute>} />
+        <Route path="/dormitoryrooms" element={<ProtectedRoute><Dormitoryrooms /></ProtectedRoute>} />
+        <Route path="/hosteladmissionform" element={<ProtectedRoute><HostelAdmissionForm /></ProtectedRoute>} />
+        <Route path="/hostelcancelform" element={<ProtectedRoute><Hostelcancelform /></ProtectedRoute>} />
+        <Route path="/challan-form/:id" element={<ProtectedRoute><Challanform /></ProtectedRoute>} />
+        <Route path="/TeacherDashboard" element={<ProtectedRoute><TeacherDashboard /></ProtectedRoute>} />
+        <Route path="/uploadlectures" element={<ProtectedRoute><UploadLectures /></ProtectedRoute>} />
+        <Route path="/uploadTasks" element={<ProtectedRoute><UploadTasks /></ProtectedRoute>} />
+        <Route path="/uploadgrades" element={<ProtectedRoute><UploadGrades /></ProtectedRoute>} />
+        <Route path='/OTPverification' element={<ProtectedRoute><OTPverification /></ProtectedRoute>} />
+
+        {/* Admin */}
+        <Route path="/admin/departments" element={<DepartmentAdmin />} />
+        <Route path="/admin/course-categories" element={<CourseCategoriesAdmin />} />
+        <Route path="/admin/courses" element={<CoursesAdmin />} />
+        <Route path="/admin/timetable" element={<AdminTimetable />} />
+        <Route path="/admin/feevoucher" element={<AdminFeeVoucher />} />
+        <Route path="/admin/libraryapplications" element={<AdminLibraryApplications />} />
+      </Routes>
     </>
   );
 };

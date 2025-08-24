@@ -5,12 +5,25 @@ from .models import Student, Teacher
 from .serializers import StudentRegistrationSerializer
 from django.views.decorators.csrf import csrf_exempt
 import random, datetime
+from rest_framework import generics
 from django.utils import timezone
+from rest_framework import viewsets
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
+from .serializers import StudentSerializer
 
+class StudentListAPIView(generics.ListAPIView):
+    serializer_class = StudentSerializer
 
+    def get_queryset(self):
+        dept_id = self.request.query_params.get('department')
+        cat_id = self.request.query_params.get('category')
+        queryset = Student.objects.all()
+        if dept_id and cat_id:
+            queryset = queryset.filter(Course_Category__Related_Department_id=dept_id,
+                                       Course_Category_id=cat_id).exclude(Degree_Status="Complete")
+        return queryset
 
 @csrf_exempt
 @api_view(['POST'])
@@ -212,7 +225,7 @@ def login_view(request):
         if not check_password(Password, student.Student_Password):
             return Response({"errors": {"Password": "Invalid password."}}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({"message": 'student_home', "role": USER_ROLES['STUDENT']},  status=status.HTTP_200_OK)
+        return Response({"message": 'student_home', "role": USER_ROLES['STUDENT'], 'student_id': student.id },  status=status.HTTP_200_OK)
 
     # 4. Teacher Login
     elif Role == USER_ROLES['TEACHER']:
@@ -249,7 +262,7 @@ def login_view(request):
         if not check_password(Password, teacher.Teacher_Password):
             return Response({"errors": {"Password": "Invalid password."}}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({"message": 'Login successfully', "role": USER_ROLES['TEACHER'],}, status=status.HTTP_200_OK)
+        return Response({"message": 'Login successfully', "role": USER_ROLES['TEACHER'], 'teacher_id': teacher.id }, status=status.HTTP_200_OK)
 @csrf_exempt    
 @api_view(['POST'])
 def forget_password(request):
@@ -359,6 +372,9 @@ def reset_password(request):
         user.save()
 
     return Response({'message': 'Password reset successful'}, status=status.HTTP_200_OK)
+
+
+
 
 
 
