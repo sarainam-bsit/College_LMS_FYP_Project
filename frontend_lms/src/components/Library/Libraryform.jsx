@@ -16,9 +16,12 @@ export default function LibraryForm() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
 
+  // assume student_id is stored in localStorage
+  const studentId = localStorage.getItem("studentId");
+
   const fetchApplications = async () => {
     try {
-      const res = await axios.get(API_URL);
+      const res = await axios.get(`${API_URL}?student_id=${studentId}`);
       setApplications(res.data);
     } catch (err) {
       console.error(err);
@@ -51,7 +54,7 @@ export default function LibraryForm() {
   };
 
   return (
-    <div className="container" style={{marginTop: '10%'}}>
+    <div className="container" style={{ marginTop: "10%" }}>
       {!submitted && (
         <form onSubmit={handleSubmit} className="card p-3 shadow-sm">
           <h3>Library Card Application</h3>
@@ -103,16 +106,46 @@ export default function LibraryForm() {
       )}
 
       <h4 className="mt-4">Your Applications</h4>
-      <ul className="list-group">
-        {applications.map((app) => (
-          <li key={app.id} className="list-group-item d-flex justify-content-between">
-            <span>{app.email} - {app.gender} - {app.phone}</span>
-            <span className={`badge ${app.status === "Pending" ? "bg-warning" : app.status === "Approved" ? "bg-success" : "bg-danger"}`}>
-              {app.status}
-            </span>
-          </li>
-        ))}
-      </ul>
+      <table className="table table-bordered mt-2">
+        <thead className="table-light">
+          <tr>
+            <th>Email</th>
+            <th>Gender</th>
+            <th>Phone</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {applications.length === 0 ? (
+            <tr>
+              <td colSpan="4" className="text-center">
+                No applications found
+              </td>
+            </tr>
+          ) : (
+            applications.map((app) => (
+              <tr key={app.id}>
+                <td>{app.email}</td>
+                <td>{app.gender}</td>
+                <td>{app.phone}</td>
+                <td>
+                  <span
+                    className={`badge ${
+                      app.status === "Pending"
+                        ? "bg-warning"
+                        : app.status === "Approved"
+                        ? "bg-success"
+                        : "bg-danger"
+                    }`}
+                  >
+                    {app.status}
+                  </span>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
     </div>
   );
 }

@@ -7,6 +7,7 @@ from .models import FeeVoucher
 from .serializers import FeeVoucherSerializer
 from Account.models import Student
 from Library.models import LibraryCard
+from Library.models import LibraryApplication
 import uuid
 
 class FeeVoucherViewSet(viewsets.ModelViewSet):
@@ -177,3 +178,49 @@ class FeeVoucherViewSet(viewsets.ModelViewSet):
                 )
 
         return Response(FeeVoucherSerializer(voucher).data, status=status.HTTP_200_OK)
+    
+    
+    @action(detail=False, methods=["post"])
+    def generate_library_fee(self, request):
+       
+      
+        application_ids = request.data.get("application_ids")  # list of library application ids
+        amount = request.data.get("amount")  # fee amount
+        fine_date = request.data.get("fine_date")
+        fine_amount = request.data.get("fine_amount") or 0
+        bank_branch = request.data.get("bank_branch") or "Default Branch"
+
+        if not application_ids or not amount:
+            return Response({"error": "application_ids and amount are required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        applications = LibraryApplication.objects.filter(id__in=application_ids, status="Approved")
+        if not applications.exists():
+            return Response({"error": "No approved library applications found"}, status=status.HTTP_404_NOT_FOUND)
+
+        vouchers = []
+        generated_ids = []  # track which applications are processed
+
+        for app in applications:
+            student = app.student
+        # Create FeeVoucher
+            voucher = FeeVoucher.objects.create(
+                Student=student,
+                Challan_no=str(uuid.uuid4())[:8],
+                Challan_Type="Library-fee",
+                Amount_to_Pay=amount,
+                Fine_Date=fine_date,
+                Fine_Amount=fine_amount,
+                Bank_Branch=bank_branch,
+                Amount_Date=now().date()
+            )
+            vouchers.append(voucher)
+
+        # Mark application as fee generated
+            app.fee_generated_status = True
+            app.save()
+            generated_ids.append(app.id)
+
+        return Response({
+            "message": "Library fee vouchers generated successfully!",
+            "generated_ids": generated_ids  # send these to React to remove from list
+        }, status=201)

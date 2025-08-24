@@ -6,9 +6,11 @@ class LibraryApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = LibraryApplication
         fields = "__all__"
+        extra_kwargs = {
+            "status": {"required": False}  # allow updating only status
+        }
 
     def validate_email(self, value):
-        # check if student email exists in Student table
         if not Student.objects.filter(Student_Email=value).exists():
             raise serializers.ValidationError("This email is not registered in student database.")
         return value

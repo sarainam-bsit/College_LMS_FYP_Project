@@ -18,11 +18,11 @@ FEE_TYPE = [
 class FeeVoucher(models.Model):
     Student = models.ForeignKey('Account.Student', blank=True, null=True, on_delete=models.CASCADE)
     Challan_no = models.CharField(max_length=100, unique=True)
-    Challan_Type = models.CharField(max_length=50, choices=FEE_TYPE, default='Admission-Processing')
-    Amount_to_Pay = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    Challan_Type = models.CharField(max_length=100, choices=FEE_TYPE, default='Admission-Processing')
+    Amount_to_Pay = models.DecimalField(max_digits=100, decimal_places=2, default=0)
     Fine_Date = models.DateField(blank=True, null=True)
-    Fine_Amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    Amount_Paid = models.DecimalField(max_digits=10, blank=True, null=True, decimal_places=2, default=0)
+    Fine_Amount = models.DecimalField(max_digits=100, decimal_places=2, default=0)
+    Amount_Paid = models.DecimalField(max_digits=100, blank=True, null=True, decimal_places=2, default=0)
     Amount_Date = models.DateField(blank=True, null=True)
     Bank_Branch = models.CharField(max_length=100)  # remove unique=True
     Status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Unpaid")

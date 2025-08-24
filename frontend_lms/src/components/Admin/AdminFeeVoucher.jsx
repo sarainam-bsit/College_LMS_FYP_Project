@@ -26,7 +26,30 @@ export default function AdminFeeVoucherPage() {
 
   const [selectedVoucher, setSelectedVoucher] = useState(null);
   const [amountPaid, setAmountPaid] = useState("");
+  const [libraryForm, setLibraryForm] = useState({
+    selectedIds: [],
+    amount: "",
+    fineDate: "",
+    fineAmount: "",
+    bankBranch: "",
+  });
 
+  // List of library applications
+  const [libraryApplications, setLibraryApplications] = useState([]);
+
+  useEffect(() => {
+    // existing fetches...
+    fetchLibraryApplications();
+  }, []);
+
+  const fetchLibraryApplications = async () => {
+    try {
+      const res = await axios.get("http://localhost:8000/library/libraryform/"); // backend endpoint
+      setLibraryApplications(res.data);
+    } catch (err) {
+      console.error("Error fetching library applications:", err);
+    }
+  };
   useEffect(() => {
     fetchVouchers();
     fetchStudents();
@@ -121,6 +144,41 @@ export default function AdminFeeVoucherPage() {
     } catch (error) {
       console.error(error);
       alert(error.response?.data?.message || "Error generating supply vouchers");
+    }
+  };
+  const handleGenerateLibraryFee = async () => {
+    if (libraryForm.selectedIds.length === 0 || !libraryForm.amount) {
+      return alert("Please select at least one application and enter the amount.");
+    }
+
+    try {
+      const res = await axios.post(`${API_URL}generate_library_fee/`, {
+        application_ids: libraryForm.selectedIds,
+        amount: libraryForm.amount,
+        fine_date: libraryForm.fineDate,
+        fine_amount: libraryForm.fineAmount,
+        bank_branch: libraryForm.bankBranch,
+      });
+
+      // Remove generated applications from list
+      const generatedIds = (res.data.generated_ids || []).map(id => parseInt(id));
+      setLibraryApplications(prev =>
+        prev.filter(app => !generatedIds.includes(app.id))
+      );
+
+      // Reset library form
+      setLibraryForm({
+        selectedIds: [],
+        amount: "",
+        fineDate: "",
+        fineAmount: "",
+        bankBranch: "",
+      });
+
+      alert(res.data.message || "Library fee vouchers generated successfully!");
+    } catch (err) {
+      console.error(err.response?.data);
+      alert(err.response?.data?.error || err.response?.data?.detail || "Error generating library fee vouchers");
     }
   };
 
@@ -440,6 +498,85 @@ export default function AdminFeeVoucherPage() {
         </div>
       </div>
 
+
+      {/* --- Library Fee Voucher --- */}
+      <div className="card mb-4">
+        <div className="card-header fw-bold">Generate Library Fee Voucher</div>
+        <div className="card-body">
+          <div className="row g-3">
+            {/* Select multiple applications */}
+            <div className="col-md-6">
+              <select
+                multiple
+                value={libraryForm.selectedIds}
+                onChange={(e) => {
+                  const options = e.target.options;
+                  const selected = [];
+                  for (let i = 0; i < options.length; i++) {
+                    if (options[i].selected) selected.push(parseInt(options[i].value));
+                  }
+                  setLibraryForm({ ...libraryForm, selectedIds: selected });
+                }}
+                className="form-select"
+              >
+                {libraryApplications
+                  .filter(app => app.status === "Approved" && app.fee_generated_status === false)
+                  .map(app => (
+                    <option key={app.id} value={app.id}>
+                      {app.email}-{app.status}
+                    </option>
+                  ))}
+              </select>
+            </div>
+
+            {/* Amount input */}
+            <div className="col-md-6">
+              <input
+                type="number"
+                placeholder="Fee Amount"
+                className="form-control"
+                value={libraryForm.amount}
+                onChange={(e) =>
+                  setLibraryForm({ ...libraryForm, amount: e.target.value })
+                }
+              />
+            </div>
+
+            {/* Fine date input */}
+            <div className="col-md-6">
+              <input
+                type="date"
+                className="form-control"
+                value={libraryForm.fineDate}
+                onChange={(e) =>
+                  setLibraryForm({ ...libraryForm, fineDate: e.target.value })
+                }
+              />
+            </div>
+
+            {/* Bank branch input */}
+            <div className="col-md-6">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Bank Branch"
+                value={libraryForm.bankBranch}
+                onChange={(e) =>
+                  setLibraryForm({ ...libraryForm, bankBranch: e.target.value })
+                }
+              />
+            </div>
+          </div>
+
+          {/* Generate button */}
+          <button
+            className="btn btn-primary mt-3"
+            onClick={handleGenerateLibraryFee}
+          >
+            Generate Library Fee
+          </button>
+        </div>
+      </div>
       {/* Voucher Table */}
       <div className="card">
         <div className="card-header fw-bold">All Fee Vouchers</div>

@@ -16,6 +16,7 @@ class LibraryApplication(models.Model):
     home_address = models.TextField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="Pending")
     applied_at = models.DateTimeField(auto_now_add=True)
+    fee_generated_status = models.BooleanField(default=False) 
 
     def __str__(self):
         return f"{self.student.Student_Name} - {self.status}"

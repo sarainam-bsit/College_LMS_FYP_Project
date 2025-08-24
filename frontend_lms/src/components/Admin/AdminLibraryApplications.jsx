@@ -59,7 +59,7 @@ const AdminLibraryApplications = () => {
                     className={`badge ${
                       app.status === "Pending"
                         ? "bg-warning"
-                        : app.status === "Accepted"
+                        : app.status === "Approved"
                         ? "bg-success"
                         : "bg-danger"
                     }`}
@@ -72,7 +72,7 @@ const AdminLibraryApplications = () => {
                     <>
                       <button
                         className="btn btn-success btn-sm me-2"
-                        onClick={() => updateStatus(app.id, "Accepted")}
+                        onClick={() => updateStatus(app.id, "Approved")}
                       >
                         Accept
                       </button>
