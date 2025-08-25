@@ -8,6 +8,7 @@ from .serializers import FeeVoucherSerializer
 from Account.models import Student
 from Library.models import LibraryCard
 from Library.models import LibraryApplication
+from Hostel.models import HostelApplication
 import uuid
 
 class FeeVoucherViewSet(viewsets.ModelViewSet):
@@ -223,4 +224,58 @@ class FeeVoucherViewSet(viewsets.ModelViewSet):
         return Response({
             "message": "Library fee vouchers generated successfully!",
             "generated_ids": generated_ids  # send these to React to remove from list
+        }, status=201)
+
+
+    @action(detail=False, methods=["post"])
+    def generate_hostel_fee_yearly(self, request):
+    
+        amount = request.data.get("amount")  # yearly hostel fee
+        fine_date = request.data.get("fine_date")
+        fine_amount = request.data.get("fine_amount") or 0
+        bank_branch = request.data.get("bank_branch") or "Default Branch"
+
+        if not amount:
+            return Response({"error": "amount is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        current_year = datetime.now().year
+
+    # Select all students with approved hostel applications
+        applications = HostelApplication.objects.filter(status="Approved")
+
+        vouchers = []
+        generated_ids = []
+
+        for app in applications:
+            try:
+                student = Student.objects.get(Student_Email=app.Email)
+            except Student.DoesNotExist:
+                continue
+
+        # Check if voucher for current year already exists
+            existing_voucher = FeeVoucher.objects.filter(
+                Student=student,
+                Challan_Type="Hostel-fee",
+                Amount_Date__year=current_year
+            ).first()
+            if existing_voucher:
+                continue  # skip if already generated this year
+
+        # Create new voucher for current year
+            voucher = FeeVoucher.objects.create(
+                Student=student,
+                Challan_no=str(uuid.uuid4())[:8],
+                Challan_Type="Hostel-fee",
+                Amount_to_Pay=amount,
+                Fine_Date=fine_date,
+                Fine_Amount=fine_amount,
+                Bank_Branch=bank_branch,
+                Amount_Date=datetime.now().date()
+            )
+            vouchers.append(voucher)
+            generated_ids.append(app.id)
+
+        return Response({
+            "message": f"Hostel fee vouchers generated for year {current_year}!",
+            "generated_ids": generated_ids
         }, status=201)

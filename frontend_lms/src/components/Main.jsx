@@ -16,7 +16,7 @@ import Libraryform from './Library/Libraryform';
 import Feedbackform from './Feedbackform';
 import Librarycard from './Library/Librarycard';
 import Hostel from './Hostel/Hostel';
-import Singlerooms from './Hostel/Singlerooms';
+import RoomDetail from './Hostel/RoomDetail';
 import Doublerooms from './Hostel/Doublerooms';
 import Dormitoryrooms from './Hostel/Dormitoryrooms';
 import HostelAdmissionForm from './Hostel/HostelAdmissionForm';
@@ -52,6 +52,14 @@ import UploadStudentGrades from './Teacher/UploadStudentGrades';
 import StudentGrades from './StudentGrades';
 import AdminFeeVoucher from './Admin/AdminFeeVoucher';
 import AdminLibraryApplications from './Admin/AdminLibraryApplications';
+import AdminHostelDetail from './Admin/AdminHostelDetail';
+import AdminRoomDetail from './Admin/AdminRoomDetail';
+import AdminHostelApplications from './Admin/AdminHostelApplication';
+import LibraryFeeVoucherPage from './Admin/LibraryFeeVoucherPage';
+import HostelFeeVoucher from './Admin/HostelFeeVoucher';
+import CancelHostelApplication from './Admin/CancelHostelApplication';
+import AdminNotifications from './Admin/AdminNotification';
+import StudentNotifications from './StudentNoifications';
 
 // ProtectedRoute component
 function ProtectedRoute({ children }) {
@@ -154,10 +162,10 @@ const Main = () => {
         <Route path="/libraryform" element={<ProtectedRoute><Libraryform /></ProtectedRoute>} />
         <Route path="/librarycard" element={<ProtectedRoute><Librarycard /></ProtectedRoute>} />
         <Route path="/feedbackform" element={<ProtectedRoute><Feedbackform /></ProtectedRoute>} />
-
+<Route path="/notifications" element={<ProtectedRoute><StudentNotifications /></ProtectedRoute>} />
         <Route path="/studentgrades" element={<ProtectedRoute><StudentGrades /></ProtectedRoute>} />
         <Route path="/hostel" element={<ProtectedRoute><Hostel /></ProtectedRoute>} />
-        <Route path="/singlerooms" element={<ProtectedRoute><Singlerooms /></ProtectedRoute>} />
+        <Route path="/hostel/roomdetail/:id" element={<ProtectedRoute><RoomDetail /></ProtectedRoute>} />
         <Route path="/doublerooms" element={<ProtectedRoute><Doublerooms /></ProtectedRoute>} />
         <Route path="/dormitoryrooms" element={<ProtectedRoute><Dormitoryrooms /></ProtectedRoute>} />
         <Route path="/hosteladmissionform" element={<ProtectedRoute><HostelAdmissionForm /></ProtectedRoute>} />
@@ -176,6 +184,13 @@ const Main = () => {
         <Route path="/admin/timetable" element={<AdminTimetable />} />
         <Route path="/admin/feevoucher" element={<AdminFeeVoucher />} />
         <Route path="/admin/libraryapplications" element={<AdminLibraryApplications />} />
+        <Route path="/admin/hosteldetail" element={<AdminHostelDetail />} />
+        <Route path="/admin/roomdetail" element={<AdminRoomDetail />} />
+        <Route path="/admin/hostelapplication" element={<AdminHostelApplications />} />
+        <Route path="/admin/libraryfeevoucher" element={<LibraryFeeVoucherPage />} />
+        <Route path="/admin/hostelfeevoucher" element={<HostelFeeVoucher />} />
+        <Route path="/admin/cancelhostelapplication" element={<CancelHostelApplication />} />
+       <Route path="/admin/notifications" element={<AdminNotifications />} />
       </Routes>
     </>
   );

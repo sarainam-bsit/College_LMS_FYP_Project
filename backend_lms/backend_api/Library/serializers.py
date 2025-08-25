@@ -7,7 +7,7 @@ class LibraryApplicationSerializer(serializers.ModelSerializer):
         model = LibraryApplication
         fields = "__all__"
         extra_kwargs = {
-            "status": {"required": False}  # allow updating only status
+            "status": {"required": False}  
         }
 
     def validate_email(self, value):

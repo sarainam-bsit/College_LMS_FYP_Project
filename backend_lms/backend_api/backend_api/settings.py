@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     'Grades',
     'FeeVoucher',
     'Library',
+    'Hostel',
+    'Notifications',
    
 ]
 

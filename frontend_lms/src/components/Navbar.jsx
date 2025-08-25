@@ -98,6 +98,16 @@ const Navbar = ({ isLoggedIn, handleLogout, role }) => {
                   <li className="nav-item">
                     <Link className="nav-link" to="/librarycard">Library Card</Link>
                   </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/hostel">Hostel</Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/hostelcancelform">Hostel Cancel Application</Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/notifications">Notifications</Link>
+                  </li>
+                 
                   {/* <li className="nav-item dropdown">
                     <Link className="nav-link dropdown-toggle" to="" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       Library

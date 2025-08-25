@@ -8,7 +8,7 @@ STATUS_CHOICES = [
 ]
 
 class LibraryApplication(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True)
     gender = models.CharField(max_length=10)
     email = models.EmailField()
     religious = models.CharField(max_length=50)
@@ -19,7 +19,7 @@ class LibraryApplication(models.Model):
     fee_generated_status = models.BooleanField(default=False) 
 
     def __str__(self):
-        return f"{self.student.Student_Name} - {self.status}"
+        return f"{self.email} - {self.status}"
 
 
 
