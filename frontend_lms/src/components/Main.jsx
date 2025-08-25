@@ -64,6 +64,7 @@ import TeacherNotifications from './Teacher/TeacherNotifications';
 import TeacherSendNotification from './Teacher/TeacherSendNotification';
 import AdminContact from './Admin/AdminContact';
 import TeacherContact from './Teacher/TeacherContact';
+import AdminFeedback from './Admin/AdminFeedback';
 
 // ProtectedRoute component
 function ProtectedRoute({ children }) {
@@ -199,6 +200,7 @@ const Main = () => {
         <Route path="/admin/cancelhostelapplication" element={<CancelHostelApplication />} />
        <Route path="/admin/notifications" element={<AdminNotifications />} />
        <Route path="/admin/contact" element={<AdminContact />} />
+       <Route path="/admin/feedback" element={<AdminFeedback />} />
       </Routes>
     </>
   );
