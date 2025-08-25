@@ -60,6 +60,10 @@ import HostelFeeVoucher from './Admin/HostelFeeVoucher';
 import CancelHostelApplication from './Admin/CancelHostelApplication';
 import AdminNotifications from './Admin/AdminNotification';
 import StudentNotifications from './StudentNoifications';
+import TeacherNotifications from './Teacher/TeacherNotifications';
+import TeacherSendNotification from './Teacher/TeacherSendNotification';
+import AdminContact from './Admin/AdminContact';
+import TeacherContact from './Teacher/TeacherContact';
 
 // ProtectedRoute component
 function ProtectedRoute({ children }) {
@@ -176,6 +180,9 @@ const Main = () => {
         <Route path="/uploadTasks" element={<ProtectedRoute><UploadTasks /></ProtectedRoute>} />
         <Route path="/uploadgrades" element={<ProtectedRoute><UploadGrades /></ProtectedRoute>} />
         <Route path='/OTPverification' element={<ProtectedRoute><OTPverification /></ProtectedRoute>} />
+        <Route path='teacher/notifications' element={<ProtectedRoute><TeacherNotifications /></ProtectedRoute>} />
+        <Route path='teacher/sendnotification' element={<ProtectedRoute><TeacherSendNotification /></ProtectedRoute>} />
+        <Route path='teacher/contact' element={<ProtectedRoute><TeacherContact /></ProtectedRoute>} />
 
         {/* Admin */}
         <Route path="/admin/departments" element={<DepartmentAdmin />} />
@@ -191,6 +198,7 @@ const Main = () => {
         <Route path="/admin/hostelfeevoucher" element={<HostelFeeVoucher />} />
         <Route path="/admin/cancelhostelapplication" element={<CancelHostelApplication />} />
        <Route path="/admin/notifications" element={<AdminNotifications />} />
+       <Route path="/admin/contact" element={<AdminContact />} />
       </Routes>
     </>
   );

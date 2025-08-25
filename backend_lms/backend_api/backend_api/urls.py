@@ -31,6 +31,7 @@ urlpatterns = [
     path('library/', include('Library.urls')), 
     path('hostel/', include('Hostel.urls')), 
     path('Notification/', include('Notifications.urls')),
+    path('Contact/', include('Contact.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

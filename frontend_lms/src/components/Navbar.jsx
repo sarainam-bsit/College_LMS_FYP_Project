@@ -161,7 +161,13 @@ const Navbar = ({ isLoggedIn, handleLogout, role }) => {
                     <Link className="nav-link" to="">View Teachers Details</Link>
                   </li>
                   <li className="nav-item">
-                    <Link className="nav-link" to="">Send Notifications</Link>
+                    <Link className="nav-link" to="/teacher/notifications">Notifications</Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/teacher/sendnotification">Send Notifications</Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/teacher/contact">Contact</Link>
                   </li>
                 </>
               )}

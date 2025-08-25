@@ -26,6 +26,6 @@ class StudentSerializer(serializers.ModelSerializer):
 class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teacher
-        fields = ['id','Teacher_Name', 'department_id',]
+        fields = ['id','Teacher_Name', ]
             
             

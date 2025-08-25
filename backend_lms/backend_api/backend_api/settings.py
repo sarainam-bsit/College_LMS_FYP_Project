@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'Library',
     'Hostel',
     'Notifications',
+    'Contact',
+    'Feedback',
    
 ]
 

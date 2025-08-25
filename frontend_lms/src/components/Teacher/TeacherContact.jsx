@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Navbar from './Navbar';
-import Footer from './Footer';
+import Navbar from '../Navbar';
+import Footer from '../Footer';
 
 const API_CONTACT = "http://127.0.0.1:8000/Contact/contact/"; // backend API
 
-const Contactus = () => {
+const TeacherContact = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -124,4 +124,4 @@ const Contactus = () => {
   );
 }
 
-export default Contactus;
+export default TeacherContact;

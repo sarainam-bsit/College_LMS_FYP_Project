@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 const API_NOTIFICATIONS = "http://127.0.0.1:8000/Notification/notifications/";
 const API_STUDENTS = "http://127.0.0.1:8000/Account/students/"; // adjust
-const API_TEACHERS = "http://127.0.0.1:8000/Account/teachers/"; // if exists
+
 
 export default function AdminNotifications() {
   const [form, setForm] = useState({
@@ -13,13 +13,11 @@ export default function AdminNotifications() {
     type: "general",
     audience: "all_students", // all_students | specific_student | all_teachers | specific_teacher | everyone
     receiver_student: "",
-    receiver_teacher: "",
     for_all_students: false,
-    for_all_teachers: false,
+   
   });
 
   const [students, setStudents] = useState([]);
-  const [teachers, setTeachers] = useState([]);
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -27,7 +25,7 @@ export default function AdminNotifications() {
   useEffect(() => {
     loadNotifications();
     loadStudents();
-    loadTeachers(); // ignore if 404
+    
   }, []);
 
   const loadNotifications = async () => {
@@ -44,14 +42,7 @@ export default function AdminNotifications() {
     }
   };
 
-  const loadTeachers = async () => {
-    try {
-      const { data } = await axios.get(API_TEACHERS);
-      setTeachers(data);
-    } catch (e) {
-      // optional
-    }
-  };
+  
 
   // audience -> flags
   const buildPayload = () => {
@@ -60,9 +51,7 @@ export default function AdminNotifications() {
       message: form.message,
       type: form.type,
       for_all_students: false,
-      for_all_teachers: false,
       receiver_student: null,
-      receiver_teacher: null,
     };
 
     switch (form.audience) {
@@ -72,16 +61,8 @@ export default function AdminNotifications() {
       case "specific_student":
         payload.receiver_student = form.receiver_student || null;
         break;
-      case "all_teachers":
-        payload.for_all_teachers = true;
-        break;
-      case "specific_teacher":
-        payload.receiver_teacher = form.receiver_teacher || null;
-        break;
-      case "everyone":
-        payload.for_all_students = true;
-        payload.for_all_teachers = true;
-        break;
+     
+      
       default:
         payload.for_all_students = true;
     }
@@ -100,9 +81,8 @@ export default function AdminNotifications() {
         type: "general",
         audience: "all_students",
         receiver_student: "",
-        receiver_teacher: "",
         for_all_students: false,
-        for_all_teachers: false,
+    
       });
       await loadNotifications();
       alert("Notification sent!");
@@ -169,9 +149,7 @@ export default function AdminNotifications() {
               {[
                 ["all_students", "All Students"],
                 ["specific_student", "Specific Student"],
-                ["all_teachers", "All Teachers"],
-                ["specific_teacher", "Specific Teacher"],
-                ["everyone", "Everyone"],
+
               ].map(([value, label]) => (
                 <div className="form-check" key={value}>
                   <input
@@ -210,24 +188,7 @@ export default function AdminNotifications() {
             </div>
           )}
 
-          {form.audience === "specific_teacher" && teachers.length > 0 && (
-            <div className="col-md-6">
-              <label className="form-label">Select Teacher</label>
-              <select
-                className="form-select"
-                value={form.receiver_teacher}
-                onChange={(e) => setForm({ ...form, receiver_teacher: e.target.value })}
-                required
-              >
-                <option value="">-- choose teacher --</option>
-                {teachers.map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.name || t.Teacher_Name} 
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
+          
 
           <div className="col-12 d-flex justify-content-end">
             <button className="btn btn-primary" disabled={loading}>
@@ -254,16 +215,12 @@ export default function AdminNotifications() {
               <tbody>
                 {list.map((n) => {
                   const audience =
-                    n.for_all_students && n.for_all_teachers
-                      ? "Everyone"
-                      : n.for_all_students
+                    
+                      n.for_all_students
                       ? "All Students"
-                      : n.for_all_teachers
-                      ? "All Teachers"
                       : n.receiver_student
                       ? `Student #${n.receiver_student}`
-                      : n.receiver_teacher
-                      ? `Teacher #${n.receiver_teacher}`
+                     
                       : "-";
                   return (
                     <tr key={n.id}>
