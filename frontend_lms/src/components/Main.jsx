@@ -9,7 +9,6 @@ import Profile from './Profile';
 import BSprogram from './BSprogram';
 import CourseCategories from './CourseCategories';
 import Categorypage from './Categorypage';
-
 import Lectures from './Lectures';
 import Library from './Library/Library';
 import Libraryform from './Library/Libraryform';
@@ -17,8 +16,6 @@ import Feedbackform from './Feedbackform';
 import Librarycard from './Library/Librarycard';
 import Hostel from './Hostel/Hostel';
 import RoomDetail from './Hostel/RoomDetail';
-import Doublerooms from './Hostel/Doublerooms';
-import Dormitoryrooms from './Hostel/Dormitoryrooms';
 import HostelAdmissionForm from './Hostel/HostelAdmissionForm';
 import Hostelcancelform from './Hostel/Hostelcancelform';
 import Feevoucher from './FeeVoucher/Feevoucher';
@@ -29,10 +26,10 @@ import UploadGrades from './Teacher/UploadGrades';
 import UploadTasks from './Teacher/UploadTasks';
 import StudentCourses from './StudentCourses';
 import StudentTasks from './StudentTasks';
-import OTPverification from './OTPverification';
 import ForgetPassword from './ForgetPassword';
 import ResetPassword from './Resetpassword';
 import Navbar from './Navbar';
+import AdminNavbar from './Admin/AdminNavbar';
 import CourseCategoriesAdmin from "./Admin/CourseCategoriesAdmin";
 import DepartmentAdmin from './Admin/DepartmentAdmin';
 import CoursesAdmin from './Admin/CoursesAdmin';
@@ -65,14 +62,46 @@ import TeacherSendNotification from './Teacher/TeacherSendNotification';
 import AdminContact from './Admin/AdminContact';
 import TeacherContact from './Teacher/TeacherContact';
 import AdminFeedback from './Admin/AdminFeedback';
+import AdminHome from './Admin/AdminHome';
+import AdminLogin from './Admin/AdminLogin';
+import TeacherNavbar from './Teacher/TeacherNavbar';
+import { useNavigate } from 'react-router-dom';
+import PublicRoute from './PublicRoute';
+import TeacherProfile from './Teacher/TeacherProfile';
+import Staff from './Staff';
 
-// ProtectedRoute component
-function ProtectedRoute({ children }) {
+
+// ✅ Student & Teacher Protected Route
+function ProtectedRoute({ children, allowedRoles }) {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-  return isLoggedIn ? children : <Navigate to="/login" />;
+  const userRole = localStorage.getItem("userRole");
+
+
+  if (!isLoggedIn) {
+    return <Navigate to="/login" />;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(userRole)) {
+    return <Navigate to="/login" />;
+  }
+
+
+  return children;
 }
 
-// Registration Protected Route (only if allowed)
+// ✅ Admin Protected Route
+function AdminProtectedRoute({ children }) {
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const userRole = localStorage.getItem("userRole");
+
+  if (!isLoggedIn || userRole !== "admin") {
+    return <Navigate to="/adminlogin" replace />;
+  }
+
+  return children;
+}
+
+// ✅ Registration Route
 function RegistrationRoute({ children }) {
   const location = useLocation();
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -85,7 +114,10 @@ function RegistrationRoute({ children }) {
   return fromLogin ? children : <Navigate to="/login" replace />;
 }
 
+
 const Main = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem("isLoggedIn") === "true");
   const [userRole, setUserRole] = useState(() => localStorage.getItem("userRole"));
 
@@ -102,105 +134,113 @@ const Main = () => {
     localStorage.removeItem("userRole");
     setIsLoggedIn(false);
     setUserRole(null);
+
+    // ✅ Redirect based on role
+    if (location.pathname.includes("/admin")) {
+      navigate("/adminlogin", { replace: true });
+    } else {
+      navigate("/login", { replace: true });
+    }
   };
 
+
   return (
+
     <>
-      {/* Navbar */}
-      {isLoggedIn && (
+      {/* Admin Navbar */}
+      {(userRole === "admin" || location.pathname === "/adminlogin") && (
+        <AdminNavbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+      )}
+
+      {/* Student Navbar */}
+      {(userRole === "student" || location.pathname === "/login") && (
         <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} role={userRole} />
       )}
 
-      {/* Routes */}
+      {/* Teacher Navbar */}
+      {userRole === "teacher" && isLoggedIn && (
+        <TeacherNavbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} role={userRole} />
+      )}
       <Routes>
-        {/* Login & Reset */}
-        <Route
-  path="/login"
-  element={
-    isLoggedIn ? (
-      <Navigate to="/" />
-    ) : (
-      <Login setIsLoggedIn={setIsLoggedIn} setUserRole={setUserRole} />
-    )
-  }
-/>
+        {/* Auth */}
+        {/* Auth */}
+        <Route path="/login" element={
+          <PublicRoute>
+            <Login setIsLoggedIn={setIsLoggedIn} setUserRole={setUserRole} />
+          </PublicRoute>
+        } />
+        <Route path="/adminlogin" element={
+          <PublicRoute>
+            <AdminLogin setIsLoggedIn={setIsLoggedIn} setUserRole={setUserRole} />
+          </PublicRoute>
+        } />
         <Route path="/reset" element={<ForgetPassword />} />
         <Route path="/reset_password" element={<ResetPassword />} />
+        <Route path="/registration" element={<RegistrationRoute><Registration setIsLoggedIn={setIsLoggedIn} setUserRole={setUserRole} /></RegistrationRoute>} />
 
-        {/* Registration */}
-<Route
-  path="/registration"
-  element={
-    <RegistrationRoute>
-      <Registration setIsLoggedIn={setIsLoggedIn} setUserRole={setUserRole} />
-    </RegistrationRoute>
-  }
-/>
-        {/* Protected Pages */}
-        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-        <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-        <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
-        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-        <Route path="/feevoucher" element={<ProtectedRoute><Feevoucher /></ProtectedRoute>} />
-        <Route path="/contact" element={<ProtectedRoute><Contactus /></ProtectedRoute>} />
-        <Route path="/programs" element={<ProtectedRoute><BSprogram /></ProtectedRoute>} />
-        <Route path="/teacher/programs" element={<ProtectedRoute><TeacherDepartment /></ProtectedRoute>} />
-        <Route path="/teacher/teacherlecture/:courseId" element={<ProtectedRoute><TeacherLecture /></ProtectedRoute>} />
-        <Route path="/teacher/department/:deptId/categories" element={<ProtectedRoute><TeacherCategory /></ProtectedRoute>} />
-        <Route path="/teacher/department/:departmentId/category/:categoryId" element={<ProtectedRoute><TeacherCategoryDetails /></ProtectedRoute>} />
-        <Route path="/teacher/department/:departmentId/category/:categoryId/timetable" element={<ProtectedRoute><TeacherTimetable /></ProtectedRoute>} />
-        <Route path="/teacher/department/:departmentId/category/:categoryId/courses" element={<ProtectedRoute><TeacherCourses /></ProtectedRoute>} />
-        <Route path="/teacher/department/:departmentId/category/:categoryId/TaskDetail" element={<ProtectedRoute><TeacherTaskDetail /></ProtectedRoute>} />
-        <Route path="/teacher/teachertask/:courseId" element={<ProtectedRoute><TeacherTasks /></ProtectedRoute>} />
-        <Route path="/categories/:deptId" element={<ProtectedRoute><CourseCategories /></ProtectedRoute>} />
-        <Route path="/teacher/department/:departmentId/category/:categoryId/gradeStudents" element={<ProtectedRoute><TeacherGradesStudent /></ProtectedRoute>} />
-        <Route path="/department/:departmentId/category/:categoryId" element={<ProtectedRoute><Categorypage /></ProtectedRoute>} />
-        <Route path="/department/:departmentId/category/:categoryId/timetable" element={<ProtectedRoute><StudentTimetable /></ProtectedRoute>} />
-        <Route path="/department/:departmentId/category/:categoryId/courses" element={<ProtectedRoute><StudentCourses /></ProtectedRoute>} />
-        <Route path="/department/:departmentId/category/:categoryId/tasks" element={<ProtectedRoute><StudentTasks /></ProtectedRoute>} />
+        {/* Student & Teacher Routes */}
+        <Route path="/" element={<ProtectedRoute allowedRoles={["student", "teacher"]}><Home /></ProtectedRoute>} />
+        <Route path="/home" element={<ProtectedRoute allowedRoles={["student", "teacher"]}><Home /></ProtectedRoute>} />
+        <Route path="/about" element={<ProtectedRoute allowedRoles={["student", "teacher", "admin"]}><About /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute allowedRoles={["student", "teacher"]}><Profile /></ProtectedRoute>} />
+        <Route path="/feevoucher" element={<ProtectedRoute allowedRoles={["student"]}><Feevoucher /></ProtectedRoute>} />
+        <Route path="/contact" element={<ProtectedRoute allowedRoles={["student"]}><Contactus /></ProtectedRoute>} />
+        <Route path="/programs" element={<ProtectedRoute allowedRoles={["student"]}><BSprogram /></ProtectedRoute>} />
+        <Route path="/department/:departmentId/category/:categoryId" element={<ProtectedRoute allowedRoles={["student"]}><Categorypage /></ProtectedRoute>} />
+        <Route path="/categories/:deptId" element={<ProtectedRoute allowedRoles={["student"]}><CourseCategories /></ProtectedRoute>} />
+        <Route path="/hostel" element={<ProtectedRoute allowedRoles={["student"]}><Hostel /></ProtectedRoute>} />
+        <Route path="/hostel/roomdetail/:id" element={<ProtectedRoute allowedRoles={["student"]}><RoomDetail /></ProtectedRoute>} />
+        <Route path="/hosteladmissionform" element={<ProtectedRoute allowedRoles={["student"]}><HostelAdmissionForm /></ProtectedRoute>} />
+        <Route path="/hostelcancelform" element={<ProtectedRoute allowedRoles={["student"]}><Hostelcancelform /></ProtectedRoute>} />
+        <Route path="/challan-form/:id" element={<ProtectedRoute allowedRoles={["student"]}><Challanform /></ProtectedRoute>} />
+        <Route path="/studentgrades" element={<ProtectedRoute allowedRoles={["student"]}><StudentGrades /></ProtectedRoute>} />
+        <Route path="/notifications" element={<ProtectedRoute allowedRoles={["student"]}><StudentNotifications /></ProtectedRoute>} />
+        <Route path="/library" element={<ProtectedRoute allowedRoles={["student"]}><Library /></ProtectedRoute>} />
+        <Route path="/libraryform" element={<ProtectedRoute allowedRoles={["student"]}><Libraryform /></ProtectedRoute>} />
+        <Route path="/librarycard" element={<ProtectedRoute allowedRoles={["student"]}><Librarycard /></ProtectedRoute>} />
+        <Route path="/feedbackform" element={<ProtectedRoute allowedRoles={["student"]}><Feedbackform /></ProtectedRoute>} />
+        <Route path="/course/:courseId/lectures" element={<ProtectedRoute allowedRoles={["student"]}><Lectures /></ProtectedRoute>} />
+        <Route path="/department/:departmentId/category/:categoryId/courses" element={<ProtectedRoute allowedRoles={["student"]}><StudentCourses /></ProtectedRoute>} />
+        <Route path="/department/:departmentId/category/:categoryId/tasks" element={<ProtectedRoute allowedRoles={["student"]}><StudentTasks /></ProtectedRoute>} />
+        <Route path="/department/:departmentId/category/:categoryId/timetable" element={<ProtectedRoute allowedRoles={["student"]}><StudentTimetable /></ProtectedRoute>} />
+        <Route path="/teacher/notifications" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherNotifications /></ProtectedRoute>} />
+        <Route path="/teacher/sendnotification" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherSendNotification /></ProtectedRoute>} />
+        <Route path="/teacher/contact" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherContact /></ProtectedRoute>} />
+        <Route path="/teacherdashboard" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherDashboard /></ProtectedRoute>} />
+        <Route path="/teacher/programs" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherDepartment /></ProtectedRoute>} />
+        <Route path="/teacher/teacherlecture/:courseId" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherLecture /></ProtectedRoute>} />
+        <Route path="/teacher/teachertask/:courseId" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherTasks /></ProtectedRoute>} />
+        <Route path="/uploadlectures" element={<ProtectedRoute allowedRoles={["teacher"]}><UploadLectures /></ProtectedRoute>} />
+        <Route path="/uploadTasks" element={<ProtectedRoute allowedRoles={["teacher"]}><UploadTasks /></ProtectedRoute>} />
+        <Route path="/uploadgrades" element={<ProtectedRoute allowedRoles={["teacher"]}><UploadGrades /></ProtectedRoute>} />
+        <Route path="/teacher/department/:departmentId/category/:categoryId/gradeStudents" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherGradesStudent /></ProtectedRoute>} />
+        <Route path="/teacher/coursestudents/:courseId" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherGradesStuDetail /></ProtectedRoute>} />
+        <Route path="/teacher/department/:deptId/categories" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherCategory /></ProtectedRoute>} />
+        <Route path="/teacher/department/:departmentId/category/:categoryId" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherCategoryDetails /></ProtectedRoute>} />
+        <Route path="/teacher/department/:departmentId/category/:categoryId/timetable" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherTimetable /></ProtectedRoute>} />
+        <Route path="/teacher/department/:departmentId/category/:categoryId/courses" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherCourses /></ProtectedRoute>} />
+        <Route path="/teacher/department/:departmentId/category/:categoryId/TaskDetail" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherTaskDetail /></ProtectedRoute>} />
+        <Route path="/teacher/uploadstudentgrades" element={<ProtectedRoute allowedRoles={["teacher"]}><UploadStudentGrades /></ProtectedRoute>} />
+        <Route path="/teacherprofile" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherProfile /></ProtectedRoute>} />
+        <Route path="/staff" element={<ProtectedRoute allowedRoles={["student","teacher"]}><Staff /></ProtectedRoute>} />
 
-        <Route path="/teacher/coursestudents/:courseId" element={<ProtectedRoute><TeacherGradesStuDetail /></ProtectedRoute>} />
-        <Route path="/teacher/uploadstudentgrades" element={<ProtectedRoute><UploadStudentGrades /></ProtectedRoute>} />
-        <Route path="/feevoucher" element={<ProtectedRoute><Feevoucher /></ProtectedRoute>} />
-        <Route path="/course/:courseId/lectures" element={<ProtectedRoute><Lectures /></ProtectedRoute>} />
-        <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
-        <Route path="/libraryform" element={<ProtectedRoute><Libraryform /></ProtectedRoute>} />
-        <Route path="/librarycard" element={<ProtectedRoute><Librarycard /></ProtectedRoute>} />
-        <Route path="/feedbackform" element={<ProtectedRoute><Feedbackform /></ProtectedRoute>} />
-<Route path="/notifications" element={<ProtectedRoute><StudentNotifications /></ProtectedRoute>} />
-        <Route path="/studentgrades" element={<ProtectedRoute><StudentGrades /></ProtectedRoute>} />
-        <Route path="/hostel" element={<ProtectedRoute><Hostel /></ProtectedRoute>} />
-        <Route path="/hostel/roomdetail/:id" element={<ProtectedRoute><RoomDetail /></ProtectedRoute>} />
-        <Route path="/doublerooms" element={<ProtectedRoute><Doublerooms /></ProtectedRoute>} />
-        <Route path="/dormitoryrooms" element={<ProtectedRoute><Dormitoryrooms /></ProtectedRoute>} />
-        <Route path="/hosteladmissionform" element={<ProtectedRoute><HostelAdmissionForm /></ProtectedRoute>} />
-        <Route path="/hostelcancelform" element={<ProtectedRoute><Hostelcancelform /></ProtectedRoute>} />
-        <Route path="/challan-form/:id" element={<ProtectedRoute><Challanform /></ProtectedRoute>} />
-        <Route path="/TeacherDashboard" element={<ProtectedRoute><TeacherDashboard /></ProtectedRoute>} />
-        <Route path="/uploadlectures" element={<ProtectedRoute><UploadLectures /></ProtectedRoute>} />
-        <Route path="/uploadTasks" element={<ProtectedRoute><UploadTasks /></ProtectedRoute>} />
-        <Route path="/uploadgrades" element={<ProtectedRoute><UploadGrades /></ProtectedRoute>} />
-        <Route path='/OTPverification' element={<ProtectedRoute><OTPverification /></ProtectedRoute>} />
-        <Route path='teacher/notifications' element={<ProtectedRoute><TeacherNotifications /></ProtectedRoute>} />
-        <Route path='teacher/sendnotification' element={<ProtectedRoute><TeacherSendNotification /></ProtectedRoute>} />
-        <Route path='teacher/contact' element={<ProtectedRoute><TeacherContact /></ProtectedRoute>} />
-
-        {/* Admin */}
-        <Route path="/admin/departments" element={<DepartmentAdmin />} />
-        <Route path="/admin/course-categories" element={<CourseCategoriesAdmin />} />
-        <Route path="/admin/courses" element={<CoursesAdmin />} />
-        <Route path="/admin/timetable" element={<AdminTimetable />} />
-        <Route path="/admin/feevoucher" element={<AdminFeeVoucher />} />
-        <Route path="/admin/libraryapplications" element={<AdminLibraryApplications />} />
-        <Route path="/admin/hosteldetail" element={<AdminHostelDetail />} />
-        <Route path="/admin/roomdetail" element={<AdminRoomDetail />} />
-        <Route path="/admin/hostelapplication" element={<AdminHostelApplications />} />
-        <Route path="/admin/libraryfeevoucher" element={<LibraryFeeVoucherPage />} />
-        <Route path="/admin/hostelfeevoucher" element={<HostelFeeVoucher />} />
-        <Route path="/admin/cancelhostelapplication" element={<CancelHostelApplication />} />
-       <Route path="/admin/notifications" element={<AdminNotifications />} />
-       <Route path="/admin/contact" element={<AdminContact />} />
-       <Route path="/admin/feedback" element={<AdminFeedback />} />
+        {/* Admin Routes */}
+        <Route path="/adminhome" element={<AdminProtectedRoute><AdminHome /></AdminProtectedRoute>} />
+        <Route path="/admin/departments" element={<AdminProtectedRoute><DepartmentAdmin /></AdminProtectedRoute>} />
+        <Route path="/admin/course-categories" element={<AdminProtectedRoute><CourseCategoriesAdmin /></AdminProtectedRoute>} />
+        <Route path="/admin/courses" element={<AdminProtectedRoute><CoursesAdmin /></AdminProtectedRoute>} />
+        <Route path="/admin/feevoucher" element={<AdminProtectedRoute><AdminFeeVoucher /></AdminProtectedRoute>} />
+        <Route path="/admin/libraryapplications" element={<AdminProtectedRoute><AdminLibraryApplications /></AdminProtectedRoute>} />
+        <Route path="/admin/hosteldetail" element={<AdminProtectedRoute><AdminHostelDetail /></AdminProtectedRoute>} />
+        <Route path="/admin/roomdetail" element={<AdminProtectedRoute><AdminRoomDetail /></AdminProtectedRoute>} />
+        <Route path="/admin/hostelapplication" element={<AdminProtectedRoute><AdminHostelApplications /></AdminProtectedRoute>} />
+        <Route path="/admin/libraryfeevoucher" element={<AdminProtectedRoute><LibraryFeeVoucherPage /></AdminProtectedRoute>} />
+        <Route path="/admin/hostelfeevoucher" element={<AdminProtectedRoute><HostelFeeVoucher /></AdminProtectedRoute>} />
+        <Route path="/admin/cancelhostelapplication" element={<AdminProtectedRoute><CancelHostelApplication /></AdminProtectedRoute>} />
+        <Route path="/admin/notifications" element={<AdminProtectedRoute><AdminNotifications /></AdminProtectedRoute>} />
+        <Route path="/admin/contact" element={<AdminProtectedRoute><AdminContact /></AdminProtectedRoute>} />
+        <Route path="/admin/feedback" element={<AdminProtectedRoute><AdminFeedback /></AdminProtectedRoute>} />
+        <Route path="/admin/timetable" element={<AdminProtectedRoute><AdminTimetable /></AdminProtectedRoute>} />
       </Routes>
     </>
   );

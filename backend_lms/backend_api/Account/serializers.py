@@ -27,5 +27,14 @@ class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teacher
         fields = ['id','Teacher_Name', ]
-            
+
+class StudentProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = "__all__"
+class TeacherProfileSerializer(serializers.ModelSerializer):
+    Department_Name = serializers.CharField(source="Department.Department_Name", read_only=True)
+    class Meta:
+        model = Teacher
+        fields = "__all__"
             

@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'Notifications',
     'Contact',
     'Feedback',
+    'Admin',
    
 ]
 

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import React from 'react';
 import Feedback from './Feedback';
-import Navbar from "./Navbar";
+
 import Footer from "./Footer";
 const Home = () =>{
  
@@ -9,7 +9,7 @@ const Home = () =>{
 
   return (
     <>
-     <Navbar />
+
     <div className="container-fluid p-0" style={{ marginTop: "65px", minHeight: "90vh" }}>
       <div className="card text-bg-dark border-0">
         <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">

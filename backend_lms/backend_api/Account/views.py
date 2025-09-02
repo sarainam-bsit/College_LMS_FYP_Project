@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from .models import Student, Teacher
+from Departments.models import Department
 from .serializers import StudentRegistrationSerializer
 from django.views.decorators.csrf import csrf_exempt
 import random, datetime
@@ -11,7 +12,7 @@ from rest_framework import viewsets
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
-from .serializers import StudentSerializer, TeacherSerializer
+from .serializers import StudentSerializer, TeacherSerializer, StudentProfileSerializer, TeacherProfileSerializer
 
 class StudentListAPIView(generics.ListAPIView):
     serializer_class = StudentSerializer
@@ -380,5 +381,22 @@ class TeacherViewSet(generics.ListAPIView):
     serializer_class = TeacherSerializer
 
 
-        
+class StudentProfileViewSet(viewsets.ModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = StudentProfileSerializer
+
+
+class TeacherProfileViewSet(viewsets.ModelViewSet):
+    queryset = Teacher.objects.all()
+    serializer_class = TeacherProfileSerializer
+
+
+@api_view(['GET'])
+def get_teachers_by_department(request, department_id):
+    try:
+        teachers = Teacher.objects.filter(Department=department_id)
+        serializer = TeacherProfileSerializer(teachers, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Teacher.DoesNotExist:
+        return Response({"message": "No teachers found for this department"}, status=status.HTTP_404_NOT_FOUND)
       

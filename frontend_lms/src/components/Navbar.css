@@ -1,51 +1,54 @@
-/* Links */
-.custom-link {
-  color: #ffffff;
-  font-weight: 500;
-  margin: 2px 0;
-  padding: 8px 12px;
-  border-radius: 6px;
-  transition: all 0.3s;
-}
-
-.custom-link:hover {
-  background-color: #1a1a1a;
-  color: #17a2b8;
-}
-
-.active-link {
-  background-color: #17a2b8;
-  color: #000000 !important;
-  border-left: 4px solid #ffffff;
-}
-
-/* Logout button */
-.logout-btn {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 6px;
+/* Navbar link default */
+.navlink {
+  width: 100%;              /* Full width (inside li) */
+  background: transparent;  /* No background */
+  color: white;             /* White text */
+  border: none;             /* No border */
+  padding: 10px 15px;
   font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
+  text-align: left;         /* Align text like links */
+  transition: all 0.3s ease;
+}
+
+/* Navbar link hover */
+.navlink:hover {
+  background-color: rgba(233, 18, 18, 0.729); /* Light hover effect */
+  transform: scale(1.05);  /* Small zoom */
+    /* Slight zoom */
+}
+.logout-btn {
+  width: 100%;              /* Full width (inside li) */
+  background: transparent;  /* No background */
+  color: white;             /* White text */
+  border: none;             /* No border */
+  padding: 10px 15px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;         /* Align text like links */
+  transition: all 0.3s ease;
 }
 
 .logout-btn:hover {
-  background-color: #c82333;
+  background-color: rgba(233, 18, 18, 0.729);; /* Light hover effect */
+  transform: scale(1.02);  /* Small zoom */
 }
 
-/* Offcanvas menu spacing */
-.custom-menu .nav-item {
-  margin-bottom: 5px;
-}
-.custom-toggler:focus,
-.custom-toggler:active {
-  outline: none;      /* Remove default focus outline */
-  box-shadow: none;   /* Remove default focus/active shadow */
+.offcanvas-end {
+  width: 250px;           /* Set a fixed width */
+  max-width: 80vw;        /* Responsive */
+  /* max-height: 100vh; */
 }
 
-/* Optional: enlarge button on click */
-.custom-toggler:active {
-  transform: scale(1.1);
-  transition: transform 0.1s ease-in-out;
+.offcanvas-body {
+  overflow-y: auto;       /* Menu scrollable */
+  max-height: 100vh;      /* Full height of viewport */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.offcanvas-body::-webkit-scrollbar {
+  display: none;
 }

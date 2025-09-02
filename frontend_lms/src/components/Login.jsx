@@ -51,12 +51,14 @@ const Login = ({ setIsLoggedIn, setUserRole }) => {
             setErrorMessage({});
 
             if (role === 'student' || role === 'teacher') {
+                setIsLoggedIn(true);
+                setUserRole(role);
                 localStorage.setItem('userRole', role);
                 localStorage.setItem('isLoggedIn', 'true');
                 localStorage.setItem('studentId', response.data.student_id); 
                 localStorage.setItem('teacherId', response.data.teacher_id); 
-                setIsLoggedIn(true);
-                setUserRole(role);  // ✅ ye hi important hai
+                
+                  // ✅ ye hi important hai
 
                 setSuccessMessage(response.data?.message);
 

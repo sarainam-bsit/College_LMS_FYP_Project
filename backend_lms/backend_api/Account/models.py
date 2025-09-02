@@ -22,7 +22,7 @@ class Student(models.Model):
         ("Running", "Running"),
         ("Complete", "Complete"),
     ]
-    
+    Student_Image = models.ImageField(upload_to= 'profile_pics/', blank= True, null = True)
     Role = models.CharField(max_length=100, choices=Role_CHOICES)
     Course_Category = models.ForeignKey('Departments.CourseCategories',blank=True, null=True, on_delete=models.CASCADE)
     Reg_No= models.CharField(max_length=100, unique=True)
@@ -74,15 +74,21 @@ class Teacher(models.Model):
     ('Student', 'Student'),
     ('Teacher', 'Teacher')
 ]
+    Teacher_Image = models.ImageField(upload_to= 'profile_pics/', blank= True, null = True)
     Role = models.CharField(max_length=100, choices=Role_CHOICES)
     Teacher_Name = models.CharField(max_length=100)
     Teacher_Email = models.EmailField(unique=True)
     Teacher_Password = models.CharField(max_length=128, blank=True, null=True) 
     Department = models.ForeignKey('Departments.Department', blank=True, null=True, related_name='teachers', on_delete=models.SET_NULL)
+    Qualification = models.CharField(max_length=100, blank=True, null=True)
     Teacher_OTP_Digits = models.CharField(max_length=6, blank=True, null=True)
     Teacher_OTP_Expiry = models.DateTimeField(blank=True, null=True)
     Teacher_Is_Verified = models.BooleanField(default=False)
+    
     def __str__(self):
         return self.Teacher_Name
+
+
+
 
 

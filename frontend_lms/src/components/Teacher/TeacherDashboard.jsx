@@ -1,57 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, {  useEffect } from "react";
 import { Link} from "react-router-dom";
 import Feedback from "../Feedback";
 import Footer from "../Footer";
 
-import { useLocation } from 'react-router-dom';
+
 
 const TeacherDashboard = () => {
-  const location = useLocation();
-  const [successMessage, setSuccessMessage] = useState('');
+
+ 
   useEffect(() => {
     document.title = 'Teacher-Dashboard';  // Ya jo bhi title chahiye
   }, []);
-  useEffect(() => {
-    if (location.state && location.state.successMessage) {
-      setSuccessMessage(location.state.successMessage);
-      
-      // Agar chaho to 3 seconds ke baad message hide kar do
-      const timer = setTimeout(() => {
-        setSuccessMessage('');
-        // Optional: history replace se state hata bhi sakte ho
-        window.history.replaceState({}, document.title);
-      }, 3000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [location.state]);
-  
+ 
   return (
        <>
        
      
     <div className="container-fluid p-0" style={{ marginTop: "65px", minHeight: "90vh" }}>
       <div className="card text-bg-dark border-0">
-        {successMessage && (
-        <div style={{
-          position: 'fixed',
-          top: '20px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          backgroundColor: '#4BB543',
-          color: 'white',
-          padding: '15px 30px',
-          borderRadius: '12px',
-          boxShadow: '0 4px 10px rgba(0,0,0,0.3)',
-          fontWeight: 'bold',
-          fontSize: '16px',
-          zIndex: 9999,
-          minWidth: '250px',
-          textAlign: 'center',
-        }}>
-          {successMessage}
-        </div>
-      )}
+       
         
         <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
           <div className="carousel-indicators">
