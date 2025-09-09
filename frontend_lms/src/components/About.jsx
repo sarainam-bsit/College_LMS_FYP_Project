@@ -87,7 +87,7 @@ const About = () => {
               onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
             >
               <video
-                src="./202508302044.mp4"
+                src="./video.mp4"
                 autoPlay
                 loop
                 muted

@@ -18,15 +18,15 @@ const Footer = () => {
             <h4 className='text-danger'>Menu</h4>
             <ul className="list-unstyled">
               <li className='footerlinks'><Link to=""className='text-decoration-none text-light'>Home</Link></li>
-              <li className='footerlinks'><Link to=""className='text-decoration-none text-light'>About</Link></li>
-              <li className='footerlinks'><Link to=""className='text-decoration-none text-light'>Contact</Link></li>
+              <li className='footerlinks'><Link to="/about"className='text-decoration-none text-light'>About</Link></li>
+              <li className='footerlinks'><Link to="/contact"className='text-decoration-none text-light'>Contact</Link></li>
             </ul>
           </div>
           <div className="col-12 col-md-6 col-lg-3">
             <h4 className='text-danger'>More</h4>
             <ul className="list-unstyled">
               <li className='footerlinks'><Link to=""className='text-decoration-none text-light'>Feedback</Link></li>
-              <li className='footerlinks'><Link to=""className='text-decoration-none text-light'>Notifications</Link></li>
+              <li className='footerlinks'><Link to="/notifications"className='text-decoration-none text-light'>Notifications</Link></li>
               <li className='footerlinks'><Link to=""className='text-decoration-none text-light'>Privacy Policy</Link></li>
               
             </ul>

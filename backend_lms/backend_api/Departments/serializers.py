@@ -18,11 +18,11 @@ class DepartmentSerializer(serializers.ModelSerializer):
 class CourseCategoriesSerializer(serializers.ModelSerializer):
     # department ka sirf name show karne ke liye
     Related_Department_Name = serializers.CharField(source='Related_Department.Department_Name', read_only=True)
-   
+    Related_Department_Discription = serializers.CharField(source='Related_Department.Discription', read_only=True)
 
     class Meta:
         model = CourseCategories
-        fields = ['id', 'Category_Type', 'Category_Name', 'Related_Department', 'Related_Department_Name']
+        fields = ['id', 'Category_Type', 'Category_Name', 'Related_Department', 'Related_Department_Name', 'Related_Department_Discription']
 
         
 

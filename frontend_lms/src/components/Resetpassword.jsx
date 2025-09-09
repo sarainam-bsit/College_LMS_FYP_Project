@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const BASE_URL = 'http://127.0.0.1:8000/Account/reset_password/';
 
@@ -37,7 +38,9 @@ const ResetPassword = () => {
 
     try {
       const response = await axios.post(BASE_URL, formData,  { withCredentials: true });
-      setMessage(response.data.message);
+      // setMessage(response.data.message);
+      toast.success(response.data.message)
+      navigate('/login');
       setFormData({ Email: '', New_Password: '', Confirm_Password: '' });
     } catch (err) {
       if (err.response?.data?.errors) {

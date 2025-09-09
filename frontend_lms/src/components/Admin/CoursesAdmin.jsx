@@ -77,7 +77,7 @@ const CoursesAdmin = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container" style={{marginTop: "4%"}}>
       <h2 className="mb-4 text-primary">Manage Courses</h2>
 
       {/* Form */}
@@ -96,7 +96,7 @@ const CoursesAdmin = () => {
                 <option value="">Select Category</option>
                 {dropdowns.categories.map(cat => (
                   <option key={cat.id} value={cat.id}>
-                    {cat.Related_Department_Name} - {cat.Category_Type} ({cat.Category_Name})
+                    {cat.Related_Department_Name} - {cat.Related_Department_Discription} - {cat.Category_Type} ({cat.Category_Name})
                   </option>
                 ))}
               </select>
@@ -122,6 +122,7 @@ const CoursesAdmin = () => {
             <div className="col-md-6">
               <input type="text" name="C_Code" placeholder="Course Code" value={form.C_Code} onChange={handleChange} className="form-control" required/>
             </div>
+            
 
             {/* Credit Hour */}
             <div className="col-md-6">

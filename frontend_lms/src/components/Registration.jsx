@@ -4,8 +4,11 @@ import axios from 'axios';
 
 import { Navigate } from 'react-router-dom';
 import Home from './Home';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import OTPverification from "./OTPverification";
 const BaseUrl = 'http://127.0.0.1:8000/Account/register_api/';
+
 
 const Registration = ({ setIsLoggedIn, setUserRole }) => {
     const isLoggedIn = !!localStorage.getItem("authToken");
@@ -36,6 +39,7 @@ const Registration = ({ setIsLoggedIn, setUserRole }) => {
     }, []);
     if (isLoggedIn) {
         // Agar login hai to registration page block
+        
         return <Navigate to="/home" replace />;
     }
 
@@ -64,7 +68,8 @@ const Registration = ({ setIsLoggedIn, setUserRole }) => {
                     status: 'success'
                 });
                 setErrorMessage({});
-                setSuccessMessage(response.data.message);
+               
+                toast.success(response.data.message );
 
                 if (response.data.student_id) {
                     // If backend sends Student_Email in response, use that:

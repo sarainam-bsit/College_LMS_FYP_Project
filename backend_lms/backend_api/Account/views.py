@@ -198,72 +198,98 @@ def login_view(request):
     Role = request.data.get('Role')
 
     errors = {}
-    handle_fields = ['Email', 'Password', 'Role']
 
-    # 1. Empty fields check
-    for field in handle_fields:
-        values = request.data.get(field)
-        if not values or values.strip() == '':
-            errors[field] = f"{field} is required."
+    def validate_password_strength(password):
+        password_errors = []
+        if len(password) < 8:
+            password_errors.append("Password must be at least 8 characters long.")
+        if not any(char.isupper() for char in password):
+            password_errors.append("Password must contain at least one uppercase letter.")
+        if not any(char.islower() for char in password):
+            password_errors.append("Password must contain at least one lowercase letter.")
+        if not any(char.isdigit() for char in password):
+            password_errors.append("Password must contain at least one digit.")
+        if not any(char in "!@#$%^&*(),.?\":{}|<>" for char in password):
+            password_errors.append("Password must contain at least one special character.")
+        return password_errors
+
+    # -------- Step 1: Empty fields check --------
+    if not Email or Email.strip() == '':
+        errors['Email'] = "Email is required."
+    if not Password or Password.strip() == '':
+        errors['Password'] = "Password is required."
+    if not Role or Role.strip() == '':
+        errors['Role'] = "Role is required."
+    elif Role not in [USER_ROLES['STUDENT'], USER_ROLES['TEACHER']]:
+        errors['Role'] = "Role not found."
 
     if errors:
         return Response({"errors": errors}, status=status.HTTP_400_BAD_REQUEST)
 
-    # 2. Role check
-    if Role not in [USER_ROLES['STUDENT'], USER_ROLES['TEACHER']]:
-        return Response({"errors": {"general": "Role not found."}}, status=status.HTTP_404_NOT_FOUND)
-
-    # 3. Student Login
+    # -------- Step 2: Email existence check --------
+    user = None
     if Role == USER_ROLES['STUDENT']:
         try:
-            student = Student.objects.get(Student_Email=Email)
+            user = Student.objects.get(Student_Email=Email)
         except Student.DoesNotExist:
             return Response({"errors": {"Email": "Email not found."}}, status=status.HTTP_404_NOT_FOUND)
-
-        if not student.Student_Password and not student.Is_Registered and not student.Is_Verified:
-            return Response({"errors": 'registration_page', 'errorcode': 'REGISTRATION_REQUIRED'}, status=status.HTTP_400_BAD_REQUEST)
-
-        if not check_password(Password, student.Student_Password):
-            return Response({"errors": {"Password": "Invalid password."}}, status=status.HTTP_400_BAD_REQUEST)
-
-        return Response({"message": 'student_home', "role": USER_ROLES['STUDENT'], 'student_id': student.id },  status=status.HTTP_200_OK)
-
-    # 4. Teacher Login
     elif Role == USER_ROLES['TEACHER']:
         try:
-            teacher = Teacher.objects.get(Teacher_Email=Email)
+            user = Teacher.objects.get(Teacher_Email=Email)
         except Teacher.DoesNotExist:
             return Response({"errors": {"Email": "Email not found."}}, status=status.HTTP_404_NOT_FOUND)
-        print(f"Teacher_Is_Verified value for {teacher.Teacher_Email}: {teacher.Teacher_Is_Verified}")
-        if not teacher.Teacher_Is_Verified and not teacher.Teacher_Password:
-    # Password set karo pehle
-            teacher.Teacher_Password = make_password(Password)
-            OTP = str(random.randint(100000, 999999))
-            teacher.Teacher_OTP_Digits = OTP
-            teacher.Teacher_OTP_Expiry = timezone.now() + datetime.timedelta(minutes=5)
-            teacher.Teacher_Is_Verified = False
-            teacher.save()
 
-    # ✅ Email send
-            send_mail(
-            subject="Your OTP Code",
-            message=f"Your OTP is {OTP}. It will expire in 5 minute.",
-            from_email="CollegeLMS.gcbskp.edu.pk",
-            recipient_list=[teacher.Teacher_Email],
-            fail_silently=False,
-        )
+    # -------- Step 3: Password Handling --------
+    if Role == USER_ROLES['STUDENT']:
+        # Agar password save hi nahi hai → full password validation
+        if not user.Student_Password:
+            password_errors = validate_password_strength(Password)
+            if password_errors:
+                return Response({"errors": {"Password": password_errors}}, status=status.HTTP_400_BAD_REQUEST)
 
+            return Response(
+                {"errors": "Please register yourself first", "errorcode": "REGISTRATION_REQUIRED"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-    # Phir response bhejo OTP verify karne ke liye
-            return Response({
-            "errors":  'Please verify OTP first.',
-            'errorcode': 'VERIFY_OTP',
-            "teacher_id": teacher.id
-            }, status=status.HTTP_400_BAD_REQUEST)
-        if not check_password(Password, teacher.Teacher_Password):
+        # Agar password save hai → check password only
+        if not check_password(Password, user.Student_Password):
             return Response({"errors": {"Password": "Invalid password."}}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({"message": 'Login successfully', "role": USER_ROLES['TEACHER'], 'teacher_id': teacher.id }, status=status.HTTP_200_OK)
+        return Response({"message": "Login Successfully", "role": USER_ROLES['STUDENT'], "student_id": user.id}, status=status.HTTP_200_OK)
+
+    elif Role == USER_ROLES['TEACHER']:
+        if not user.Teacher_Password:
+            password_errors = validate_password_strength(Password)
+            if password_errors:
+                return Response({"errors": {"Password": password_errors}}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Agar OTP verification pending hai
+            OTP = str(random.randint(100000, 999999))
+            user.Teacher_Password = make_password(Password)
+            user.Teacher_OTP_Digits = OTP
+            user.Teacher_OTP_Expiry = timezone.now() + datetime.timedelta(minutes=5)
+            user.Teacher_Is_Verified = False
+            user.save()
+
+            send_mail(
+                subject="Your OTP Code",
+                message=f"Your OTP is {OTP}. It will expire in 5 minutes.",
+                from_email="CollegeLMS.gcbskp.edu.pk",
+                recipient_list=[user.Teacher_Email],
+                fail_silently=False,
+            )
+
+            return Response(
+                {"errors": "Please verify OTP first.", "errorcode": "VERIFY_OTP", "teacher_id": user.id},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Agar password save hai → check password only
+        if not check_password(Password, user.Teacher_Password):
+            return Response({"errors": {"Password": "Invalid password."}}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": "Login Successfully", "role": USER_ROLES['TEACHER'], "teacher_id": user.id}, status=status.HTTP_200_OK)
 @csrf_exempt    
 @api_view(['POST'])
 def forget_password(request):
@@ -329,6 +355,7 @@ def reset_password(request):
 
     errors = {}
     handle_fields = ['Email', 'New_Password', 'Confirm_Password']
+    
 
     # 1. Empty fields check
     for field in handle_fields:
@@ -337,14 +364,15 @@ def reset_password(request):
             errors[field] = f"{field} is required."
     # if email_from_session != email:
     #     return Response({"errorS": "Invalid email for reset"}, status=400)
+    
 
     if errors:
         return Response({"errors": errors}, status=status.HTTP_400_BAD_REQUEST)
     
     
 
-    if new_password != confirm_password:
-        return Response({'error': 'Passwords do not match.'}, status=status.HTTP_400_BAD_REQUEST)
+    # if new_password != confirm_password:
+    #     return Response({'error': 'Passwords do not match.'}, status=status.HTTP_400_BAD_REQUEST)
 
     # Check if user exists (student or teacher)
     user = None
@@ -358,6 +386,30 @@ def reset_password(request):
             user_type = 'teacher'
         except Teacher.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+    def validate_password_strength(password):
+        password_errors = []
+        if len(password) < 8:
+            password_errors.append("Password must be at least 8 characters long.")
+        if not any(char.isupper() for char in password):
+            password_errors.append("Password must contain at least one uppercase letter.")
+        if not any(char.islower() for char in password):
+            password_errors.append("Password must contain at least one lowercase letter.")
+        if not any(char.isdigit() for char in password):
+            password_errors.append("Password must contain at least one digit.")
+        if not any(char in "!@#$%^&*(),.?\":{}|<>" for char in password):
+            password_errors.append("Password must contain at least one special character.")
+        return password_errors
+
+    password_errors = validate_password_strength(new_password)
+    if password_errors:
+        errors['New_Password'] = password_errors
+
+    # ✅ Confirm password check
+    if new_password != confirm_password:
+        errors['Confirm_Password'] = ["Passwords do not match."]
+
+    if errors:
+        return Response({"errors": errors}, status=status.HTTP_400_BAD_REQUEST)
 
     # Check OTP validity (example for student, do same for teacher)
     if user_type == 'student':
@@ -399,4 +451,3 @@ def get_teachers_by_department(request, department_id):
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Teacher.DoesNotExist:
         return Response({"message": "No teachers found for this department"}, status=status.HTTP_404_NOT_FOUND)
-      

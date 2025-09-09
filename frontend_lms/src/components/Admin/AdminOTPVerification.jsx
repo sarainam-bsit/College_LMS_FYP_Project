@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const API_VERIFY_OTP = "http://127.0.0.1:8000/adminaccount/verify-otp/";
 const API_RESEND_OTP = "http://127.0.0.1:8000/adminaccount/resend-otp/";
 
-const AdminOTPVerification = ({ show, onClose, email }) => {
+const AdminOTPVerification = ({ show, onClose, email, setIsLoggedIn, setUserRole }) => {
   const [otp, setOtp] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -14,12 +15,24 @@ const AdminOTPVerification = ({ show, onClose, email }) => {
 
   const handleVerify = async () => {
     try {
-      await axios.post(API_VERIFY_OTP, { email, otp });
-      setMessage("OTP verified successfully!");
-      setTimeout(() => {
-        onClose();
-        navigate("/adminhome");
-      }, 1000);
+      const response = await axios.post(API_VERIFY_OTP, { email, otp });
+  
+    
+   localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("userRole", "admin");
+
+      // ✅ update React state so navbar shows
+      setIsLoggedIn(true);
+      setUserRole("admin");
+
+      onClose();
+      toast.success(response.data.message);
+      navigate("/adminhome");
+    
+    
+  
+ 
+
     } catch (err) {
       setMessage(err.response?.data?.error || "OTP verification failed");
     }
@@ -28,7 +41,8 @@ const AdminOTPVerification = ({ show, onClose, email }) => {
   const handleResend = async () => {
     try {
       const res = await axios.post(API_RESEND_OTP, { email });
-      setMessage(res.data.message);
+      // setMessage(res.data.message);
+      toast.success(res.data.message)
     } catch (err) {
       setMessage(err.response?.data?.error || "Resend OTP failed");
     }
@@ -36,11 +50,10 @@ const AdminOTPVerification = ({ show, onClose, email }) => {
 
   return (
     <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.6)" }}>
-      <div className="modal-dialog">
+      <div className="modal-dialog modal-dialog-centered" style={{ marginTop: "30px" }}>
         <div className="modal-content" style={{ borderRadius: "15px", overflow: "hidden" }}>
           <div className="modal-header bg-dark text-white">
             <h5 className="modal-title">Admin OTP Verification</h5>
-            <button type="button" className="btn-close btn-close-white" onClick={onClose}></button>
           </div>
           <div className="modal-body">
             {message && <div className="alert alert-info">{message}</div>}

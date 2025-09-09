@@ -18,7 +18,7 @@ from django.forms import Textarea
 
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'Department_Name', 'teacher_count', 'HOD', 'list_teachers', 'student_count', 'list_students')  # methods yahan add karo
+    list_display = ('id', 'Department_Name', 'Discription', 'teacher_count', 'HOD', 'list_teachers', 'student_count', 'list_students')  # methods yahan add karo
     list_filter = ('Department_Name',)
     search_fields = ('Department_Name', 'HOD')
     # inlines = [StudentInline, TeacherInline] 

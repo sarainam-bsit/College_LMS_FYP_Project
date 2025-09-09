@@ -69,6 +69,10 @@ import { useNavigate } from 'react-router-dom';
 import PublicRoute from './PublicRoute';
 import TeacherProfile from './Teacher/TeacherProfile';
 import Staff from './Staff';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import AdminForgetPassword from './Admin/AdminForgetPassword';
+import AdminResetPassword from './Admin/AdminResetPassword';
 
 
 // ✅ Student & Teacher Protected Route
@@ -147,15 +151,15 @@ const Main = () => {
   return (
 
     <>
-      {/* Admin Navbar */}
-      {(userRole === "admin" || location.pathname === "/adminlogin") && (
-        <AdminNavbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
-      )}
+      {/* Admin Navbar by default on login pages */}
+{(location.pathname === "/login" || location.pathname === "/adminlogin" || userRole === "admin") && (
+  <AdminNavbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+)}
 
       {/* Student Navbar */}
-      {(userRole === "student" || location.pathname === "/login") && (
-        <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} role={userRole} />
-      )}
+{(userRole === "student" || location.pathname === "/registration") && (
+  <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} role={userRole} />
+)}
 
       {/* Teacher Navbar */}
       {userRole === "teacher" && isLoggedIn && (
@@ -176,13 +180,15 @@ const Main = () => {
         } />
         <Route path="/reset" element={<ForgetPassword />} />
         <Route path="/reset_password" element={<ResetPassword />} />
+        <Route path="/adminreset" element={<AdminForgetPassword />} />
+        <Route path="/admin_reset_password" element={<AdminResetPassword />} />
         <Route path="/registration" element={<RegistrationRoute><Registration setIsLoggedIn={setIsLoggedIn} setUserRole={setUserRole} /></RegistrationRoute>} />
 
         {/* Student & Teacher Routes */}
         <Route path="/" element={<ProtectedRoute allowedRoles={["student", "teacher"]}><Home /></ProtectedRoute>} />
         <Route path="/home" element={<ProtectedRoute allowedRoles={["student", "teacher"]}><Home /></ProtectedRoute>} />
         <Route path="/about" element={<ProtectedRoute allowedRoles={["student", "teacher", "admin"]}><About /></ProtectedRoute>} />
-        <Route path="/profile" element={<ProtectedRoute allowedRoles={["student", "teacher"]}><Profile /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute allowedRoles={["student"]}><Profile /></ProtectedRoute>} />
         <Route path="/feevoucher" element={<ProtectedRoute allowedRoles={["student"]}><Feevoucher /></ProtectedRoute>} />
         <Route path="/contact" element={<ProtectedRoute allowedRoles={["student"]}><Contactus /></ProtectedRoute>} />
         <Route path="/programs" element={<ProtectedRoute allowedRoles={["student"]}><BSprogram /></ProtectedRoute>} />
@@ -242,6 +248,15 @@ const Main = () => {
         <Route path="/admin/feedback" element={<AdminProtectedRoute><AdminFeedback /></AdminProtectedRoute>} />
         <Route path="/admin/timetable" element={<AdminProtectedRoute><AdminTimetable /></AdminProtectedRoute>} />
       </Routes>
+       {/* Toast ek hi dafa lagana hota hai pura app me */}
+      <ToastContainer 
+        position="top-center"   
+        autoClose={3000} 
+        hideProgressBar={true} 
+        newestOnTop={true} 
+        closeOnClick 
+        pauseOnHover 
+      />
     </>
   );
 };

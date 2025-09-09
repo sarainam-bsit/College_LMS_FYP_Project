@@ -3,6 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import OTPverification from "./OTPverification";
 import Home from './Home';
+import { toast } from 'react-toastify';
+// import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+// import Main from './Main';
 
 
 const BASE_URL = 'http://127.0.0.1:8000/Account/Login_api/';
@@ -55,20 +59,21 @@ const Login = ({ setIsLoggedIn, setUserRole }) => {
                 setUserRole(role);
                 localStorage.setItem('userRole', role);
                 localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('studentId', response.data.student_id); 
-                localStorage.setItem('teacherId', response.data.teacher_id); 
-                
-                  // ✅ ye hi important hai
+                localStorage.setItem('studentId', response.data.student_id);
+                localStorage.setItem('teacherId', response.data.teacher_id);
+
+                // ✅ ye hi important hai
 
                 setSuccessMessage(response.data?.message);
+                toast.success(response.data?.message);
 
                 if (role === 'student') {
                     setTimeout(() => {
-                        navigate('/home', { state: { successMessage: response.data.message } });
+                        navigate('/home');
                     }, 1000);
                 } else if (role === 'teacher') {
                     setTimeout(() => {
-                        navigate('/TeacherDashboard', { state: { successMessage: response.data.message } });
+                        navigate('/TeacherDashboard');
                     }, 1000);
                 }
             } else {
@@ -79,14 +84,12 @@ const Login = ({ setIsLoggedIn, setUserRole }) => {
             const backendErrors = error.response?.data || {};
 
             if (backendErrors.errorcode === 'VERIFY_OTP') {
-                setTimeout(() => {
-                    setShowOTP(true);
-                    setUserEmail(loginData.Email);
-                }, 1000);
+                toast.info(backendErrors.errors);   // 🔵 Info toast
+                setShowOTP(true);
+                setUserEmail(loginData.Email);
             } else if (backendErrors.errorcode === 'REGISTRATION_REQUIRED') {
-                setTimeout(() => {
-                    navigate('/registration', { state: { fromLogin: true } });
-                }, 1000);
+                toast.warning(backendErrors.errors);  // 🟡 Warning toast
+                navigate('/registration', { state: { fromLogin: true } });
             } else {
                 setErrorMessage(backendErrors.errors || {});
             }
@@ -213,10 +216,17 @@ const Login = ({ setIsLoggedIn, setUserRole }) => {
 
                                 />
                                 {errorMessage.Password && (
-                                    <small style={{ color: 'red' }}>
-                                        {Array.isArray(errorMessage.Password) ? errorMessage.Password[0] : errorMessage.Password}
-                                    </small>
+                                    <div style={{ color: 'red' }}>
+                                        {Array.isArray(errorMessage.Password) ? (
+                                            errorMessage.Password.map((err, index) => (
+                                                <div key={index}>{err}</div>
+                                            ))
+                                        ) : (
+                                            <div>{errorMessage.Password}</div>
+                                        )}
+                                    </div>
                                 )}
+
                             </div>
 
                             <div className="mt-3">

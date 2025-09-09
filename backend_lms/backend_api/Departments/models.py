@@ -8,7 +8,7 @@ class Department(models.Model):
     Department_Image = models.ImageField(upload_to= 'department_pics/', blank= True, null = True)
     HOD = models.OneToOneField('Account.Teacher', blank=True, null=True, on_delete=models.SET_NULL, related_name='headed_departments')
     def __str__(self):
-        return self.Department_Name
+        return f"{self.Department_Name} - {self.Discription}"
     
     
 class CourseCategories(models.Model):

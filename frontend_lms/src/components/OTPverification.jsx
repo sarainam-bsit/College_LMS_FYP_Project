@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const BaseUrl = 'http://127.0.0.1:8000/Account/verify_OTP_api/';
 
@@ -36,7 +37,8 @@ const OTPverification = ({ show, onClose, email, setIsLoggedIn, setUserRole }) =
 
             });
 
-            setSuccessMessage(response.data.message);
+            // setSuccessMessage(response.data.message);
+            toast.success(response.data.message)
             setErrorMessage('');
             setOTPData({ OTP_Digits: '' });
             const role = response.data.role || ''; // pehle define karo
@@ -76,7 +78,8 @@ const OTPverification = ({ show, onClose, email, setIsLoggedIn, setUserRole }) =
 
             });
 
-            setSuccessMessage(response.data.message);
+            // setSuccessMessage(response.data.message);
+            toast.success(response.data.message)
             setErrorMessage('');
         } catch (error) {
             setSuccessMessage('');
@@ -90,9 +93,8 @@ const OTPverification = ({ show, onClose, email, setIsLoggedIn, setUserRole }) =
         <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
             <div className="modal-dialog">
                 <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title">OTP Verification</h5>
-                        <button type="button" className="btn-close" onClick={onClose}></button>
+                    <div className="modal-header bg-dark">
+                        <h5 className="modal-title text-white">OTP Verification</h5>
                     </div>
                     <div className="modal-body">
                         {successMessage && <p style={{ color: 'green', fontWeight: 'bold' }}>{successMessage}</p>}

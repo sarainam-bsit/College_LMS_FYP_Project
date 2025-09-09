@@ -95,7 +95,7 @@ const DepartmentAdmin = () => {
   };
 
   return (
-    <div style={{ padding: "30px", fontFamily: "Arial, sans-serif" }}>
+    <div style={{ padding: "30px", fontFamily: "Arial, sans-serif", marginTop: "4%" }}>
       <h2 style={{ marginBottom: "20px", color: "#333" }}>Department Admin</h2>
 
       {/* Error Message */}

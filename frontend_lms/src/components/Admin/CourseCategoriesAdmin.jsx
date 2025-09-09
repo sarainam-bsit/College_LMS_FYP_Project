@@ -84,7 +84,7 @@ const CourseCategoriesAdmin = () => {
   };
 
   // --- Styling ---
-  const containerStyle = { padding: "30px", fontFamily: "Arial, sans-serif" };
+  const containerStyle = { marginTop: "4%", padding: "30px", fontFamily: "Arial, sans-serif" };
   const formStyle = { marginBottom: "30px", backgroundColor: "#f9f9f9", padding: "20px", borderRadius: "10px" };
   const labelStyle = { display: "block", marginBottom: "5px", fontWeight: "bold" };
   const inputStyle = { padding: "8px", width: "100%", borderRadius: "5px", border: "1px solid #ccc", marginBottom: "15px" };
@@ -134,7 +134,7 @@ const CourseCategoriesAdmin = () => {
             <option value="">Select Department</option>
             {departments.map((d) => (
               <option key={d.id} value={d.id}>
-                {d.Department_Name}
+                {d.Department_Name} - {d.Discription}
               </option>
             ))}
           </select>
@@ -163,6 +163,7 @@ const CourseCategoriesAdmin = () => {
             <th style={thtdStyle}>Category Type</th>
             <th style={thtdStyle}>Category Name</th>
             <th style={thtdStyle}>Department</th>
+            <th style={thtdStyle}>Discription</th>
             <th style={thtdStyle}>Actions</th>
           </tr>
         </thead>
@@ -172,6 +173,7 @@ const CourseCategoriesAdmin = () => {
               <td style={thtdStyle}>{c.Category_Type}</td>
               <td style={thtdStyle}>{c.Category_Name}</td>
               <td style={thtdStyle}>{c.Related_Department_Name || "-"}</td>
+              <td style={thtdStyle}>{c.Related_Department_Discription || "-"}</td>
               <td style={thtdStyle}>
                 <button style={{ ...buttonStyle, backgroundColor: "#2196F3", color: "white" }} onClick={() => handleEdit(c)}>
                   Edit

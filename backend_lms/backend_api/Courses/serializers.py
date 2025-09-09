@@ -16,6 +16,7 @@ class CourseSerializer(serializers.ModelSerializer):
             'Credit_Hour',
             'C_Category',
             'C_Category_Full',
+            'Teacher',
             'Teacher_Name',
             'C_Category_Name'
         ]
@@ -25,6 +26,8 @@ class CourseSerializer(serializers.ModelSerializer):
         # Ensure the C_Category has a related department
             department = getattr(obj.C_Category, 'Related_Department', None)
             department_name = department.Department_Name if department else ""
+            department_discription = department.Discription if department else ""
         
-            return f"{department_name} - {obj.C_Category.Category_Type} ({obj.C_Category.Category_Name})"
+            return f"{department_name} - {department_discription} - {obj.C_Category.Category_Type} ({obj.C_Category.Category_Name})"
         return ""
+    

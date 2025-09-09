@@ -46,6 +46,7 @@ className="logout-btn"                  >
               )}
               <li className="nav-item"><Link className="navlink nav-link" to="/teacherprofile">Profile</Link></li>
               <li className="nav-item"><Link className="navlink nav-link" to="/teacherdashboard">Home</Link></li>
+              <li className="nav-item"><Link className="navlink nav-link" to="/teacher/department/:departmentId/category/:categoryId/timetable">Timetable</Link></li>
               <li className="nav-item"><Link className="navlink nav-link" to="/about">About</Link></li>
               <li className="nav-item"><Link className="navlink nav-link" to="/teacher/programs">Department</Link></li>
               <li className="nav-item"><Link className="navlink nav-link" to="/uploadlectures">Upload Lectures</Link></li>
