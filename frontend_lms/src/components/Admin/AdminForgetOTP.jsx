@@ -82,11 +82,11 @@ const AdminForgetOTP = ({ show, onClose, email }) => {
             tabIndex="-1"
             style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
         >
-            <div className="modal-dialog">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title">OTP Verification for Forget Password</h5>
-                        <button type="button" className="btn-close" onClick={onClose}></button>
+            <div className="modal-dialog modal-dialog-centered" style={{ marginTop: "10px" }}>
+                <div className="modal-content" style={{ borderRadius: "15px", overflow: "hidden" }}>
+                    <div className="modal-header bg-dark">
+                        <h5 className="modal-title text-white">Admin OTP Verification </h5>
+                       
                     </div>
                     <div className="modal-body">
                         {successMessage && (

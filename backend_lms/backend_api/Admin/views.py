@@ -72,7 +72,7 @@ def admin_login(request):
 
     # Step 5: Successful login
     return Response({
-        "message": "Login successful. Redirect to home page.",
+        "message": "Login Successful.",
         "admin_id": admin.id
     }, status=status.HTTP_200_OK)
 
