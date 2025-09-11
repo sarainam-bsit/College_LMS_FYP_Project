@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const API_BASE = "http://127.0.0.1:8000/hostel/"; // Django backend URL
 
@@ -18,7 +20,7 @@ const AdminHostelDetail = () => {
       const res = await axios.get(`${API_BASE}hosteldetail/`);
       setHostels(res.data);
     } catch (err) {
-      console.error(err);
+      toast.error("Failed to fetch hostel details");
     }
   };
 
@@ -49,15 +51,16 @@ const AdminHostelDetail = () => {
     try {
       if (editId) {
         await axios.put(`${API_BASE}hosteldetail/${editId}/`, data);
+        toast.success("Hostel updated successfully!");
         setEditId(null);
       } else {
         await axios.post(`${API_BASE}hosteldetail/`, data);
+        toast.success("Hostel added successfully!");
       }
       setFormData({ Hostel_Rooms_Name: "", Discription: "", Hostel_Room_Image: null });
       fetchHostels();
     } catch (err) {
-      console.error(err);
-      alert("Error saving hostel details.");
+      toast.error("Error saving hostel details.");
     }
   };
 
@@ -69,119 +72,203 @@ const AdminHostelDetail = () => {
       Discription: hostel.Discription,
       Hostel_Room_Image: null,
     });
+    toast.info(`Editing Hostel: ${hostel.Hostel_Rooms_Name}`);
   };
 
   // Delete hostel
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure?")) return;
+    if (!window.confirm("Are you sure you want to delete this hostel?")) return;
     try {
       await axios.delete(`${API_BASE}hosteldetail/${id}/`);
+      toast.success("Hostel deleted successfully!");
       fetchHostels();
     } catch (err) {
-      console.error(err);
-      alert("Error deleting hostel.");
+      toast.error("Error deleting hostel.");
     }
   };
 
   return (
-    <div className="container mt-4">
-      <h2 className="mb-4 text-primary">Manage Hostel Details</h2>
+    <div
+      style={{
+        padding: "30px",
+        fontFamily: "Arial, sans-serif",
+        marginTop: "4%",
+        backgroundColor: "#ebeaf2ff",
+        color: "rgba(44, 44, 122, 1)",
+      }}
+    >
+      <h1
+        style={{
+          marginBottom: "20px",
+          color: "rgba(44, 44, 122, 1)",
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
+      >
+        Manage Hostel Details
+      </h1>
 
       {/* Form */}
-      <div className="card mb-4 shadow-sm">
-        <div className="card-body">
-          <form className="row g-3" onSubmit={handleSubmit}>
-            <div className="col-md-6">
-              <input
-                type="text"
-                name="Hostel_Rooms_Name"
-                placeholder="Hostel Room Name"
-                value={formData.Hostel_Rooms_Name}
-                onChange={handleChange}
-                className="form-control"
-                required
-              />
-            </div>
-            <div className="col-md-6">
-              <input
-                type="file"
-                name="Hostel_Room_Image"
-                onChange={handleChange}
-                className="form-control"
-              />
-            </div>
-            <div className="col-12">
-              <textarea
-                name="Discription"
-                placeholder="Description"
-                value={formData.Discription}
-                onChange={handleChange}
-                className="form-control"
-              />
-            </div>
-            <div className="col-12 d-flex gap-2">
-              <button type="submit" className={`btn ${editId ? "btn-warning" : "btn-primary"}`}>
-                {editId ? "Update Hostel" : "Add Hostel"}
-              </button>
-              {editId && (
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => {
-                    setEditId(null);
-                    setFormData({ Hostel_Rooms_Name: "", Discription: "", Hostel_Room_Image: null });
-                  }}
-                >
-                  Cancel
-                </button>
-              )}
-            </div>
-          </form>
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          marginBottom: "30px",
+          backgroundColor: "#f5ecf4ff",
+          padding: "20px",
+          borderRadius: "10px",
+          border: "2px solid white",
+        }}
+      >
+        <div style={{ marginBottom: "15px" }}>
+          <label style={{ display: "block", marginBottom: "5px" }}>Hostel Room Name:</label>
+          <input
+            type="text"
+            name="Hostel_Rooms_Name"
+            value={formData.Hostel_Rooms_Name}
+            onChange={handleChange}
+            required
+            style={{
+              padding: "8px",
+              width: "100%",
+              borderRadius: "5px",
+              border: "1px solid #ccc",
+            }}
+          />
         </div>
-      </div>
+
+        <div style={{ marginBottom: "15px" }}>
+          <label style={{ display: "block", marginBottom: "5px" }}>Description:</label>
+          <textarea
+            name="Discription"
+            value={formData.Discription}
+            onChange={handleChange}
+            style={{
+              padding: "8px",
+              width: "100%",
+              borderRadius: "5px",
+              border: "1px solid #ccc",
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: "15px" }}>
+          <label style={{ display: "block", marginBottom: "5px" }}>Hostel Room Image:</label>
+          <input type="file" name="Hostel_Room_Image" onChange={handleChange} />
+        </div>
+
+        <button
+          type="submit"
+          style={{
+            padding: "10px 20px",
+            marginRight: "10px",
+            borderRadius: "5px",
+            backgroundColor: "rgb(70, 4, 67)",
+            color: "white",
+            border: "none",
+            cursor: "pointer",
+            transition: "transform 0.2s",
+          }}
+          onMouseOver={(e) => (e.target.style.transform = "scale(1.05)")}
+          onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
+        >
+          {editId ? "Update Hostel" : "Add Hostel"}
+        </button>
+
+        {editId && (
+          <button
+            type="button"
+            onClick={() =>
+              setFormData({ Hostel_Rooms_Name: "", Discription: "", Hostel_Room_Image: null })
+            }
+            style={{
+              padding: "10px 20px",
+              borderRadius: "5px",
+              backgroundColor: "rgb(4, 4, 63)",
+              color: "white",
+              border: "none",
+              cursor: "pointer",
+              transition: "transform 0.2s",
+            }}
+            onMouseOver={(e) => (e.target.style.transform = "scale(1.05)")}
+            onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
+          >
+            Cancel
+          </button>
+        )}
+      </form>
 
       {/* Hostel Table */}
-      <div className="table-responsive card shadow-sm">
-        <table className="table table-striped table-hover mb-0">
-          <thead className="table-primary">
+      <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "center" }}>
+        <thead>
+          <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Name</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Description</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Image</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {hostels.length === 0 ? (
             <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Image</th>
-              <th>Actions</th>
+              <td colSpan={4} style={{ padding: "10px", textAlign: "center" }}>
+                No hostel details found
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {hostels.length === 0 ? (
-              <tr>
-                <td colSpan={4} className="text-center">
-                  No hostel details found
+          ) : (
+            hostels.map((hostel, index) => (
+              <tr
+                key={hostel.id}
+                style={{
+                  backgroundColor: index % 2 === 0 ? "#f9f9f9" : "#fff",
+                }}
+              >
+                <td style={{ padding: "10px", border: "1px solid white" }}>{hostel.Hostel_Rooms_Name}</td>
+                <td style={{ padding: "10px", border: "1px solid white" }}>{hostel.Discription}</td>
+                <td style={{ padding: "10px", border: "1px solid white" }}>
+                  {hostel.Hostel_Room_Image && (
+                    <img src={`${API_BASE}${hostel.Hostel_Room_Image}`} alt="Hostel" width="80" />
+                  )}
+                </td>
+                <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                  <button
+                    onClick={() => handleEdit(hostel)}
+                    style={{
+                      marginRight: "5px",
+                      padding: "5px 10px",
+                      backgroundColor: "orange",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                      transition: "transform 0.2s",
+                    }}
+                    onMouseOver={(e) => (e.target.style.transform = "scale(1.1)")}
+                    onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(hostel.id)}
+                    style={{
+                      padding: "5px 10px",
+                      backgroundColor: "red",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                      transition: "transform 0.2s",
+                    }}
+                    onMouseOver={(e) => (e.target.style.transform = "scale(1.1)")}
+                    onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
-            ) : (
-              hostels.map((hostel) => (
-                <tr key={hostel.id}>
-                  <td>{hostel.Hostel_Rooms_Name}</td>
-                  <td>{hostel.Discription}</td>
-                  <td>
-                    {hostel.Hostel_Room_Image && (
-                      <img src={`${API_BASE}${hostel.Hostel_Room_Image}`} alt="Hostel" width="80" />
-                    )}
-                  </td>
-                  <td className="d-flex gap-2">
-                    <button onClick={() => handleEdit(hostel)} className="btn btn-sm btn-warning">
-                      Edit
-                    </button>
-                    <button onClick={() => handleDelete(hostel.id)} className="btn btn-sm btn-danger">
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+            ))
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };

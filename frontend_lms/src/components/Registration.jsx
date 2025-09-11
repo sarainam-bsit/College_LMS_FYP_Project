@@ -1,9 +1,9 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import CarouselBackground from "./Admin/CarouselBackground";
 import { Navigate } from 'react-router-dom';
-import Home from './Home';
+
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import OTPverification from "./OTPverification";
@@ -39,7 +39,7 @@ const Registration = ({ setIsLoggedIn, setUserRole }) => {
     }, []);
     if (isLoggedIn) {
         // Agar login hai to registration page block
-        
+
         return <Navigate to="/home" replace />;
     }
 
@@ -68,8 +68,8 @@ const Registration = ({ setIsLoggedIn, setUserRole }) => {
                     status: 'success'
                 });
                 setErrorMessage({});
-               
-                toast.success(response.data.message );
+
+                toast.success(response.data.message);
 
                 if (response.data.student_id) {
                     // If backend sends Student_Email in response, use that:
@@ -100,7 +100,7 @@ const Registration = ({ setIsLoggedIn, setUserRole }) => {
             setstudentData({ ...studentData, status: 'error' });
         }
     };
-    
+
 
     return (
         <>
@@ -131,7 +131,7 @@ const Registration = ({ setIsLoggedIn, setUserRole }) => {
 
                 .register-card {
                     backdrop-filter: blur(15px);
-                    background: rgba(255, 255, 255, 0.15);
+                    background: rgba(222, 49, 204, 0.15);
                     border-radius: 20px;
                     padding: 30px;
                     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
@@ -144,7 +144,7 @@ const Registration = ({ setIsLoggedIn, setUserRole }) => {
                     color: #fff;
                     text-align: center;
                     margin-bottom: 20px;
-                    background: rgba(0,0,0,0.5);
+                    background: rgb(2,2,40);
                     padding: 10px;
                     border-radius: 12px;
                 }
@@ -160,14 +160,23 @@ const Registration = ({ setIsLoggedIn, setUserRole }) => {
                 }
                 .registerInput:focus{
                     background: rgba(255, 255, 255, 0.3);
-                    border: 1px solid #ff9800;
-                    box-shadow: 0 0 8px #ff9800;
+                    border: 1px solid rgb(2,2,40);
+                    box-shadow: 0 0 8px rgb(2,2,40);
                     color: white;
+                }
+                .btn{
+                   background: rgb(2,2,40); /* Dodger Blue */
+                   border: none;
+                   font-weight: bold;
+                   color: white;
+                }
+                .btn:hover {
+                    background: rgb(2,2,40); /* Slightly darker blue on hover */
                 }
             `}</style>
 
             <div className="background-wrapper">
-                <Home />
+                <CarouselBackground /> 
                 <div className="register-overlay">
                     <div className="register-card">
                         <form>
@@ -235,7 +244,7 @@ const Registration = ({ setIsLoggedIn, setUserRole }) => {
                                 </div>
                             )}
                             <div className=" d-flex justify-content-center">
-                                <button type="submit" onClick={submitForm} className="btn btn-dark" style={{ width: "200px" }}>Submit</button>
+                                <button type="submit" onClick={submitForm} className="btn" style={{ width: "200px" }}>Submit</button>
                             </div>
                             <OTPverification
                                 show={showOTP}

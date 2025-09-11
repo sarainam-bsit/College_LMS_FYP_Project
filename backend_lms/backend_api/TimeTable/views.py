@@ -14,17 +14,17 @@ class TimetableViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=["get"])
     def departments(self, request):
         departments = Department.objects.all()
-        return Response([{"id": d.id, "Department_Name": d.Department_Name} for d in departments])
+        return Response([{"id": d.id, "Department_Name": d.Department_Name, "Discription": d.Discription} for d in departments])
 
     @action(detail=False, methods=["get"])
     def categories(self, request):
         categories = CourseCategories.objects.all()
-        return Response([{"id": c.id, "Category_Name": c.Category_Name} for c in categories])
+        return Response([{"id": c.id,  "Related_Department": c.Related_Department.Department_Name, 'Discription': c.Related_Department.Discription,"Category_Name": c.Category_Name, "Category_Type": c.Category_Type} for c in categories])
 
     @action(detail=False, methods=["get"])
     def courses(self, request):
         courses = Course.objects.all()
-        return Response([{"id": c.id, "C_Title": c.C_Title, "C_Code": c.C_Code} for c in courses])
+        return Response([{"id": c.id, 'Department_Name': c.C_Category.Related_Department.Department_Name, 'Discription': c.C_Category.Related_Department.Discription, 'Category_Name': c.C_Category.Category_Name, "C_Title": c.C_Title, "C_Code": c.C_Code} for c in courses])
 
     @action(detail=False, methods=["get"])
     def teachers(self, request):

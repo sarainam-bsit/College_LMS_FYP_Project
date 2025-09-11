@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const API_BASE = "http://127.0.0.1:8000/hostel";
 
@@ -38,6 +40,7 @@ const AdminRoomDetail = () => {
       setLoading(false);
     } catch (err) {
       console.error("Failed to fetch data:", err);
+      toast.error("Failed to fetch data from server!");
     }
   };
 
@@ -68,55 +71,64 @@ const AdminRoomDetail = () => {
   };
 
   const handleSubmit = async () => {
-  try {
-    const formData = new FormData();
+    try {
+      const formData = new FormData();
 
-    Object.keys(roomForm).forEach((key) => {
-      if (roomForm[key] !== null && roomForm[key] !== "") {
-        formData.append(key, roomForm[key]);
+      Object.keys(roomForm).forEach((key) => {
+        if (roomForm[key] !== null && roomForm[key] !== "") {
+          formData.append(key, roomForm[key]);
+        }
+      });
+
+      if (roomForm.id) {
+        await axios.patch(`${API_BASE}/roomdetail/${roomForm.id}/`, formData);
+        toast.success("Room updated successfully!");
+      } else {
+        await axios.post(`${API_BASE}/roomdetail/`, formData);
+        toast.success("Room added successfully!");
       }
-    });
 
-    if (roomForm.id) {
-      await axios.patch(`${API_BASE}/roomdetail/${roomForm.id}/`, formData);
-      alert("Room updated successfully!");
-    } else {
-      await axios.post(`${API_BASE}/roomdetail/`, formData);
-      alert("Room added successfully!");
+      resetForm();
+      fetchData();
+    } catch (err) {
+      console.error("Failed to save room:", err.response?.data || err.message);
+      toast.error("Error saving room. Please check input fields.");
     }
-
-    resetForm();
-    fetchData();
-  } catch (err) {
-    console.error("Failed to save room:", err.response?.data || err.message);
-    alert("Error saving room. Check console.");
-  }
-};
+  };
 
   const handleEdit = (room) => {
     setRoomForm({
       ...room,
-      room_type: room.room_type, // API se ID already aati hai
-      room_image: null, // reset image on edit
+      room_type: room.room_type,
+      room_image: null,
     });
+    toast.info(`Editing Room ID: ${room.id}`);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this room?")) {
-      await axios.delete(`${API_BASE}/roomdetail/${id}/`);
-      fetchData();
+      try {
+        await axios.delete(`${API_BASE}/roomdetail/${id}/`);
+        toast.success("Room deleted successfully!");
+        fetchData();
+      } catch (err) {
+        console.error("Delete error:", err);
+        toast.error("Failed to delete room.");
+      }
     }
   };
 
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="container mt-4">
-      <h2 className="text-center text-primary mb-4">Admin Room Management</h2>
+    <div style={{ padding: "30px", marginTop: "4%", backgroundColor: "#ebeaf2ff", color: "rgba(44, 44, 122, 1)" }}>
+      <h2 style={{ textAlign: "center", color: "rgba(44, 44, 122, 1)", fontWeight: "bold", marginBottom: "20px" }}>
+        Admin Room Management
+      </h2>
 
       {/* Form Card */}
-      <div className="card shadow-sm p-4 mb-5">
+      <div style={{ backgroundColor: "#f5ecf4ff", padding: "20px", borderRadius: "10px", border: "2px solid white", marginBottom: "30px" }}>
         <h4>{roomForm.id ? "Update Room" : "Add Room"}</h4>
 
         <div className="row g-3 mb-3">
@@ -124,9 +136,7 @@ const AdminRoomDetail = () => {
             <select
               className="form-select"
               value={roomForm.room_type}
-              onChange={(e) =>
-                setRoomForm({ ...roomForm, room_type: e.target.value })
-              }
+              onChange={(e) => setRoomForm({ ...roomForm, room_type: e.target.value })}
             >
               <option value="">Select Room Type</option>
               {roomTypes.map((rt) => (
@@ -143,9 +153,7 @@ const AdminRoomDetail = () => {
               className="form-control"
               placeholder="Total Rooms"
               value={roomForm.total_room}
-              onChange={(e) =>
-                setRoomForm({ ...roomForm, total_room: e.target.value })
-              }
+              onChange={(e) => setRoomForm({ ...roomForm, total_room: e.target.value })}
             />
           </div>
           <div className="col-md-3">
@@ -154,9 +162,7 @@ const AdminRoomDetail = () => {
               className="form-control"
               placeholder="Booked Rooms"
               value={roomForm.booked_room}
-              onChange={(e) =>
-                setRoomForm({ ...roomForm, booked_room: e.target.value })
-              }
+              onChange={(e) => setRoomForm({ ...roomForm, booked_room: e.target.value })}
             />
           </div>
           <div className="col-md-3">
@@ -165,9 +171,7 @@ const AdminRoomDetail = () => {
               className="form-control"
               placeholder="Available Rooms"
               value={roomForm.available_room}
-              onChange={(e) =>
-                setRoomForm({ ...roomForm, available_room: e.target.value })
-              }
+              onChange={(e) => setRoomForm({ ...roomForm, available_room: e.target.value })}
             />
           </div>
           <div className="col-md-3">
@@ -176,9 +180,7 @@ const AdminRoomDetail = () => {
               className="form-control"
               placeholder="Rent"
               value={roomForm.rent}
-              onChange={(e) =>
-                setRoomForm({ ...roomForm, rent: e.target.value })
-              }
+              onChange={(e) => setRoomForm({ ...roomForm, rent: e.target.value })}
             />
           </div>
         </div>
@@ -190,9 +192,7 @@ const AdminRoomDetail = () => {
             type="file"
             className="form-control"
             accept="image/*"
-            onChange={(e) =>
-              setRoomForm({ ...roomForm, room_image: e.target.files[0] })
-            }
+            onChange={(e) => setRoomForm({ ...roomForm, room_image: e.target.files[0] })}
           />
         </div>
 
@@ -214,9 +214,7 @@ const AdminRoomDetail = () => {
                 type="checkbox"
                 className="form-check-input"
                 checked={roomForm[f.key]}
-                onChange={(e) =>
-                  setRoomForm({ ...roomForm, [f.key]: e.target.checked })
-                }
+                onChange={(e) => setRoomForm({ ...roomForm, [f.key]: e.target.checked })}
                 id={f.key}
               />
               <label className="form-check-label" htmlFor={f.key}>
@@ -232,9 +230,7 @@ const AdminRoomDetail = () => {
             className="form-control"
             placeholder="Description"
             value={roomForm.description}
-            onChange={(e) =>
-              setRoomForm({ ...roomForm, description: e.target.value })
-            }
+            onChange={(e) => setRoomForm({ ...roomForm, description: e.target.value })}
           />
         </div>
 
@@ -257,7 +253,7 @@ const AdminRoomDetail = () => {
         <h4>Rooms List</h4>
         <div className="table-responsive">
           <table className="table table-striped table-hover text-center align-middle mb-0">
-            <thead className="table-primary">
+            <thead style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
               <tr>
                 <th>Type</th>
                 <th>Total</th>
@@ -291,11 +287,7 @@ const AdminRoomDetail = () => {
                       <img
                         src={room.room_image}
                         alt="room"
-                        style={{
-                          width: "80px",
-                          height: "50px",
-                          objectFit: "cover",
-                        }}
+                        style={{ width: "80px", height: "50px", objectFit: "cover" }}
                       />
                     ) : (
                       "No Image"

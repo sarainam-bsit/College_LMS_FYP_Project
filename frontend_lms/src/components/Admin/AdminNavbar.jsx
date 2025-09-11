@@ -20,7 +20,7 @@ const AdminNavbar = ({ handleLogout }) => {
   };
 
   return (
-    <nav className="navbar navbar-dark  fixed-top">
+    <nav className="navbar navbar-dark fixed-top">
       <div className="container-fluid">
         <Link className="navbar-brand d-flex align-items-center" to={isLoggedIn ? "/adminhome" : "#"}>
           <img
@@ -40,6 +40,14 @@ const AdminNavbar = ({ handleLogout }) => {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
+
+        {/* Glass overlay */}
+        {menuOpen && (
+          <div
+            className="glass-overlay"
+            onClick={() => setMenuOpen(false)}
+          ></div>
+        )}
 
         <div
           className={`offcanvas offcanvas-end text-bg-dark ${menuOpen ? "show" : ""}`}
@@ -67,12 +75,21 @@ const AdminNavbar = ({ handleLogout }) => {
                 <>
                   <li className="nav-item"><Link className="navlink nav-link" to="/adminhome">Home</Link></li>
                   <li className="nav-item"><Link className="navlink nav-link" to="/about">About</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/feevoucher">Manage Fee Voucher</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/hostelfeevoucher">Manage Hostel Fee Voucher</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/libraryfeevoucher">Manage Library Fee Voucher</Link></li>
                   <li className="nav-item"><Link className="navlink nav-link" to="/admin/departments">Manage Programs</Link></li>
                   <li className="nav-item"><Link className="navlink nav-link" to="/admin/course-categories">Manage Courses Categories</Link></li>
                   <li className="nav-item"><Link className="navlink nav-link" to="/admin/courses">Manage Courses</Link></li>
                   <li className="nav-item"><Link className="navlink nav-link" to="/admin/timetable">Manage Timetable</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/hosteldetail">Manage Hostel Details</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/roomdetail">Manage Room Details</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/hostelapplication">Manage Hostel Applications</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/cancelhostelapplication">Manage Cancel Hostel Applications</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/libraryapplications">Manage Library Applications</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/feedback">Manage Feedback</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/contact">Manage Contact</Link></li>
                   <li className="nav-item"><Link className="navlink nav-link" to="/admin/notifications">Send Notifications</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/settings">Settings</Link></li>
                 </>
               )}
             </ul>

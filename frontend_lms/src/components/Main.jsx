@@ -22,7 +22,6 @@ import Feevoucher from './FeeVoucher/Feevoucher';
 import Challanform from './FeeVoucher/Challanform';
 import TeacherDashboard from './Teacher/TeacherDashboard';
 import UploadLectures from './Teacher/UploadLectures';
-import UploadGrades from './Teacher/UploadGrades';
 import UploadTasks from './Teacher/UploadTasks';
 import StudentCourses from './StudentCourses';
 import StudentTasks from './StudentTasks';
@@ -218,7 +217,6 @@ const Main = () => {
         <Route path="/teacher/teachertask/:courseId" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherTasks /></ProtectedRoute>} />
         <Route path="/uploadlectures" element={<ProtectedRoute allowedRoles={["teacher"]}><UploadLectures /></ProtectedRoute>} />
         <Route path="/uploadTasks" element={<ProtectedRoute allowedRoles={["teacher"]}><UploadTasks /></ProtectedRoute>} />
-        <Route path="/uploadgrades" element={<ProtectedRoute allowedRoles={["teacher"]}><UploadGrades /></ProtectedRoute>} />
         <Route path="/teacher/department/:departmentId/category/:categoryId/gradeStudents" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherGradesStudent /></ProtectedRoute>} />
         <Route path="/teacher/coursestudents/:courseId" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherGradesStuDetail /></ProtectedRoute>} />
         <Route path="/teacher/department/:deptId/categories" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherCategory /></ProtectedRoute>} />
@@ -250,13 +248,13 @@ const Main = () => {
       </Routes>
        {/* Toast ek hi dafa lagana hota hai pura app me */}
       <ToastContainer 
-        position="top-center"   
-        autoClose={3000} 
-        hideProgressBar={true} 
-        newestOnTop={true} 
-        closeOnClick 
-        pauseOnHover 
-      />
+    position="top-center"
+    autoClose={3000}
+    hideProgressBar={false}
+    newestOnTop
+    closeOnClick
+    pauseOnHover
+  />
     </>
   );
 };

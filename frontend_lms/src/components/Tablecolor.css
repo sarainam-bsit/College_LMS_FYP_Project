@@ -1,0 +1,8 @@
+.table-purple thead {
+  background-color: #9b59b6 !important; /* Medium Purple */
+  color: white !important;
+}
+
+.table-purple tbody tr:hover {
+  background-color: #d8b4fe !important; /* Light purple on hover */
+}

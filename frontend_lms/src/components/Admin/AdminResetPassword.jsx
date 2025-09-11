@@ -61,13 +61,15 @@ const AdminResetPassword = () => {
           padding: 30px;
           border-radius: 10px;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-          background-color: #fff;
+          background-color: rgba(239, 227, 238, 1);
           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .reset-heading {
           text-align: center;
           margin-bottom: 25px;
-          color: #333;
+          color: rgb(4, 4, 63);
+          font-size: 2rem;
+          font-weight: bold;
         }
         .reset-input {
           width: 100%;
@@ -80,10 +82,10 @@ const AdminResetPassword = () => {
           transition: border-color 0.3s;
         }
         .reset-input:focus {
-          border-color: #3498db;
+          border-color: rgb(4, 4, 63);
         }
         .reset-button {
-          background-color: #3498db;
+          background-color: rgb(4, 4, 63);
           color: white;
           border: none;
           padding: 12px 20px;
@@ -96,7 +98,7 @@ const AdminResetPassword = () => {
           font-weight: bold;
         }
         .reset-button:hover {
-          background-color: #2980b9;
+          background-color: rgb(4, 4, 63);
           transform: scale(1.03);
         }
         .reset-message {

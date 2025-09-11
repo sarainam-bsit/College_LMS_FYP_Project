@@ -3,13 +3,13 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const VERIFY_URL = 'http://127.0.0.1:8000/adminaccount/verify-otp/';
-const RESEND_URL = 'http://127.0.0.1:8000/adminaccount/resend-otp/'; // Backend resend OTP endpoint
+const RESEND_URL = 'http://127.0.0.1:8000/adminaccount/resend-otp/';
 
 const AdminForgetOTP = ({ show, onClose, email }) => {
     const [OTPData, setOTPData] = useState({ otp: '' });
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
-    const [isSending, setIsSending] = useState(false); // resend button loading
+    const [isSending, setIsSending] = useState(false); 
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -61,7 +61,6 @@ const AdminForgetOTP = ({ show, onClose, email }) => {
             setErrorMessage('');
         } catch (error) {
             setSuccessMessage('');
-            // Agar OTP abhi valid hai to backend se ye message milega
             setErrorMessage(
                 error.response?.data?.error ||
                 error.response?.data?.message ||
@@ -75,36 +74,54 @@ const AdminForgetOTP = ({ show, onClose, email }) => {
     if (!show) return null;
 
     return (
-        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
-            <div className="modal-dialog modal-dialog-centered" style={{ marginTop: "10px" }}>
+        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.6)" }}>
+            <div className="modal-dialog modal-dialog-centered" style={{ marginTop: "30px" }}>
                 <div className="modal-content" style={{ borderRadius: "15px", overflow: "hidden" }}>
-                    <div className="modal-header bg-dark">
-                        <h5 className="modal-title text-white">Admin OTP Verification</h5>
+                    <div className="modal-header text-white" style={{ backgroundColor: "rgb(70, 4, 67)" }}>
+                        <h5 className="modal-title">Admin OTP Verification</h5>
                     </div>
-                    <div className="modal-body">
-                        {successMessage && <p style={{ color: 'green', fontWeight: 'bold' }}>{successMessage}</p>}
-                        {errorMessage && <p style={{ color: 'red', fontWeight: 'bold' }}>{errorMessage}</p>}
+                    <div className="modal-body" style={{ backgroundColor: "rgba(239, 227, 238, 1)" }}>
+                        {successMessage && <div style={{ color: 'green', fontWeight: 'bold', marginBottom: '10px' }}>{successMessage}</div>}
+                        {errorMessage && <div style={{ color: 'red', fontWeight: 'bold', marginBottom: '10px' }}>{errorMessage}</div>}
 
-                        <div className="mt-3">
-                            <label htmlFor="6DigitOTP" className="form-label">Enter 6 digit OTP</label>
-                            <input
-                                type="text"
-                                name="otp"
-                                value={OTPData.otp}
-                                onChange={handleChange}
-                                className="form-control"
-                                id="6DigitOTP"
-                                placeholder="Enter OTP"
-                                required
-                                maxLength={6}
-                                pattern="\d{6}"
-                                title="Please enter a 6 digit OTP"
-                            />
-                        </div>
+                        <label htmlFor="6DigitOTP" className="form-label" style={{ color: "rgb(4, 4, 63)", fontWeight: 'bold' }}>Enter 6-digit OTP</label>
+                        <input
+                            type="text"
+                            name="otp"
+                            value={OTPData.otp}
+                            onChange={handleChange}
+                            className="form-control"
+                            id="6DigitOTP"
+                            placeholder="Enter OTP"
+                            required
+                            maxLength={6}
+                            pattern="\d{6}"
+                            title="Please enter a 6 digit OTP"
+                            style={{
+                                backgroundColor: 'white',
+                                borderRadius: '6px',
+                                padding: '8px',
+                                marginTop: '5px',
+                                border: '1px solid #ccc',
+                                fontSize: '16px',
+                                color: '#000'
+                            }}
+                        />
                     </div>
-                    <div className="modal-footer">
-                        <button className="btn btn-dark" onClick={submitForm}>Submit</button>
-                        <button className="btn btn-primary" onClick={resendOTP} disabled={isSending}>
+                    <div className="modal-footer" style={{ backgroundColor: "rgba(239, 227, 238, 1)" }}>
+                        <button 
+                            className="btn text-white" 
+                            style={{ backgroundColor: "rgb(70, 4, 67)" }} 
+                            onClick={submitForm}
+                        >
+                            Verify OTP
+                        </button>
+                        <button 
+                            className="btn text-white" 
+                            style={{ backgroundColor: "rgb(4, 4, 63)" }} 
+                            onClick={resendOTP} 
+                            disabled={isSending}
+                        >
                             {isSending ? "Sending..." : "Resend OTP"}
                         </button>
                     </div>

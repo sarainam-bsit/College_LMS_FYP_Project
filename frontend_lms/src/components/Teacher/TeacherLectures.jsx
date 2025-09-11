@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const TeacherLectures = () => {
   const teacherId = localStorage.getItem("teacherId");
@@ -27,7 +29,7 @@ const TeacherLectures = () => {
         );
         setCourses(res.data);
       } catch (err) {
-        console.error("Error fetching courses:", err);
+        toast.error("❌ Failed to fetch courses");
       }
     };
     fetchCourses();
@@ -53,7 +55,7 @@ const TeacherLectures = () => {
         );
         setLectures(res.data);
       } catch (err) {
-        console.error("Error fetching lectures:", err);
+        toast.error("❌ Failed to fetch lectures");
       }
     };
     fetchLectures();
@@ -69,7 +71,7 @@ const TeacherLectures = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!teacherId || !selectedCourse) {
-      return alert("Please select a course and log in as a teacher");
+      return toast.warn("⚠️ Please select a course and log in as a teacher");
     }
 
     const payload = new FormData();
@@ -78,22 +80,24 @@ const TeacherLectures = () => {
     payload.append("Title", formData.Title);
     payload.append("Date", formData.Date);
     payload.append("Time", formData.Time);
-    if (formData.Video) payload.append("Video", formData.Video);
+    if (formData.Video instanceof File) {
+      payload.append("Video", formData.Video);
+    }
 
     try {
       if (editingLectureId) {
-        await axios.put(
+        await axios.patch(
           `http://127.0.0.1:8000/Lecture/lectures/${editingLectureId}/`,
           payload,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
         setEditingLectureId(null);
+        toast.success("✅ Lecture updated successfully");
       } else {
-        await axios.post(
-          `http://127.0.0.1:8000/Lecture/lectures/`,
-          payload,
-          { headers: { "Content-Type": "multipart/form-data" } }
-        );
+        await axios.post(`http://127.0.0.1:8000/Lecture/lectures/`, payload, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        toast.success("🎉 Lecture added successfully");
       }
 
       setFormData({ Title: "", Date: "", Time: "", Video: null });
@@ -103,10 +107,9 @@ const TeacherLectures = () => {
       );
       setLectures(res.data);
     } catch (err) {
-      console.error("Error submitting lecture:", err);
-      alert(
+      toast.error(
         err.response?.data?.detail ||
-          "Error submitting lecture. Check if you are uploading for your assigned course."
+          "❌ Error submitting lecture. Check if this course belongs to you."
       );
     }
   };
@@ -117,175 +120,294 @@ const TeacherLectures = () => {
       Title: lec.Title,
       Date: lec.Date,
       Time: lec.Time,
-      Video: null,
+      Video: lec.Video || null,
     });
     setSelectedCourse(String(lec.Lec_course));
+    toast.info(`Editing Lecture: ${lec.Title}`);
   };
 
   const handleDelete = async (lecId) => {
-    if (!window.confirm("Are you sure you want to delete this lecture?")) return;
+    if (!window.confirm("⚠️ Are you sure you want to delete this lecture?"))
+      return;
     try {
       await axios.delete(`http://127.0.0.1:8000/Lecture/lectures/${lecId}/`);
       setLectures(lectures.filter((lec) => lec.id !== lecId));
+      toast.success("🗑️ Lecture deleted");
     } catch (err) {
-      console.error("Error deleting lecture:", err);
-      alert("Error deleting lecture");
+      toast.error("❌ Failed to delete lecture");
     }
   };
 
   return (
-    <div className="container my-5">
-      <h2 className="text-center text-dark mb-4">📚 Teacher Lectures</h2>
+    <div
+      style={{
+        padding: "30px",
+        fontFamily: "Arial, sans-serif",
+        marginTop: "4%",
+        backgroundColor: "#ebeaf2ff", // light purple background
+        color: "rgba(44, 44, 122, 1)",
+      }}
+    >
+      <h1
+        style={{
+          marginBottom: "20px",
+          color: "rgba(44, 44, 122, 1)",
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
+      >
+        📚 Teacher Lectures
+      </h1>
 
       {!teacherId && (
-        <div className="alert alert-danger text-center">
-          Please log in as a teacher.
+        <div className="alert alert-danger text-center mt-4">
+          ❌ Please log in as a teacher.
         </div>
       )}
 
-      {teacherId && (
+      {teacherId && selectedCourse && (
         <>
-          {/* Form & Selected Course inside one card */}
-          {selectedCourse && (
-            <div className="card shadow-sm p-4 mb-5">
-              <h4 className="mb-3 text-primary">
-                {editingLectureId ? "✏️ Edit Lecture" : "➕ Add Lecture"}
-              </h4>
+          {/* Form */}
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              marginBottom: "30px",
+              backgroundColor: "#f5ecf4ff",
+              padding: "20px",
+              borderRadius: "10px",
+              border: "2px solid white",
+            }}
+          >
+            <h4 style={{ textAlign: "center", fontWeight: "bold" }}>
+              {editingLectureId ? "✏️ Edit Lecture" : "➕ Add Lecture"}
+            </h4>
 
-              {/* Selected Course inside card */}
-              <div className="mb-3">
-  <label className="form-label fw-bold">Selected Course</label>
-  <input
-    type="text"
-    className="form-control"
-    disabled
-    value={
-      courses.find(c => String(c.id) === String(selectedCourse))
-        ? `${courses.find(c => String(c.id) === String(selectedCourse)).C_Code} - ${courses.find(c => String(c.id) === String(selectedCourse)).C_Title}`
-        : ""
-    }
-  />
-</div>
-
-              <form onSubmit={handleSubmit} encType="multipart/form-data">
-                <div className="row g-3 mb-3">
-                  <div className="col-md-4">
-                    <input
-                      type="text"
-                      name="Title"
-                      className="form-control"
-                      placeholder="Lecture Title"
-                      value={formData.Title}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-4">
-                    <input
-                      type="date"
-                      name="Date"
-                      className="form-control"
-                      value={formData.Date}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-4">
-                    <input
-                      type="time"
-                      name="Time"
-                      className="form-control"
-                      value={formData.Time}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                </div>
-                <div className="mb-3">
-                  <input
-                    type="file"
-                    name="Video"
-                    className="form-control"
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <button type="submit" className="btn btn-success">
-                  {editingLectureId ? "Update Lecture" : "Add Lecture"}
-                </button>
-              </form>
+            <div style={{ marginBottom: "15px" }}>
+              <label className="form-label fw-bold">🎯 Selected Course</label>
+              <input
+                type="text"
+                className="form-control"
+                disabled
+                value={
+                  courses.find((c) => String(c.id) === String(selectedCourse))
+                    ? `${courses.find(
+                        (c) => String(c.id) === String(selectedCourse)
+                      ).C_Code} - ${
+                        courses.find(
+                          (c) => String(c.id) === String(selectedCourse)
+                        ).C_Title
+                      }`
+                    : ""
+                }
+              />
             </div>
-          )}
 
-          {/* Lecture list */}
-          {selectedCourse && (
-            <>
-              <h4 className="text-dark">📖 Lecture List</h4>
+            <div style={{ display: "flex", gap: "10px", marginBottom: "15px" }}>
+              <input
+                type="text"
+                name="Title"
+                placeholder="Lecture Title"
+                value={formData.Title}
+                onChange={handleInputChange}
+                required
+                style={{ padding: "8px", flex: 1, borderRadius: "5px" }}
+              />
+              <input
+                type="date"
+                name="Date"
+                value={formData.Date}
+                onChange={handleInputChange}
+                required
+                style={{ padding: "8px", borderRadius: "5px" }}
+              />
+              <input
+                type="time"
+                name="Time"
+                value={formData.Time}
+                onChange={handleInputChange}
+                required
+                style={{ padding: "8px", borderRadius: "5px" }}
+              />
+            </div>
+
+            <div style={{ marginBottom: "15px" }}>
+              <input
+                type="file"
+                name="Video"
+                className="form-control"
+                onChange={handleInputChange}
+              />
+            </div>
+
+            <button
+              type="submit"
+              style={{
+                padding: "10px 20px",
+                marginRight: "10px",
+                borderRadius: "5px",
+                backgroundColor: "rgb(70, 4, 67)", // dark purple
+                color: "white",
+                border: "none",
+                cursor: "pointer",
+                transition: "transform 0.2s",
+              }}
+              onMouseOver={(e) => (e.target.style.transform = "scale(1.05)")}
+              onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
+            >
+              {editingLectureId ? "Update Lecture" : "Add Lecture"}
+            </button>
+
+            {editingLectureId && (
+              <button
+                type="button"
+                onClick={() =>
+                  setFormData({
+                    Title: "",
+                    Date: "",
+                    Time: "",
+                    Video: null,
+                  })
+                }
+                style={{
+                  padding: "10px 20px",
+                  borderRadius: "5px",
+                  backgroundColor: "rgb(4, 4, 63)", // navy blue
+                  color: "white",
+                  border: "none",
+                  cursor: "pointer",
+                  transition: "transform 0.2s",
+                }}
+                onMouseOver={(e) =>
+                  (e.target.style.transform = "scale(1.05)")
+                }
+                onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
+              >
+                Cancel
+              </button>
+            )}
+          </form>
+
+          {/* Lecture Table */}
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              textAlign: "center",
+            }}
+          >
+            <thead>
+              <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+                <th style={{ padding: "10px", border: "1px solid #ddd" }}>
+                  Code
+                </th>
+                <th style={{ padding: "10px", border: "1px solid #ddd" }}>
+                  Course
+                </th>
+                <th style={{ padding: "10px", border: "1px solid #ddd" }}>
+                  Title
+                </th>
+                <th style={{ padding: "10px", border: "1px solid #ddd" }}>
+                  Date
+                </th>
+                <th style={{ padding: "10px", border: "1px solid #ddd" }}>
+                  Time
+                </th>
+                <th style={{ padding: "10px", border: "1px solid #ddd" }}>
+                  Video
+                </th>
+                <th style={{ padding: "10px", border: "1px solid #ddd" }}>
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
               {lectures.length === 0 ? (
-                <div className="alert alert-info mt-3">
-                  No lectures found for this course.
-                </div>
+                <tr>
+                  <td colSpan={7}>ℹ️ No lectures found</td>
+                </tr>
               ) : (
-                <div className="table-responsive">
-                  <table className="table table-striped table-bordered align-middle text-center">
-                    <thead className="table-dark">
-                      <tr>
-                        <th>Course Code</th>
-                        <th>Course Name</th>
-                        <th>Title</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Video</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {lectures.map((lec) => (
-                        <tr key={lec.id}>
-                          <td>{lec.Lec_course_code}</td>
-                          <td>{lec.Lec_course_name}</td>
-                          <td>{lec.Title}</td>
-                          <td>{lec.Date}</td>
-                          <td>{lec.Time}</td>
-                          <td>
-                            {lec.Video ? (
-                              <a
-                                href={
-                                  lec.Video.startsWith("http")
-                                    ? lec.Video
-                                    : `http://127.0.0.1:8000${lec.Video}`
-                                }
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="btn btn-sm btn-outline-primary"
-                              >
-                                ▶ View
-                              </a>
-                            ) : (
-                              "No Video"
-                            )}
-                          </td>
-                          <td>
-                            <button
-                              className="btn btn-sm btn-warning me-2"
-                              onClick={() => handleEdit(lec)}
-                            >
-                              ✏️ Edit
-                            </button>
-                            <button
-                              className="btn btn-sm btn-danger"
-                              onClick={() => handleDelete(lec.id)}
-                            >
-                              🗑 Delete
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                lectures.map((lec) => (
+                  <tr key={lec.id} style={{ textAlign: "center" }}>
+                    <td style={{ padding: "10px", border: "1px solid white" }}>
+                      {lec.Lec_course_code}
+                    </td>
+                    <td style={{ padding: "10px", border: "1px solid white" }}>
+                      {lec.Lec_course_name}
+                    </td>
+                    <td style={{ padding: "10px", border: "1px solid white" }}>
+                      {lec.Title}
+                    </td>
+                    <td style={{ padding: "10px", border: "1px solid white" }}>
+                      {lec.Date}
+                    </td>
+                    <td style={{ padding: "10px", border: "1px solid white" }}>
+                      {lec.Time}
+                    </td>
+                    <td style={{ padding: "10px", border: "1px solid white" }}>
+                      {lec.Video ? (
+                        <a
+                          href={
+                            lec.Video.startsWith("http")
+                              ? lec.Video
+                              : `http://127.0.0.1:8000${lec.Video}`
+                          }
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          ▶ View
+                        </a>
+                      ) : (
+                        "No Video"
+                      )}
+                    </td>
+                    <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                      <button
+                        onClick={() => handleEdit(lec)}
+                        style={{
+                          marginRight: "5px",
+                          padding: "5px 10px",
+                          backgroundColor: "rgb(70, 4, 67)",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "5px",
+                          cursor: "pointer",
+                          transition: "transform 0.2s",
+                        }}
+                        onMouseOver={(e) =>
+                          (e.target.style.transform = "scale(1.1)")
+                        }
+                        onMouseOut={(e) =>
+                          (e.target.style.transform = "scale(1)")
+                        }
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(lec.id)}
+                        style={{
+                          padding: "5px 10px",
+                          backgroundColor: "rgb(4, 4, 63)",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "5px",
+                          cursor: "pointer",
+                          transition: "transform 0.2s",
+                        }}
+                        onMouseOver={(e) =>
+                          (e.target.style.transform = "scale(1.1)")
+                        }
+                        onMouseOut={(e) =>
+                          (e.target.style.transform = "scale(1)")
+                        }
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))
               )}
-            </>
-          )}
+            </tbody>
+          </table>
         </>
       )}
     </div>

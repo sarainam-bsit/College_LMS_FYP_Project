@@ -23,18 +23,19 @@ const ForgetPassword = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const ForgetFormData = new FormData();
-        ForgetFormData.append('Email', emailData.Email);
 
         try {
-            const response = await axios.post('http://127.0.0.1:8000/Account/forget_password/', { Email: emailData.Email }, { withCredentials: true });
+            const response = await axios.post(
+                'http://127.0.0.1:8000/Account/forget_password/',
+                { Email: emailData.Email },
+                { withCredentials: true }
+            );
+
             setMessage(response.data.message);
             setError('');
-            setTimeout(() => {
-                setShowOTP(true);
-            }, 1000);
+            setTimeout(() => setShowOTP(true), 1000);
         } catch (err) {
-            setError(err.response?.data?.error);
+            setError(err.response?.data?.error || "Something went wrong");
             setMessage('');
         }
     };
@@ -42,20 +43,31 @@ const ForgetPassword = () => {
     return (
         <>
             <style>{`
+            
+    .forget-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* full viewport height */
+        background-color: rgba(244, 219, 242, 0.1); /* optional subtle background */
+    }
                 .forget-container {
                     max-width: 400px;
+                   
                     margin: 60px auto;
                     padding: 25px 30px;
                     border-radius: 10px;
+                    padding: 40px 35px;
                     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-                    background-color: #fff;
+                    background-color: rgba(239, 227, 238, 1);
                     font-family: 'Segoe UI', sans-serif;
                 }
                 .forget-heading {
                     text-align: center;
                     margin-bottom: 20px;
-                    color: #333;
-                    font-size: 1.5rem;
+                    color: rgb(4, 4, 63);
+                    font-size: 2rem;
+                    font-weight: bold;
                 }
                 .forget-input {
                     width: 100%;
@@ -68,12 +80,13 @@ const ForgetPassword = () => {
                     transition: border-color 0.3s;
                 }
                 .forget-input:focus {
-                    border-color: #d2691e;
+                    border-color: rgb(4, 4, 63);
                 }
                 .forget-button {
-                    background-color: #d2691e;
+                    background-color: rgb(4, 4, 63);
                     color: white;
                     border: none;
+                    margin-top: 20px;
                     padding: 12px 20px;
                     font-size: 16px;
                     border-radius: 6px;
@@ -83,7 +96,7 @@ const ForgetPassword = () => {
                     font-weight: bold;
                 }
                 .forget-button:hover {
-                    background-color: #b85c18;
+                    background-color: rgb(4, 4, 63);
                     transform: scale(1.03);
                 }
                 .message {
@@ -99,14 +112,15 @@ const ForgetPassword = () => {
                     font-size: 0.95rem;
                 }
             `}</style>
-
+<div className="forget-wrapper">
             <div className="forget-container">
                 <h2 className="forget-heading">Forget Password</h2>
                 {message && <div className="message">{message}</div>}
-                
 
                 <form onSubmit={handleSubmit}>
-                    <label style={{ fontWeight: '500', marginBottom: '5px', display: 'block' }}>Email:</label>
+                    <label style={{ fontWeight: '500', marginBottom: '5px', display: 'block', color: 'rgb(4, 4, 63)' }}>
+                        Email:
+                    </label>
                     <input
                         type="email"
                         name='Email'
@@ -126,6 +140,7 @@ const ForgetPassword = () => {
                         email={emailData.Email}
                     />
                 </form>
+            </div>
             </div>
         </>
     );

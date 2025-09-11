@@ -43,7 +43,7 @@ const TeacherDepartment = ({ deptId }) => {
         <div className="row row-cols-1 row-cols-md-3 g-4 mt-4 mb-4">
           {departments.map(dept =>(
           <div className="col" key={dept.id}>
-            <Link to={`/semesterIT`} className='text-decoration-none'>
+            <Link to={`/teacher/department/${dept.id}/categories`} className='text-decoration-none'>
               <div className="card">
                 <div className="card-body">
                   <img src={dept.Department_Image} className="image card-img-top img-fluid" alt="..." style={{ height: '200px', objectFit: 'cover' }} />

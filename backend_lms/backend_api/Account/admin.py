@@ -78,6 +78,7 @@ class StudentAdmin(ExtraButtonsMixin, ImportExportModelAdmin):
 @admin.register(Teacher)
 class TeacherAdmin(ExtraButtonsMixin, ImportExportModelAdmin):
     list_display = (
+        'id',
         'Role',
         'Teacher_Name',
         'Teacher_Email',

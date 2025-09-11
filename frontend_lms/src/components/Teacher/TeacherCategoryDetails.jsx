@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../Navbar';
+
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 
@@ -28,7 +28,7 @@ const TeacherCategoryDetails = () => {
         }
       `}</style>
 
-      <Navbar />
+     
 
       <div className="container p-1" style={{ marginTop: "80px", minHeight: "90vh" }}>
         <div className="row justify-content-center">

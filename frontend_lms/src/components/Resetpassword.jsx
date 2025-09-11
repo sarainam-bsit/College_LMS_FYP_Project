@@ -18,13 +18,12 @@ const ResetPassword = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-  if (!location.state?.otpVerified) {
-    navigate('/forget-password');
-  } else {
-    // Set email in form from location.state.email
-    setFormData(prev => ({ ...prev, Email: location.state.email || '' }));
-  }
-}, [location.state, navigate]);
+    if (!location.state?.otpVerified) {
+      navigate('/forget-password');
+    } else {
+      setFormData(prev => ({ ...prev, Email: location.state.email || '' }));
+    }
+  }, [location.state, navigate]);
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -37,9 +36,8 @@ const ResetPassword = () => {
     setFieldErrors({});
 
     try {
-      const response = await axios.post(BASE_URL, formData,  { withCredentials: true });
-      // setMessage(response.data.message);
-      toast.success(response.data.message)
+      const response = await axios.post(BASE_URL, formData, { withCredentials: true });
+      toast.success(response.data.message);
       navigate('/login');
       setFormData({ Email: '', New_Password: '', Confirm_Password: '' });
     } catch (err) {
@@ -48,7 +46,6 @@ const ResetPassword = () => {
       } else {
         setError(err.response?.data?.error);
       }
-      setError(err.response?.data?.error);
     }
   };
 
@@ -61,13 +58,15 @@ const ResetPassword = () => {
           padding: 30px;
           border-radius: 10px;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-          background-color: #fff;
+          background-color: rgba(239, 227, 238, 1);
           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .reset-heading {
           text-align: center;
           margin-bottom: 25px;
-          color: #333;
+          color: rgb(70, 4, 67));
+          font-size: 2rem;
+          font-weight: bold;
         }
         .reset-input {
           width: 100%;
@@ -80,10 +79,10 @@ const ResetPassword = () => {
           transition: border-color 0.3s;
         }
         .reset-input:focus {
-          border-color: #3498db;
+          border-color: rgb(4, 4, 63);
         }
         .reset-button {
-          background-color: #3498db;
+          background-color: rgb(4, 4, 63);
           color: white;
           border: none;
           padding: 12px 20px;
@@ -96,7 +95,7 @@ const ResetPassword = () => {
           font-weight: bold;
         }
         .reset-button:hover {
-          background-color: #2980b9;
+          background-color: rgb(4, 4, 63);
           transform: scale(1.03);
         }
         .reset-message {
@@ -118,22 +117,16 @@ const ResetPassword = () => {
 
         <form onSubmit={handleSubmit}>
           <input
-  type="email"
-  name="Email"
-  placeholder="Your registered email"
-  value={formData.Email}
-  onChange={handleChange}
-  className="reset-input"
-  readOnly // <- disable editing
-/>
+            type="email"
+            name="Email"
+            placeholder="Your registered email"
+            value={formData.Email}
+            onChange={handleChange}
+            className="reset-input"
+            readOnly
+          />
           {fieldErrors.Email && (
-            <div style={{
-              color: "red",
-              fontSize: "0.85rem",
-              marginTop: "0px",
-              fontWeight: "500",
-              marginLeft: '9px',
-            }}>
+            <div style={{ color: "red", fontSize: "0.85rem", marginTop: "0px", fontWeight: "500", marginLeft: '9px' }}>
               {fieldErrors.Email}
             </div>
           )}
@@ -147,13 +140,7 @@ const ResetPassword = () => {
             className="reset-input"
           />
           {fieldErrors.New_Password && (
-            <div style={{
-              color: "red",
-              fontSize: "0.85rem",
-              marginTop: "0px",
-              fontWeight: "500",
-              marginLeft: '9px',
-            }}>
+            <div style={{ color: "red", fontSize: "0.85rem", marginTop: "0px", fontWeight: "500", marginLeft: '9px' }}>
               {fieldErrors.New_Password}
             </div>
           )}
@@ -167,13 +154,7 @@ const ResetPassword = () => {
             className="reset-input"
           />
           {fieldErrors.Confirm_Password && (
-            <div style={{
-              color: "red",
-              fontSize: "0.85rem",
-              marginTop: "0px",
-              fontWeight: "500",
-              marginLeft: '9px',
-            }}>
+            <div style={{ color: "red", fontSize: "0.85rem", marginTop: "0px", fontWeight: "500", marginLeft: '9px' }}>
               {fieldErrors.Confirm_Password}
             </div>
           )}

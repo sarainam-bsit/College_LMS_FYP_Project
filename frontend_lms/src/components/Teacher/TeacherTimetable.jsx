@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Navbar from "../Navbar";
+
 import axios from "axios";
 
 const TeacherTimetable = () => {
@@ -43,24 +43,30 @@ const TeacherTimetable = () => {
 
   return (
     <>
-    <Navbar />
+  
       <div
         className="container p-1 text-center"
         style={{ marginTop: '80px', minHeight: '90vh' }}
       >
-      <h2 className="text-primary mb-4">My Timetable</h2>
+      <div className="row justify-content-center">
+        <div className="col-10 col-sm-8 col-md-6">
+          <h2 className="heading text-center mb-4 mt-3  text-white py-3 px-3 mx-auto rounded shadow-lg" style={{ maxWidth: '400px', backgroundColor: 'rgba(6, 6, 93, 1)' }}>
+            TimeTable
+          </h2>
+        </div>
+      </div>
 
       {error && <div className="alert alert-danger">{error}</div>}
 
       <div className="table-responsive card shadow-sm">
         <table className="table table-striped table-hover text-center align-middle">
-          <thead className="table-primary">
-            <tr>
-              <th>Department</th>
-              <th>Category</th>
-              <th>Course</th>
-              <th>Teacher</th>
-              <th>Day</th>
+          <thead >
+            <tr >
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Department</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Category</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Course</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Teacher</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Day</th>
             </tr>
           </thead>
           <tbody>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UploadStudentGrades = () => {
   const location = useLocation();
@@ -23,7 +25,7 @@ const UploadStudentGrades = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
 
-  // Fetch categories for dropdown
+  // Fetch categories
   useEffect(() => {
     axios
       .get("http://127.0.0.1:8000/Grade/grades/category_dropdown/")
@@ -31,9 +33,9 @@ const UploadStudentGrades = () => {
       .catch((err) => console.error("Error fetching categories:", err));
   }, []);
 
-  // Fetch course info if not passed in location.state
+  // Fetch course info if missing
   useEffect(() => {
-    if (!courseInfo.code || !courseInfo.title && courseId) {
+    if ((!courseInfo.code || !courseInfo.title) && courseId) {
       axios
         .get(`http://127.0.0.1:8000/Course/courses/${courseId}/`)
         .then((res) =>
@@ -73,7 +75,7 @@ const UploadStudentGrades = () => {
             remarks: g.Remarks,
           });
           setGradeId(g.id);
-          setSelectedCategory(g.Category); // preselect category if exists
+          setSelectedCategory(g.Category);
         }
       })
       .catch((err) => console.error(err));
@@ -111,7 +113,7 @@ const UploadStudentGrades = () => {
     const payload = {
       Student: student.id,
       Course: courseId,
-      Category: selectedCategory, // added category here
+      Category: selectedCategory,
       Course_Total_Marks: Number(marks.course_total),
       Course_Obtained_Marks: Number(marks.course_obtained),
       Sessional_Total_Marks: Number(marks.sessional_total),
@@ -126,62 +128,68 @@ const UploadStudentGrades = () => {
     if (gradeId) {
       axios
         .put(`http://127.0.0.1:8000/Grade/grades/${gradeId}/`, payload)
-        .then(() => alert("✅ Grade updated successfully!"))
-        .catch((err) => alert("⚠️ Error updating grade: " + JSON.stringify(err.response?.data)));
+        .then(() => toast.success("✅ Grade updated successfully!"))
+        .catch((err) => toast.error("⚠️ Error updating grade"));
     } else {
       axios
         .post(`http://127.0.0.1:8000/Grade/grades/`, payload)
-        .then(() => alert("✅ Grade uploaded successfully!"))
-        .catch((err) => alert("⚠️ Error uploading grade: " + JSON.stringify(err.response?.data)));
+        .then(() => toast.success("✅ Grade uploaded successfully!"))
+        .catch((err) => toast.error("⚠️ Error uploading grade"));
     }
   };
 
   const handleDelete = () => {
-    if (!gradeId) return alert("⚠️ No grade to delete!");
+    if (!gradeId) return toast.warning("⚠️ No grade to delete!");
     if (!window.confirm("Are you sure you want to delete this grade?")) return;
 
     axios
       .delete(`http://127.0.0.1:8000/Grade/grades/${gradeId}/`)
       .then(() => {
-        alert("🗑️ Grade deleted successfully!");
+        toast.success("🗑️ Grade deleted successfully!");
         navigate(-1);
       })
-      .catch((err) => alert("⚠️ Error deleting grade: " + JSON.stringify(err.response?.data)));
+      .catch((err) => toast.error("⚠️ Error deleting grade"));
   };
 
   return (
     <div className="container mt-5">
+      <ToastContainer position="top-center" autoClose={2500} />
       <div className="card shadow-lg p-4 bg-light">
-        <h2 className="text-center mb-4 text-primary">Upload / Update Grades</h2>
-
+<div className="row justify-content-center">
+        <div className="col-10 col-sm-8 col-md-6">
+          <h2 className="heading text-center mb-4 mt-3  text-white py-3 px-3 mx-auto rounded shadow-lg" style={{ maxWidth: '400px', backgroundColor: 'rgba(6, 6, 93, 1)' }}>
+           Upload Grades
+          </h2>
+        </div>
+      </div>
         <form onSubmit={handleSubmit}>
           {/* Student Info */}
           <div className="row mb-3">
-            <div className="col-md-6">
-              <label className="form-label fw-bold">Student Name</label>
+            <div className="col-md-6 mb-3">
+              <label className="fw-bold">Student Name</label>
               <input type="text" className="form-control" value={student.Student_Name} readOnly />
             </div>
-            <div className="col-md-6">
-              <label className="form-label fw-bold">Registration No</label>
+            <div className="col-md-6 mb-3">
+              <label className="fw-bold">Registration No</label>
               <input type="text" className="form-control" value={student.Reg_No} readOnly />
             </div>
           </div>
 
           <div className="row mb-3">
-            <div className="col-md-6">
-              <label className="form-label fw-bold">Roll No</label>
+            <div className="col-md-6 mb-3">
+              <label className="fw-bold">Roll No</label>
               <input type="text" className="form-control" value={student.Roll_No} readOnly />
             </div>
-            <div className="col-md-6">
-              <label className="form-label fw-bold">Email</label>
+            <div className="col-md-6 mb-3">
+              <label className="fw-bold">Email</label>
               <input type="text" className="form-control" value={student.Student_Email} readOnly />
             </div>
           </div>
 
-          {/* Category Dropdown */}
+          {/* Category */}
           <div className="row mb-3">
-            <div className="col-md-6">
-              <label className="form-label fw-bold">Course Category (Semester/Part)</label>
+            <div className="col-md-6 mb-3">
+              <label className="fw-bold">Course Category (Semester/Part)</label>
               <select
                 className="form-select"
                 value={selectedCategory}
@@ -198,62 +206,62 @@ const UploadStudentGrades = () => {
             </div>
           </div>
 
-          {/* Course Info */}
+          {/* Course Code & Title */}
           <div className="row mb-3">
-            <div className="col-md-6">
-              <label className="form-label fw-bold">Course Code</label>
+            <div className="col-md-6 mb-3">
+              <label className="fw-bold">Course Code</label>
               <input type="text" className="form-control" value={courseInfo.code} readOnly />
             </div>
-            <div className="col-md-6">
-              <label className="form-label fw-bold">Course Title</label>
+            <div className="col-md-6 mb-3">
+              <label className="fw-bold">Course Title</label>
               <input type="text" className="form-control" value={courseInfo.title} readOnly />
             </div>
           </div>
 
-          {/* Marks Fields */}
+          {/* Marks */}
           <div className="row mb-3">
-            <div className="col-md-4">
-              <label className="form-label fw-bold">Course Total</label>
+            <div className="col-md-4 mb-3">
+              <label className="fw-bold">Course Total</label>
               <input type="number" className="form-control" name="course_total" value={marks.course_total} onChange={handleChange} />
             </div>
-            <div className="col-md-4">
-              <label className="form-label fw-bold">Course Obtained</label>
+            <div className="col-md-4 mb-3">
+              <label className="fw-bold">Course Obtained</label>
               <input type="number" className="form-control" name="course_obtained" value={marks.course_obtained} onChange={handleChange} />
               {errors.course_obtained && <small className="text-danger">{errors.course_obtained}</small>}
             </div>
-            <div className="col-md-4">
-              <label className="form-label fw-bold">Sessional Total</label>
+            <div className="col-md-4 mb-3">
+              <label className="fw-bold">Sessional Total</label>
               <input type="number" className="form-control" name="sessional_total" value={marks.sessional_total} onChange={handleChange} />
             </div>
           </div>
 
           <div className="row mb-3">
-            <div className="col-md-4">
-              <label className="form-label fw-bold">Sessional Obtained</label>
+            <div className="col-md-4 mb-3">
+              <label className="fw-bold">Sessional Obtained</label>
               <input type="number" className="form-control" name="sessional_obtained" value={marks.sessional_obtained} onChange={handleChange} />
               {errors.sessional_obtained && <small className="text-danger">{errors.sessional_obtained}</small>}
             </div>
           </div>
 
-          {/* Calculated Totals */}
+          {/* Totals & Grade */}
           <div className="row mb-3 text-center">
-            <div className="col-md-4">
-              <label className="form-label fw-bold">Total Obtained</label>
+            <div className="col-md-4 mb-3">
+              <label className="fw-bold">Total Obtained</label>
               <input className="form-control fw-bold text-success" value={totalObtained} readOnly />
             </div>
-            <div className="col-md-4">
-              <label className="form-label fw-bold">Total Marks</label>
+            <div className="col-md-4 mb-3">
+              <label className="fw-bold">Total Marks</label>
               <input className="form-control fw-bold" value={totalMarks} readOnly />
             </div>
-            <div className="col-md-4">
-              <label className="form-label fw-bold">Status / Grade</label>
+            <div className="col-md-4 mb-3">
+              <label className="fw-bold">Status / Grade</label>
               <input className="form-control fw-bold text-primary" value={`${status} (${grade})`} readOnly />
             </div>
           </div>
 
-          {/* Remarks Field */}
+          {/* Remarks */}
           <div className="card bg-white shadow-sm mb-3 p-3">
-            <label className="form-label fw-bold text-secondary">Remarks</label>
+            <label className="fw-bold text-secondary">Remarks</label>
             <textarea
               className="form-control"
               name="remarks"

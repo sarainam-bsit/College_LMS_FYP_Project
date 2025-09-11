@@ -26,25 +26,29 @@ const TeacherGradesStuDetail = () => {
 
   return (
     <div className="container" style={{marginTop: '6%'}}>
-      <h2 className="mb-5 text-center fw-bold text-primary">
-        Students for Selected Course
-      </h2>
+      <div className="row justify-content-center">
+        <div className="col-10 col-sm-8 col-md-6">
+          <h2 className="heading text-center mb-4 mt-3  text-white py-3 px-3 mx-auto rounded shadow-lg" style={{ maxWidth: '400px', backgroundColor: 'rgba(6, 6, 93, 1)' }}>
+            Students for Selected Courses
+          </h2>
+        </div>
+      </div>
 
       {/* Normal Students */}
       {normalStudents.length > 0 && (
         <div className="mb-5">
-          <h4 className="text-center mb-4 text-success">Regular Students</h4>
+          <h2 className="text-center mb-4 fw-bold" style={{ color: "rgb(70, 4, 67)"}}>Regular Students</h2>
           <div className="card shadow-sm">
             <div className="card-body p-0">
               <table className="table table-striped table-hover mb-0">
                 <thead className="table-dark">
                   <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Registration No</th>
-                    <th>Roll No</th>
-                    <th>Upload Grades</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>#</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Name</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Email</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Registration No</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Roll No</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Upload Grades</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -76,18 +80,18 @@ const TeacherGradesStuDetail = () => {
       {/* Supply Students */}
       {supplyStudents.length > 0 && (
         <div className="mb-5">
-          <h4 className="text-center mb-4 text-danger">Supply Students</h4>
+          <h2 className="text-center mb-4 fw-bold" style={{ color: "rgb(70, 4, 67)"}}>Supply Students</h2>
           <div className="card shadow-sm border-danger">
             <div className="card-body p-0">
               <table className="table table-striped table-hover mb-0">
                 <thead className="table-secondary">
                   <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Registration No</th>
-                    <th>Roll No</th>
-                    <th>Upload Grades</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>#</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Name</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Email</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Registration No</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Roll No</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Upload Grades</th>
                   </tr>
                 </thead>
                 <tbody>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
@@ -35,23 +36,39 @@ export default function AdminFeeVoucherPage() {
   }, []);
 
   const fetchVouchers = async () => {
-    const res = await axios.get(API_URL);
-    setVouchers(res.data);
+    try {
+      const res = await axios.get(API_URL);
+      setVouchers(res.data);
+    } catch {
+      toast.error("Failed to load vouchers.");
+    }
   };
 
   const fetchStudents = async () => {
-    const res = await axios.get(STUDENT_API);
-    setStudents(res.data);
+    try {
+      const res = await axios.get(STUDENT_API);
+      setStudents(res.data);
+    } catch {
+      toast.error("Failed to load students.");
+    }
   };
 
   const fetchDepartments = async () => {
-    const res = await axios.get(DEPT_API);
-    setDepartments(res.data);
+    try {
+      const res = await axios.get(DEPT_API);
+      setDepartments(res.data);
+    } catch {
+      toast.error("Failed to load departments.");
+    }
   };
 
   const fetchCategories = async () => {
-    const res = await axios.get(CATEGORY_API);
-    setCategories(res.data);
+    try {
+      const res = await axios.get(CATEGORY_API);
+      setCategories(res.data);
+    } catch {
+      toast.error("Failed to load categories.");
+    }
   };
 
   const handleChange = (e) =>
@@ -60,7 +77,7 @@ export default function AdminFeeVoucherPage() {
   // --- Single Voucher ---
   const generateSingle = async () => {
     if (!formData.studentId || !formData.amount) {
-      return alert("Please select a student and enter the amount.");
+      return toast.warn("Please select a student and enter the amount.");
     }
     try {
       await axios.post(`${API_URL}generate_single/`, {
@@ -71,18 +88,17 @@ export default function AdminFeeVoucherPage() {
         fine_amount: formData.fineAmount,
         bank_branch: formData.bankBranch,
       });
-      alert("Voucher generated successfully!");
+      toast.success("Voucher generated successfully!");
       fetchVouchers();
     } catch (error) {
-      console.error(error);
-      alert(error.response?.data?.error || "Error generating voucher");
+      toast.error(error.response?.data?.error || "Error generating voucher");
     }
   };
 
   // --- Bulk Voucher ---
   const generateBulk = async () => {
     if (!formData.departmentId || !formData.categoryId || !formData.amount) {
-      return alert("Please select department, category, and enter amount.");
+      return toast.warn("Please select department, category, and enter amount.");
     }
     try {
       const res = await axios.post(`${API_URL}generate_bulk/`, {
@@ -94,18 +110,17 @@ export default function AdminFeeVoucherPage() {
         fine_amount: formData.fineAmount,
         bank_branch: formData.bankBranch,
       });
-      alert(res.data.message || "Bulk vouchers generated successfully!");
+      toast.success(res.data.message || "Bulk vouchers generated successfully!");
       fetchVouchers();
     } catch (error) {
-      console.error(error);
-      alert(error.response?.data?.error || "Error generating bulk vouchers");
+      toast.error(error.response?.data?.error || "Error generating bulk vouchers");
     }
   };
 
   // --- Supply Voucher ---
   const generateSupply = async () => {
     if (!formData.departmentId || !formData.categoryId || !formData.amount) {
-      return alert("Please select department, category, and enter amount.");
+      return toast.warn("Please select department, category, and enter amount.");
     }
     try {
       const res = await axios.post(`${API_URL}generate_supply/`, {
@@ -116,11 +131,10 @@ export default function AdminFeeVoucherPage() {
         fine_amount: formData.fineAmount,
         bank_branch: formData.bankBranch,
       });
-      alert(res.data.message || "Supply vouchers generated successfully!");
+      toast.success(res.data.message || "Supply vouchers generated successfully!");
       fetchVouchers();
     } catch (error) {
-      console.error(error);
-      alert(error.response?.data?.message || "Error generating supply vouchers");
+      toast.error(error.response?.data?.message || "Error generating supply vouchers");
     }
   };
 
@@ -138,13 +152,13 @@ export default function AdminFeeVoucherPage() {
   };
 
   const confirmMarkPaid = async () => {
-    if (!amountPaid) return alert("Enter amount paid!");
+    if (!amountPaid) return toast.warn("Enter amount paid!");
     try {
       await axios.post(`${API_URL}${selectedVoucher.id}/mark_paid/`, {
         amount_paid: amountPaid,
         paid_date: selectedVoucher.Amount_Date,
       });
-      alert("Voucher marked as paid!");
+      toast.success("Voucher marked as paid!");
       fetchVouchers();
 
       const modal = window.bootstrap.Modal.getInstance(
@@ -152,8 +166,7 @@ export default function AdminFeeVoucherPage() {
       );
       modal.hide();
     } catch (error) {
-      console.error(error);
-      alert(error.response?.data?.error || "Error marking voucher as paid");
+      toast.error(error.response?.data?.error || "Error marking voucher as paid");
     }
   };
 
@@ -162,348 +175,439 @@ export default function AdminFeeVoucherPage() {
 
     try {
       await axios.delete(`${API_URL}${voucherId}/`);
-      alert("Voucher deleted successfully!");
+      toast.success("Voucher deleted successfully!");
       fetchVouchers();
     } catch (error) {
-      console.error(error);
-      alert(error.response?.data?.error || "Error deleting voucher");
+      toast.error(error.response?.data?.error || "Error deleting voucher");
     }
   };
 
+  const buttonStyle = (bg) => ({
+    padding: "8px 16px",
+    borderRadius: "5px",
+    backgroundColor: bg,
+    color: "white",
+    border: "none",
+    cursor: "pointer",
+    fontWeight: "bold",
+    transition: "transform 0.2s",
+  });
+
   return (
-    <div className="container mt-4">
-      <h1 className="mb-4 fw-bold">🎟️ Fee Voucher Management</h1>
+    <div
+      style={{
+        padding: "30px",
+        fontFamily: "Arial, sans-serif",
+        backgroundColor: "#ebeaf2ff",
+        color: "rgba(44, 44, 122, 1)",
+      }}
+    >
+      <h1
+        style={{
+          marginTop: "40px",
+          textAlign: "center",
+          marginBottom: "30px",
+          color: "rgba(44, 44, 122, 1)",
+          fontWeight: "bold",
+        }}
+      >
+        Manage Fee Vouchers
+      </h1>
 
       {/* Single Student Voucher */}
-      <div className="card mb-4">
-        <div className="card-header fw-bold">
-          Generate Voucher for Single Student
-        </div>
-        <div className="card-body">
-          <div className="row g-3">
-            <div className="col-md-6">
-              <select
-                name="studentId"
-                className="form-select"
-                value={formData.studentId}
-                onChange={handleChange}
-              >
-                <option value="">-- Select Student --</option>
-                {students.map((student) => (
-                  <option key={student.id} value={student.id}>
-                    {student.Student_Name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="col-md-6">
-              <input
-                name="amount"
-                type="number"
-                placeholder="Amount"
-                className="form-control"
-                onChange={handleChange}
-                value={formData.amount}
-              />
-            </div>
-            <div className="col-md-6">
-              <select
-                name="challanType"
-                className="form-select"
-                onChange={handleChange}
-                value={formData.challanType}
-              >
-                <option>Admission-Processing</option>
-                <option>Admission-fee</option>
-                <option>Intermediate</option>
-                <option>Semester-wise</option>
-                <option>Library-fee</option>
-                <option>Hostel-fee</option>
-                <option>Supply-fee</option>
-              </select>
-            </div>
-            <div className="col-md-6">
-              <input
-                name="fineDate"
-                type="date"
-                className="form-control"
-                onChange={handleChange}
-                value={formData.fineDate}
-              />
-            </div>
-            <div className="col-md-6">
-              <input
-                name="fineAmount"
-                type="number"
-                placeholder="Fine Amount"
-                className="form-control"
-                onChange={handleChange}
-                value={formData.fineAmount}
-              />
-            </div>
-            <div className="col-md-6">
-              <input
-                name="bankBranch"
-                type="text"
-                placeholder="Bank Branch"
-                className="form-control"
-                onChange={handleChange}
-                value={formData.bankBranch}
-              />
-            </div>
+      <div
+        style={{
+          marginBottom: "30px",
+          backgroundColor: "#f5ecf4ff",
+          padding: "20px",
+          borderRadius: "10px",
+          border: "2px solid white",
+        }}
+      >
+        <h5>Generate Voucher for Single Student</h5>
+        <div className="row g-3">
+          <div className="col-md-6">
+            <select
+              name="studentId"
+              className="form-select"
+              value={formData.studentId}
+              onChange={handleChange}
+            >
+              <option value="">-- Select Student --</option>
+              {students.map((student) => (
+                <option key={student.id} value={student.id}>
+                  {student.Student_Name}
+                </option>
+              ))}
+            </select>
           </div>
-          <button onClick={generateSingle} className="btn btn-primary mt-3">
-            Generate
-          </button>
+          <div className="col-md-6">
+            <input
+              name="amount"
+              type="number"
+              placeholder="Amount"
+              className="form-control"
+              onChange={handleChange}
+              value={formData.amount}
+            />
+          </div>
+          <div className="col-md-6">
+            <select
+              name="challanType"
+              className="form-select"
+              onChange={handleChange}
+              value={formData.challanType}
+            >
+              <option>Admission-Processing</option>
+              <option>Admission-fee</option>
+              <option>Intermediate</option>
+              <option>Semester-wise</option>
+              <option>Library-fee</option>
+              <option>Hostel-fee</option>
+              <option>Supply-fee</option>
+            </select>
+          </div>
+          <div className="col-md-6">
+            <input
+              name="fineDate"
+              type="date"
+              className="form-control"
+              onChange={handleChange}
+              value={formData.fineDate}
+            />
+          </div>
+          <div className="col-md-6">
+            <input
+              name="fineAmount"
+              type="number"
+              placeholder="Fine Amount"
+              className="form-control"
+              onChange={handleChange}
+              value={formData.fineAmount}
+            />
+          </div>
+          <div className="col-md-6">
+            <input
+              name="bankBranch"
+              type="text"
+              placeholder="Bank Branch"
+              className="form-control"
+              onChange={handleChange}
+              value={formData.bankBranch}
+            />
+          </div>
         </div>
+        <button
+          onClick={generateSingle}
+          style={{ ...buttonStyle("rgb(70,4,67)"), marginTop: "15px" }}
+        >
+          Generate
+        </button>
       </div>
 
       {/* Bulk Voucher */}
-      <div className="card mb-4">
-        <div className="card-header fw-bold">
-          Generate Vouchers for Department + Category
-        </div>
-        <div className="card-body">
-          <div className="row g-3">
-            <div className="col-md-6">
-              <select
-                name="departmentId"
-                className="form-select"
-                onChange={handleChange}
-                value={formData.departmentId}
-              >
-                <option value="">Select Department</option>
-                {departments.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.Department_Name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="col-md-6">
-              <select
-                name="categoryId"
-                className="form-select"
-                onChange={handleChange}
-                value={formData.categoryId}
-              >
-                <option value="">Select Category</option>
-                {categories.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.Related_Department_Name} - {c.Category_Name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="col-md-6">
-              <select
-                name="challanType"
-                className="form-select"
-                onChange={handleChange}
-                value={formData.challanType}
-              >
-                <option>Admission-Processing</option>
-                <option>Admission-fee</option>
-                <option>Intermediate</option>
-                <option>Semester-wise</option>
-                <option>Library-fee</option>
-                <option>Hostel-fee</option>
-                <option>Supply-fee</option>
-              </select>
-            </div>
-            <div className="col-md-6">
-              <input
-                name="fineDate"
-                type="date"
-                className="form-control"
-                onChange={handleChange}
-                value={formData.fineDate}
-              />
-            </div>
-            <div className="col-md-6">
-              <input
-                name="amount"
-                type="number"
-                placeholder="Amount"
-                className="form-control"
-                onChange={handleChange}
-                value={formData.amount}
-              />
-            </div>
-            <div className="col-md-6">
-              <input
-                name="fineAmount"
-                type="number"
-                placeholder="Fine Amount"
-                className="form-control"
-                onChange={handleChange}
-                value={formData.fineAmount}
-              />
-            </div>
-            <div className="col-md-6">
-              <input
-                name="bankBranch"
-                type="text"
-                placeholder="Bank Branch"
-                className="form-control"
-                onChange={handleChange}
-                value={formData.bankBranch}
-              />
-            </div>
+      <div
+        style={{
+          marginBottom: "30px",
+          backgroundColor: "#f5ecf4ff",
+          padding: "20px",
+          borderRadius: "10px",
+          border: "2px solid white",
+        }}
+      >
+        <h5>Generate Vouchers for Department + Category</h5>
+        <div className="row g-3">
+          <div className="col-md-6">
+            <select
+              name="departmentId"
+              className="form-select"
+              onChange={handleChange}
+              value={formData.departmentId}
+            >
+              <option value="">Select Department</option>
+              {departments.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.Department_Name}-({d.Discription})
+                </option>
+              ))}
+            </select>
           </div>
-          <button onClick={generateBulk} className="btn btn-success mt-3">
-            Generate Bulk
-          </button>
+          <div className="col-md-6">
+            <select
+              name="categoryId"
+              className="form-select"
+              onChange={handleChange}
+              value={formData.categoryId}
+            >
+              <option value="">Select Category</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  ({c.Related_Department_Name}, {c.Related_Department_Discription}) - {c.Category_Name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="col-md-6">
+            <select
+              name="challanType"
+              className="form-select"
+              onChange={handleChange}
+              value={formData.challanType}
+            >
+              <option>Admission-Processing</option>
+              <option>Admission-fee</option>
+              <option>Intermediate</option>
+              <option>Semester-wise</option>
+              <option>Library-fee</option>
+              <option>Hostel-fee</option>
+              <option>Supply-fee</option>
+            </select>
+          </div>
+          <div className="col-md-6">
+            <input
+              name="fineDate"
+              type="date"
+              className="form-control"
+              onChange={handleChange}
+              value={formData.fineDate}
+            />
+          </div>
+          <div className="col-md-6">
+            <input
+              name="amount"
+              type="number"
+              placeholder="Amount"
+              className="form-control"
+              onChange={handleChange}
+              value={formData.amount}
+            />
+          </div>
+          <div className="col-md-6">
+            <input
+              name="fineAmount"
+              type="number"
+              placeholder="Fine Amount"
+              className="form-control"
+              onChange={handleChange}
+              value={formData.fineAmount}
+            />
+          </div>
+          <div className="col-md-6">
+            <input
+              name="bankBranch"
+              type="text"
+              placeholder="Bank Branch"
+              className="form-control"
+              onChange={handleChange}
+              value={formData.bankBranch}
+            />
+          </div>
         </div>
+        <button
+          onClick={generateBulk}
+          style={{ ...buttonStyle("rgb(4,4,63)"), marginTop: "15px" }}
+        >
+          Generate Bulk
+        </button>
       </div>
 
       {/* Supply Voucher */}
-      <div className="card mb-4">
-        <div className="card-header fw-bold">
-          Generate Supply Vouchers (Department + Category)
-        </div>
-        <div className="card-body">
-          <div className="row g-3">
-            <div className="col-md-6">
-              <select
-                name="departmentId"
-                className="form-select"
-                onChange={handleChange}
-                value={formData.departmentId}
-              >
-                <option value="">Select Department</option>
-                {departments.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.Department_Name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="col-md-6">
-              <select
-                name="categoryId"
-                className="form-select"
-                onChange={handleChange}
-                value={formData.categoryId}
-              >
-                <option value="">Select Category</option>
-                {categories.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.Related_Department_Name} - {c.Category_Name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="col-md-6">
-              <input
-                name="amount"
-                type="number"
-                placeholder="Amount"
-                className="form-control"
-                onChange={handleChange}
-                value={formData.amount}
-              />
-            </div>
-            <div className="col-md-6">
-              <input
-                name="fineDate"
-                type="date"
-                className="form-control"
-                onChange={handleChange}
-                value={formData.fineDate}
-              />
-            </div>
-            <div className="col-md-6">
-              <input
-                name="fineAmount"
-                type="number"
-                placeholder="Fine Amount"
-                className="form-control"
-                onChange={handleChange}
-                value={formData.fineAmount}
-              />
-            </div>
-            <div className="col-md-6">
-              <input
-                name="bankBranch"
-                type="text"
-                placeholder="Bank Branch"
-                className="form-control"
-                onChange={handleChange}
-                value={formData.bankBranch}
-              />
-            </div>
+      <div
+        style={{
+          marginBottom: "30px",
+          backgroundColor: "#f5ecf4ff",
+          padding: "20px",
+          borderRadius: "10px",
+          border: "2px solid white",
+        }}
+      >
+        <h5>Generate Supply Vouchers (Department + Category)</h5>
+        <div className="row g-3">
+          <div className="col-md-6">
+            <select
+              name="departmentId"
+              className="form-select"
+              onChange={handleChange}
+              value={formData.departmentId}
+            >
+              <option value="">Select Department</option>
+              {departments.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.Department_Name}-({d.Discription})
+                </option>
+              ))}
+            </select>
           </div>
-          <button onClick={generateSupply} className="btn btn-danger mt-3">
-            Generate Supply Vouchers
-          </button>
+          <div className="col-md-6">
+            <select
+              name="categoryId"
+              className="form-select"
+              onChange={handleChange}
+              value={formData.categoryId}
+            >
+              <option value="">Select Category</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  ({c.Related_Department_Name}, {c.Related_Department_Discription}) - {c.Category_Name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="col-md-6">
+            <input
+              name="amount"
+              type="number"
+              placeholder="Amount"
+              className="form-control"
+              onChange={handleChange}
+              value={formData.amount}
+            />
+          </div>
+          <div className="col-md-6">
+            <input
+              name="fineDate"
+              type="date"
+              className="form-control"
+              onChange={handleChange}
+              value={formData.fineDate}
+            />
+          </div>
+          <div className="col-md-6">
+            <input
+              name="fineAmount"
+              type="number"
+              placeholder="Fine Amount"
+              className="form-control"
+              onChange={handleChange}
+              value={formData.fineAmount}
+            />
+          </div>
+          <div className="col-md-6">
+            <input
+              name="bankBranch"
+              type="text"
+              placeholder="Bank Branch"
+              className="form-control"
+              onChange={handleChange}
+              value={formData.bankBranch}
+            />
+          </div>
         </div>
+        <button
+          onClick={generateSupply}
+          style={{ ...buttonStyle("rgb(70,4,67)"), marginTop: "15px" }}
+        >
+          Generate Supply Vouchers
+        </button>
       </div>
 
-
-      
-     {/* Voucher Table */}
-      <div className="card">
-        <div className="card-header fw-bold">All Fee Vouchers</div>
-        <div className="card-body">
-          <table className="table table-bordered table-striped">
-            <thead className="table-dark">
+      {/* Voucher Table */}
+      <div
+        style={{
+          marginBottom: "30px",
+          backgroundColor: "#f5ecf4ff",
+          padding: "20px",
+          borderRadius: "10px",
+          border: "2px solid white",
+        }}
+      >
+        <h5>All Fee Vouchers</h5>
+        <table
+          style={{ width: "100%", borderCollapse: "collapse", textAlign: "center" }}
+        >
+          <thead>
+            <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+              <th style={{ padding: "10px", border: "1px solid white" }}>
+                Challan No
+              </th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>Student</th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>Type</th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>Amount</th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>
+                Fine Date
+              </th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>
+                Amount Date
+              </th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>
+                Fine Amount
+              </th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>
+                Branch Name
+              </th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>Paid</th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>Status</th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {vouchers.length === 0 ? (
               <tr>
-                <th>Challan No</th>
-                <th>Student</th>
-                <th>Type</th>
-                <th>Amount</th>
-                <th>Fine Date</th>
-                <th>Amount Date</th>
-                <th>Fine Amount</th>
-                <th>Branch Name</th>
-                <th>Paid</th>
-                <th>Status</th>
-                <th>Action</th>
+                <td colSpan={11} style={{ padding: "10px", border: "1px solid white" }}>
+                  No vouchers found
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {vouchers.map((v) => (
+            ) : (
+              vouchers.map((v) => (
                 <tr key={v.id}>
-                  <td>{v.Challan_no}</td>
-                  <td>{v.Student_Name}</td>
-                  <td>{v.Challan_Type}</td>
-                  <td>{v.Amount_to_Pay}</td>
-                  <td>{v.Fine_Date || "-"}</td>
-                  <td>{v.Amount_Date || "-"}</td>
-                  <td>{v.Fine_Amount || "-"}</td>
-                  <td>{v.Bank_Branch || "-"}</td>
-                  <td>{v.Amount_Paid || "-"}</td>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
+                    {v.Challan_no}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
+                    {v.Student_Name}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
+                    {v.Challan_Type}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
+                    {v.Amount_to_Pay}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
+                    {v.Fine_Date || "-"}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
+                    {v.Amount_Date || "-"}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
+                    {v.Fine_Amount || "-"}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
+                    {v.Bank_Branch || "-"}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
+                    {v.Amount_Paid || "-"}
+                  </td>
                   <td
-                    className={
-                      v.Status === "Paid"
-                        ? "text-success fw-bold"
-                        : "text-danger fw-bold"
-                    }
+                    style={{
+                      padding: "10px",
+                      border: "1px solid white",
+                      fontWeight: "bold",
+                      color: v.Status === "Paid" ? "green" : "red",
+                    }}
                   >
                     {v.Status}
                   </td>
-                  <td>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
                     {v.Status === "Unpaid" && (
                       <button
                         onClick={() => openModal(v)}
-                        className="btn btn-sm btn-warning me-1"
+                        style={{ ...buttonStyle("orange"), marginRight: "5px" }}
                       >
                         Mark Paid
                       </button>
                     )}
                     <button
                       onClick={() => deleteVoucher(v.id)}
-                      className="btn btn-sm btn-danger"
+                      style={buttonStyle("red")}
                     >
                       Delete
                     </button>
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
 
       {/* Bootstrap Modal */}

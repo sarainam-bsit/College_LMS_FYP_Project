@@ -1,72 +1,56 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const API_NOTIFICATIONS = "http://127.0.0.1:8000/Notification/notifications/";
-const API_STUDENTS = "http://127.0.0.1:8000/Account/students/"; // adjust
+const API_STUDENTS = "http://127.0.0.1:8000/Account/students/";
 
-
-export default function AdminNotifications() {
+export default function TeacherSendNotifications() {
   const [form, setForm] = useState({
     title: "",
     message: "",
     type: "general",
-    audience: "all_students", // all_students | specific_student | all_teachers | specific_teacher | everyone
+    audience: "all_students",
     receiver_student: "",
-    for_all_students: false,
-   
   });
 
   const [students, setStudents] = useState([]);
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // load users + notifications
   useEffect(() => {
     loadNotifications();
     loadStudents();
-    
   }, []);
 
   const loadNotifications = async () => {
-    const { data } = await axios.get(API_NOTIFICATIONS);
-    setList(data);
+    try {
+      const { data } = await axios.get(API_NOTIFICATIONS);
+      setList(data);
+    } catch {
+      toast.error("Failed to fetch notifications");
+    }
   };
 
   const loadStudents = async () => {
     try {
       const { data } = await axios.get(API_STUDENTS);
       setStudents(data);
-    } catch (e) {
-      console.warn("Students API failed", e?.response?.status);
+    } catch {
+      console.warn("Students API failed");
     }
   };
 
-  
-
-  // audience -> flags
   const buildPayload = () => {
     const payload = {
       title: form.title,
       message: form.message,
       type: form.type,
-      for_all_students: false,
-      receiver_student: null,
+      for_all_students: form.audience === "all_students",
+      receiver_student: form.audience === "specific_student" ? form.receiver_student : null,
     };
-
-    switch (form.audience) {
-      case "all_students":
-        payload.for_all_students = true;
-        break;
-      case "specific_student":
-        payload.receiver_student = form.receiver_student || null;
-        break;
-     
-      
-      default:
-        payload.for_all_students = true;
-    }
-
     return payload;
   };
 
@@ -75,22 +59,20 @@ export default function AdminNotifications() {
     setLoading(true);
     try {
       await axios.post(API_NOTIFICATIONS, buildPayload());
+      toast.success("Notification sent!");
       setForm({
         title: "",
         message: "",
         type: "general",
         audience: "all_students",
         receiver_student: "",
-        for_all_students: false,
-    
       });
       await loadNotifications();
-      alert("Notification sent!");
     } catch (err) {
-      alert(
+      toast.error(
         err?.response?.data?.non_field_errors?.[0] ||
-          err?.response?.data?.detail ||
-          "Failed to create notification"
+        err?.response?.data?.detail ||
+        "Failed to create notification"
       );
     } finally {
       setLoading(false);
@@ -99,15 +81,46 @@ export default function AdminNotifications() {
 
   const onDelete = async (id) => {
     if (!window.confirm("Delete this notification?")) return;
-    await axios.delete(`${API_NOTIFICATIONS}${id}/`);
-    await loadNotifications();
+    try {
+      await axios.delete(`${API_NOTIFICATIONS}${id}/`);
+      toast.success("Notification deleted!");
+      await loadNotifications();
+    } catch {
+      toast.error("Failed to delete notification");
+    }
   };
 
   return (
-    <div className="container py-4">
-      <h2 className="fw-bold mb-3">Admin — Notifications</h2>
+    <div
+      style={{
+        padding: "30px",
+        fontFamily: "Arial, sans-serif",
+        marginTop: "3%",
+        backgroundColor: "#ebeaf2ff",
+        color: "rgba(44, 44, 122, 1)",
+      }}
+    >
+      <h1
+        style={{
+          marginBottom: "20px",
+          color: "rgba(44, 44, 122, 1)",
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
+      >
+        Teacher — Notifications
+      </h1>
 
-      <form className="card p-3 shadow-sm mb-4" onSubmit={onSubmit}>
+      <form
+        onSubmit={onSubmit}
+        style={{
+          marginBottom: "30px",
+          backgroundColor: "#f5ecf4ff",
+          padding: "20px",
+          borderRadius: "10px",
+          border: "2px solid white",
+        }}
+      >
         <div className="row g-3">
           <div className="col-md-6">
             <label className="form-label">Title</label>
@@ -149,7 +162,6 @@ export default function AdminNotifications() {
               {[
                 ["all_students", "All Students"],
                 ["specific_student", "Specific Student"],
-
               ].map(([value, label]) => (
                 <div className="form-check" key={value}>
                   <input
@@ -159,7 +171,9 @@ export default function AdminNotifications() {
                     name="audience"
                     value={value}
                     checked={form.audience === value}
-                    onChange={(e) => setForm({ ...form, audience: e.target.value })}
+                    onChange={(e) =>
+                      setForm({ ...form, audience: e.target.value })
+                    }
                   />
                   <label className="form-check-label" htmlFor={value}>
                     {label}
@@ -175,7 +189,9 @@ export default function AdminNotifications() {
               <select
                 className="form-select"
                 value={form.receiver_student}
-                onChange={(e) => setForm({ ...form, receiver_student: e.target.value })}
+                onChange={(e) =>
+                  setForm({ ...form, receiver_student: e.target.value })
+                }
                 required
               >
                 <option value="">-- choose student --</option>
@@ -188,72 +204,88 @@ export default function AdminNotifications() {
             </div>
           )}
 
-          
-
           <div className="col-12 d-flex justify-content-end">
-            <button className="btn btn-primary" disabled={loading}>
+            <button
+              type="submit"
+              style={{
+                padding: "10px 20px",
+                borderRadius: "5px",
+                backgroundColor: "rgb(70, 4, 67)",
+                color: "white",
+                border: "none",
+                cursor: "pointer",
+              }}
+              disabled={loading}
+            >
               {loading ? "Sending..." : "Send Notification"}
             </button>
           </div>
         </div>
       </form>
 
-      <div className="card shadow-sm">
-        <div className="card-header fw-bold">Recent Notifications</div>
-        <div className="card-body p-0">
-          <div className="table-responsive">
-            <table className="table table-striped mb-0">
-              <thead className="table-dark">
-                <tr>
-                  <th>Title</th>
-                  <th>Type</th>
-                  <th>Audience</th>
-                  <th>Created</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {list.map((n) => {
-                  const audience =
-                    
-                      n.for_all_students
-                      ? "All Students"
-                      : n.receiver_student
-                      ? `Student #${n.receiver_student}`
-                     
-                      : "-";
-                  return (
-                    <tr key={n.id}>
-                      <td>
-                        <div className="fw-semibold">{n.title}</div>
-                        <div className="small text-muted">{n.message}</div>
-                      </td>
-                      <td>{n.type}</td>
-                      <td>{audience}</td>
-                      <td>{new Date(n.created_at).toLocaleString()}</td>
-                      <td>
-                        <button
-                          className="btn btn-sm btn-danger"
-                          onClick={() => onDelete(n.id)}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-                {list.length === 0 && (
-                  <tr>
-                    <td colSpan="5" className="text-center py-4">
-                      No notifications yet
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+      <table
+        style={{
+          width: "100%",
+          borderCollapse: "collapse",
+          textAlign: "center",
+        }}
+      >
+        <thead>
+          <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Title</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Type</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Audience</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Created</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {list.map((n) => {
+            const audience = n.for_all_students
+              ? "All Students"
+              : n.receiver_student
+              ? `Student #${n.receiver_student}`
+              : "-";
+            return (
+              <tr key={n.id}>
+                <td style={{ padding: "10px", border: "1px solid white" }}>
+                  <b>{n.title}</b>
+                  <div className="small text-muted">{n.message}</div>
+                </td>
+                <td style={{ padding: "10px", border: "1px solid white" }}>{n.type}</td>
+                <td style={{ padding: "10px", border: "1px solid white" }}>{audience}</td>
+                <td style={{ padding: "10px", border: "1px solid white" }}>
+                  {new Date(n.created_at).toLocaleString()}
+                </td>
+                <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+                  <button
+                    onClick={() => onDelete(n.id)}
+                    style={{
+                      padding: "5px 10px",
+                      backgroundColor: "rgb(4, 4, 63)",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+          {list.length === 0 && (
+            <tr>
+              <td colSpan="5" className="text-center py-4">
+                No notifications yet
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+
+      <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
     </div>
   );
 }

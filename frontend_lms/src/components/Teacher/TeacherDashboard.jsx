@@ -51,14 +51,28 @@ const TeacherDashboard = () => {
     <h1 className="fw-bold fs-1 fs-md-1">Welcome to Our College LMS</h1>
     <p className="lead d-none d-md-block">Learn better. Grow faster. Stay connected with your<br /> teachers and college — all in one place.</p>
     <p className="lead">
-      <Link to="/about" className="btn btn-lg btn-light fw-bold border-white bg-white">Learn more</Link>
-    </p>
+<Link to="/about" className="btn btn-lg learn-more-btn">
+                  Learn more
+                </Link>    </p>
   </div>
 </div>
       </div>
     </div>
     <Feedback/>
     <Footer />
+    <style>{`
+        .learn-more-btn {
+          background-color: rgb(70, 4, 67);
+          color: white;
+          border: 1px solid white;
+          font-weight: bold;
+          transition: all 0.3s ease;
+        }
+        .learn-more-btn:hover {
+          background-color: rgb(70, 4, 67);
+          transform: scale(1.1);
+        }
+      `}</style>
     </>
   );
 };

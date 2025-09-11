@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CoursesAdmin = () => {
@@ -73,8 +73,8 @@ const CoursesAdmin = () => {
   const handleEdit = (course) => {
     setEditId(course.id);
     setForm({
-      C_Category: course.C_Category, // category ID
-      Teacher: course.Teacher, // teacher ID
+      C_Category: course.C_Category,
+      Teacher: course.Teacher,
       C_Code: course.C_Code,
       C_Title: course.C_Title,
       Credit_Hour: course.Credit_Hour,
@@ -323,6 +323,8 @@ const CoursesAdmin = () => {
           )}
         </tbody>
       </table>
+
+     
     </div>
   );
 };

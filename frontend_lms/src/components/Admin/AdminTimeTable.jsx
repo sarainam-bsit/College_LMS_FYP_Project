@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+
 
 const AdminTimetable = () => {
   const [timetables, setTimetables] = useState([]);
@@ -15,11 +17,9 @@ const AdminTimetable = () => {
     Day: "MON",
   });
   const [editId, setEditId] = useState(null);
-  const [error, setError] = useState("");
 
   const API_BASE = "http://127.0.0.1:8000/TimeTable/timetable/";
 
-  // Fetch all data
   useEffect(() => {
     fetchAll();
   }, []);
@@ -39,29 +39,30 @@ const AdminTimetable = () => {
       setCourses(crRes.data);
       setTeachers(tchRes.data);
     } catch {
-      setError("Failed to fetch data.");
+      toast.error("Failed to fetch data.");
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setError("");
       if (editId) {
         await axios.put(`${API_BASE}${editId}/`, form);
+        toast.success("Timetable updated successfully!");
         setEditId(null);
       } else {
         await axios.post(`${API_BASE}`, form);
+        toast.success("Timetable added successfully!");
       }
       setForm({ Department: "", Category: "", Course: "", Teacher: "", Day: "MON" });
       fetchAll();
     } catch {
-      setError("Failed to save timetable.");
+      toast.error("Failed to save timetable.");
     }
   };
 
@@ -74,6 +75,7 @@ const AdminTimetable = () => {
       Teacher: t.Teacher,
       Day: t.Day,
     });
+    toast.info(`Editing timetable for ${t.course_name}`);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -81,51 +83,139 @@ const AdminTimetable = () => {
     if (!window.confirm("Are you sure to delete this timetable?")) return;
     try {
       await axios.delete(`${API_BASE}${id}/`);
+      toast.success("Timetable deleted successfully!");
       fetchAll();
     } catch {
-      setError("Failed to delete timetable.");
+      toast.error("Failed to delete timetable.");
     }
   };
 
-  return (
-    <div className="container mt-4">
-      <h2 className="text-primary mb-4">Manage Timetable</h2>
+  const buttonStyle = (bg) => ({
+    padding: "10px 20px",
+    borderRadius: "5px",
+    backgroundColor: bg,
+    color: "white",
+    border: "none",
+    cursor: "pointer",
+    fontWeight: "bold",
+    transition: "transform 0.2s",
+  });
 
-      {error && <div className="alert alert-danger">{error}</div>}
+  return (
+    <div
+      style={{
+        padding: "30px",
+        fontFamily: "Arial, sans-serif",
+        backgroundColor: "#ebeaf2ff",
+        color: "rgba(44, 44, 122, 1)",
+      }}
+    >
+      
+  
+      <h1
+        style={{
+          marginTop: "50px",
+          textAlign: "center",
+          marginBottom: "20px",
+          color: "rgba(44, 44, 122, 1)",
+          fontWeight: "bold",
+        }}
+      >
+        Manage Timetable
+      </h1>
 
       {/* Form */}
-      <div className="card mb-4 shadow-sm p-3">
-        <form className="row g-3" onSubmit={handleSubmit}>
-          <div className="col-md-3">
-            <select name="Department" value={form.Department} onChange={handleChange} className="form-select" required>
+      <div
+        style={{
+          marginBottom: "30px",
+          backgroundColor: "#f5ecf4ff",
+          padding: "20px",
+          borderRadius: "10px",
+          border: "2px solid white",
+        }}
+      >
+        <form onSubmit={handleSubmit} className="row g-3">
+          {/* Department */}
+          <div className="col-md-6">
+            <select
+              name="Department"
+              value={form.Department}
+              onChange={handleChange}
+              required
+              className="form-select"
+            >
               <option value="">Select Department</option>
-              {departments.map(d => <option key={d.id} value={d.id}>{d.Department_Name}</option>)}
+              {departments.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.Department_Name}-{d.Discription}
+                </option>
+              ))}
             </select>
           </div>
 
-          <div className="col-md-3">
-            <select name="Category" value={form.Category} onChange={handleChange} className="form-select" required>
+          {/* Category */}
+          <div className="col-md-6">
+            <select
+              name="Category"
+              value={form.Category}
+              onChange={handleChange}
+              required
+              className="form-select"
+            >
               <option value="">Select Category</option>
-              {categories.map(c => <option key={c.id} value={c.id}>{c.Category_Name}</option>)}
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  ({c.Related_Department}, {c.Discription}) - {c.Category_Name}
+                </option>
+              ))}
             </select>
           </div>
 
-          <div className="col-md-3">
-            <select name="Course" value={form.Course} onChange={handleChange} className="form-select" required>
+          {/* Course */}
+          <div className="col-md-6">
+            <select
+              name="Course"
+              value={form.Course}
+              onChange={handleChange}
+              required
+              className="form-select"
+            >
               <option value="">Select Course</option>
-              {courses.map(c => <option key={c.id} value={c.id}>{c.C_Code}</option>)}
+              {courses.map((c) => (
+                <option key={c.id} value={c.id}>
+                  ({c.Department_Name}, {c.Discription}, {c.Category_Name})-{c.C_Code}-{c.C_Title}
+                </option>
+              ))}
             </select>
           </div>
 
-          <div className="col-md-3">
-            <select name="Teacher" value={form.Teacher} onChange={handleChange} className="form-select" required>
+          {/* Teacher */}
+          <div className="col-md-6">
+            <select
+              name="Teacher"
+              value={form.Teacher}
+              onChange={handleChange}
+              required
+              className="form-select"
+            >
               <option value="">Select Teacher</option>
-              {teachers.map(t => <option key={t.id} value={t.id}>{t.Teacher_Name}</option>)}
+              {teachers.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.Teacher_Name}
+                </option>
+              ))}
             </select>
           </div>
 
-          <div className="col-md-2">
-            <select name="Day" value={form.Day} onChange={handleChange} className="form-select" required>
+          {/* Day */}
+          <div className="col-md-6">
+            <select
+              name="Day"
+              value={form.Day}
+              onChange={handleChange}
+              required
+              className="form-select"
+            >
               <option value="MON">Monday</option>
               <option value="TUE">Tuesday</option>
               <option value="WED">Wednesday</option>
@@ -135,51 +225,87 @@ const AdminTimetable = () => {
             </select>
           </div>
 
+          {/* Buttons */}
           <div className="col-12 d-flex gap-2">
-            <button type="submit" className={`btn ${editId ? "btn-warning" : "btn-primary"}`}>
+            <button
+              type="submit"
+              style={buttonStyle(editId ? "rgb(4,4,63)" : "rgb(70,4,67)")}
+            >
               {editId ? "Update" : "Add"}
             </button>
-            {editId && <button type="button" className="btn btn-secondary" onClick={() => setEditId(null)}>Cancel</button>}
+            {editId && (
+              <button
+                type="button"
+                style={buttonStyle("rgb(4,4,63)")}
+                onClick={() => {
+                  setEditId(null);
+                  setForm({ Department: "", Category: "", Course: "", Teacher: "", Day: "MON" });
+                  toast.info("Edit cancelled!");
+                }}
+              >
+                Cancel
+              </button>
+            )}
           </div>
         </form>
       </div>
 
       {/* Table */}
-      <div className="table-responsive card shadow-sm">
-        <table className="table table-striped table-hover mb-0 text-center align-middle">
-          <thead className="table-primary">
+      <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "center" }}>
+        <thead>
+          <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+            <th style={{ padding: "10px", border: "1px solid white" }}>Department</th>
+            <th style={{ padding: "10px", border: "1px solid white" }}>Category</th>
+            <th style={{ padding: "10px", border: "1px solid white" }}>Course Code</th>
+            <th style={{ padding: "10px", border: "1px solid white" }}>Course</th>
+            <th style={{ padding: "10px", border: "1px solid white" }}>Teacher</th>
+            <th style={{ padding: "10px", border: "1px solid white" }}>Day</th>
+            <th style={{ padding: "10px", border: "1px solid white" }}>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {timetables.length === 0 ? (
             <tr>
-              <th>Department</th>
-              <th>Category</th>
-              <th>Course Code</th>
-              <th>Course</th>
-              <th>Teacher</th>
-              <th>Day</th>
-              <th>Actions</th>
+              <td colSpan={7} style={{ padding: "10px", border: "1px solid white" }}>
+                No timetables found
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {timetables.length === 0 ? (
-              <tr><td colSpan={6}>No timetables found</td></tr>
-            ) : (
-              timetables.map(t => (
-                <tr key={t.id}>
-                  <td>{t.department_name}</td>
-                  <td>{t.category_name}</td>
-                  <td>{t.course_code}</td>
-                  <td>{t.course_name}</td>
-                  <td>{t.teacher_name}</td>
-                  <td>{t.Day}</td>
-                  <td className="d-flex gap-2 justify-content-center">
-                    <button className="btn btn-sm btn-warning" onClick={() => handleEdit(t)}>Edit</button>
-                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(t.id)}>Delete</button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+          ) : (
+            timetables.map((t) => (
+              <tr key={t.id}>
+                <td style={{ padding: "10px", border: "1px solid white" }}>{t.department_name}</td>
+                <td style={{ padding: "10px", border: "1px solid white" }}>{t.category_name}</td>
+                <td style={{ padding: "10px", border: "1px solid white" }}>{t.course_code}</td>
+                <td style={{ padding: "10px", border: "1px solid white" }}>{t.course_name}</td>
+                <td style={{ padding: "10px", border: "1px solid white" }}>{t.teacher_name}</td>
+                <td style={{ padding: "10px", border: "1px solid white" }}>{t.Day}</td>
+                <td
+                  style={{
+                    padding: "10px",
+                    border: "1px solid white",
+                    display: "flex",
+                    justifyContent: "center",
+                    gap: "5px",
+                  }}
+                >
+                  <button
+                    onClick={() => handleEdit(t)}
+                    style={buttonStyle("rgb(70,4,67)")}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(t.id)}
+                    style={buttonStyle("rgb(4,4,63)")}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };

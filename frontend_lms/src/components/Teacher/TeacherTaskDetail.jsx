@@ -48,20 +48,26 @@ const TeacherTaskDetail = () => {
         className="container p-1 text-center"
         style={{ marginTop: '80px', minHeight: '90vh' }}
       >
-      <h2 className="text-primary mb-4">My Tasks</h2>
+      <div className="row justify-content-center">
+        <div className="col-10 col-sm-8 col-md-6">
+          <h2 className="heading text-center mb-4 mt-3  text-white py-3 px-3 mx-auto rounded shadow-lg" style={{ maxWidth: '400px', backgroundColor: 'rgba(4, 4, 61, 1)' }}>
+            Tasks
+          </h2>
+        </div>
+      </div>
 
       {error && <div className="alert alert-danger">{error}</div>}
 
       <div className="table-responsive card shadow-sm">
         <table className="table table-striped table-hover text-center align-middle">
-          <thead className="table-dark">
+          <thead>
             <tr>
-              <th>Course Code</th>
-              <th>Course Title</th>
-              <th>Credit Hour</th>
-              <th>Category</th>
-              <th>Teacher</th>
-              <th>Upload Tasks</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Course Code</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Course Title</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Credit Hour</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Category</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Teacher</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Upload Tasks</th>
             </tr>
           </thead>
           <tbody>

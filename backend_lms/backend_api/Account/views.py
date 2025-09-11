@@ -104,6 +104,7 @@ def student_register(request):
     student.OTP_Expiry = timezone.now() + datetime.timedelta(minutes=5)
     student.Is_Registered = False
     student.Is_Verified = False
+    student.Temp_Password = make_password(data.get('Student_Password'))
     student.save()
 
     # ✅ Email send
@@ -122,9 +123,9 @@ def student_register(request):
 @csrf_exempt
 @api_view(['POST'])
 def verify_otp(request):
-    OTP = request.data.get('OTP_Digits')
+    otp = request.data.get('OTP_Digits')
+    email = request.data.get('Email')
     resend = request.data.get('resend')
-    email = request.data.get('Email')  # Email instead of user_id
 
     if not email:
         return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
@@ -132,7 +133,7 @@ def verify_otp(request):
     user = None
     user_type = None
 
-    # Try to find user in Student model (unverified)
+    # Find the user in Student or Teacher
     try:
         user = Student.objects.get(Student_Email=email, Is_Verified=False)
         user_type = 'student'
@@ -143,46 +144,56 @@ def verify_otp(request):
         except Teacher.DoesNotExist:
             return Response({"error": "User not found or already verified"}, status=status.HTTP_400_BAD_REQUEST)
 
+    # --------- Resend OTP ----------
     if resend == "true":
-        new_OTP = str(random.randint(100000, 999999))
+        expiry_time = user.OTP_Expiry if user_type == 'student' else user.Teacher_OTP_Expiry
+        if expiry_time and timezone.now() < expiry_time:
+            remaining_seconds = int((expiry_time - timezone.now()).total_seconds())
+            return Response({"error": f"OTP is still valid. Wait {remaining_seconds} seconds."}, status=status.HTTP_400_BAD_REQUEST)
+
+        new_otp = str(random.randint(100000, 999999))
         if user_type == 'student':
-            user.OTP_Digits = new_OTP
+            user.OTP_Digits = new_otp
             user.OTP_Expiry = timezone.now() + datetime.timedelta(minutes=10)
-            email = user.Student_Email
+            email_to_send = user.Student_Email
         else:
-            user.Teacher_OTP_Digits = new_OTP
+            user.Teacher_OTP_Digits = new_otp
             user.Teacher_OTP_Expiry = timezone.now() + datetime.timedelta(minutes=10)
-            email = user.Teacher_Email
+            email_to_send = user.Teacher_Email
 
         user.save()
 
         send_mail(
             subject="Your New OTP Code",
-            message=f"Your new OTP is {new_OTP}. It will expire in 10 minutes.",
+            message=f"Your new OTP is {new_otp}. It will expire in 10 minutes.",
             from_email="CollegeLMS.gcbskp.edu.pk",
-            recipient_list=[email],
+            recipient_list=[email_to_send],
             fail_silently=False,
         )
-        return Response({"message": f"New OTP sent to {email}"}, status=status.HTTP_200_OK)
+        return Response({"message": f"New OTP sent to {email_to_send}"}, status=status.HTTP_200_OK)
 
-    # Verify OTP flow
+    # --------- Verify OTP ----------
     if user_type == 'student':
-        otp_valid = OTP and user.OTP_Digits == OTP and user.OTP_Expiry and user.OTP_Expiry > timezone.now()
-        if otp_valid:
+        if otp and user.OTP_Digits == otp and user.OTP_Expiry and timezone.now() < user.OTP_Expiry:
             user.Is_Verified = True
             user.Is_Registered = True
             user.OTP_Digits = None
             user.OTP_Expiry = None
+            if user.Temp_Password:
+                user.Student_Password = user.Temp_Password
+                user.Temp_Password = None
             user.save()
-            return Response({"message": f"OTP verified successfully for {user.Student_Email}", "role": "student"}, status=status.HTTP_200_OK)
+            return Response({"message": "OTP verified successfully", "role": "student"}, status=status.HTTP_200_OK)
     else:
-        otp_valid = OTP and user.Teacher_OTP_Digits == OTP and user.Teacher_OTP_Expiry and user.Teacher_OTP_Expiry > timezone.now()
-        if otp_valid:
+        if otp and user.Teacher_OTP_Digits == otp and user.Teacher_OTP_Expiry and timezone.now() < user.Teacher_OTP_Expiry:
             user.Teacher_Is_Verified = True
             user.Teacher_OTP_Digits = None
             user.Teacher_OTP_Expiry = None
+            if user.Temp_Password:
+                user.Teacher_Password = user.Temp_Password
+                user.Temp_Password = None
             user.save()
-            return Response({"message": f"OTP verified successfully for {user.Teacher_Email}", "role": "teacher"}, status=status.HTTP_200_OK)
+            return Response({"message": "OTP verified successfully", "role": "teacher"}, status=status.HTTP_200_OK)
 
     return Response({"error": "Invalid or expired OTP"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -266,10 +277,11 @@ def login_view(request):
 
             # Agar OTP verification pending hai
             OTP = str(random.randint(100000, 999999))
-            user.Teacher_Password = make_password(Password)
+            
             user.Teacher_OTP_Digits = OTP
             user.Teacher_OTP_Expiry = timezone.now() + datetime.timedelta(minutes=5)
             user.Teacher_Is_Verified = False
+            user.Temp_Password = make_password(Password)
             user.save()
 
             send_mail(

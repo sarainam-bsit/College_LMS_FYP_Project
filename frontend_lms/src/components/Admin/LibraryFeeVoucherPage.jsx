@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
@@ -29,10 +30,10 @@ export default function LibraryFeeVoucherPage() {
   const fetchVouchers = async () => {
     try {
       const res = await axios.get(API_URL);
-      const filtered = res.data.filter(v => v.Challan_Type === "Library-fee");
+      const filtered = res.data.filter((v) => v.Challan_Type === "Library-fee");
       setVouchers(filtered);
-    } catch (err) {
-      console.error("Error fetching vouchers:", err);
+    } catch {
+      toast.error("Error fetching vouchers");
     }
   };
 
@@ -41,15 +42,15 @@ export default function LibraryFeeVoucherPage() {
     try {
       const res = await axios.get(LIBRARY_API);
       setLibraryApplications(res.data);
-    } catch (err) {
-      console.error("Error fetching applications:", err);
+    } catch {
+      toast.error("Error fetching applications");
     }
   };
 
   // Generate Library Fee
   const handleGenerateLibraryFee = async () => {
     if (libraryForm.selectedIds.length === 0 || !libraryForm.amount) {
-      return alert("Select at least one application and enter amount.");
+      return toast.warn("Select at least one application and enter amount.");
     }
 
     try {
@@ -61,9 +62,11 @@ export default function LibraryFeeVoucherPage() {
         bank_branch: libraryForm.bankBranch,
       });
 
-      const generatedIds = (res.data.generated_ids || []).map(id => parseInt(id));
-      setLibraryApplications(prev =>
-        prev.filter(app => !generatedIds.includes(app.id))
+      const generatedIds = (res.data.generated_ids || []).map((id) =>
+        parseInt(id)
+      );
+      setLibraryApplications((prev) =>
+        prev.filter((app) => !generatedIds.includes(app.id))
       );
 
       setLibraryForm({
@@ -74,11 +77,10 @@ export default function LibraryFeeVoucherPage() {
         bankBranch: "",
       });
 
-      alert(res.data.message || "Library vouchers generated!");
+      toast.success(res.data.message || "Library vouchers generated!");
       fetchVouchers();
     } catch (err) {
-      console.error(err.response?.data);
-      alert(err.response?.data?.error || "Error generating library fee");
+      toast.error(err.response?.data?.error || "Error generating library fee");
     }
   };
 
@@ -86,32 +88,30 @@ export default function LibraryFeeVoucherPage() {
   const openModal = (voucher) => {
     setSelectedVoucher({
       ...voucher,
-      Amount_Date: voucher.Amount_Date || new Date().toISOString().split("T")[0],
+      Amount_Date:
+        voucher.Amount_Date || new Date().toISOString().split("T")[0],
     });
     setAmountPaid("");
-    const modal = new window.bootstrap.Modal(
+    new window.bootstrap.Modal(
       document.getElementById("markPaidModal")
-    );
-    modal.show();
+    ).show();
   };
 
   const confirmMarkPaid = async () => {
-    if (!amountPaid) return alert("Enter amount paid!");
+    if (!amountPaid) return toast.warn("Enter amount paid!");
     try {
       await axios.post(`${API_URL}${selectedVoucher.id}/mark_paid/`, {
         amount_paid: amountPaid,
         paid_date: selectedVoucher.Amount_Date,
       });
-      alert("Voucher marked as paid!");
+      toast.success("Voucher marked as paid!");
       fetchVouchers();
 
-      const modal = window.bootstrap.Modal.getInstance(
+      window.bootstrap.Modal.getInstance(
         document.getElementById("markPaidModal")
-      );
-      modal.hide();
+      ).hide();
     } catch (error) {
-      console.error(error);
-      alert(error.response?.data?.error || "Error marking paid");
+      toast.error(error.response?.data?.error || "Error marking paid");
     }
   };
 
@@ -121,167 +121,280 @@ export default function LibraryFeeVoucherPage() {
 
     try {
       await axios.delete(`${API_URL}${voucherId}/`);
-      alert("Voucher deleted!");
+      toast.success("Voucher deleted!");
       fetchVouchers();
     } catch (error) {
-      console.error(error);
-      alert(error.response?.data?.error || "Error deleting voucher");
+      toast.error(error.response?.data?.error || "Error deleting voucher");
     }
   };
 
+  const buttonStyle = (bg) => ({
+    padding: "6px 12px",
+    borderRadius: "5px",
+    backgroundColor: bg,
+    color: "white",
+    border: "none",
+    cursor: "pointer",
+    fontWeight: "bold",
+    transition: "transform 0.2s",
+  });
+
   return (
-    <div className="container mt-4">
-      <h2 className="fw-bold mb-4">📚 Library Fee Voucher Management</h2>
+    <div
+      className="container"
+      style={{
+        marginTop: "6%",
+        backgroundColor: "#ebeaf2ff",
+        padding: "20px",
+        borderRadius: "12px",
+      }}
+    >
+      <h2
+        className="text-center"
+        style={{ color: "rgba(44, 44, 122, 1)", fontWeight: "bold" }}
+      >
+        📚 Library Fee Voucher Management
+      </h2>
 
       {/* Library Generate */}
-      <div className="card mb-4">
-        <div className="card-header fw-bold">Generate Library Fee Voucher</div>
-        <div className="card-body">
-          <div className="row g-3">
-            <div className="col-md-6">
-              <select
-                multiple
-                value={libraryForm.selectedIds}
-                onChange={(e) => {
-                  const options = e.target.options;
-                  const selected = [];
-                  for (let i = 0; i < options.length; i++) {
-                    if (options[i].selected) selected.push(parseInt(options[i].value));
-                  }
-                  setLibraryForm({ ...libraryForm, selectedIds: selected });
-                }}
-                className="form-select"
-              >
-                {libraryApplications
-                  .filter(app => app.status === "Approved" && !app.fee_generated_status)
-                  .map(app => (
-                    <option key={app.id} value={app.id}>
-                      {app.email} - {app.status}
-                    </option>
-                  ))}
-              </select>
-            </div>
-
-            <div className="col-md-6">
-              <input
-                type="number"
-                placeholder="Fee Amount"
-                className="form-control"
-                value={libraryForm.amount}
-                onChange={(e) =>
-                  setLibraryForm({ ...libraryForm, amount: e.target.value })
+      <div
+        className="shadow mt-4"
+        style={{
+          backgroundColor: "#f5ecf4ff",
+          padding: "20px",
+          borderRadius: "10px",
+          border: "2px solid white",
+        }}
+      >
+        <h5 style={{ color: "rgba(44, 44, 122, 1)" }}>
+          Generate Library Fee Voucher
+        </h5>
+        <div className="row g-3">
+          <div className="col-md-6">
+            <select
+              multiple
+              value={libraryForm.selectedIds}
+              onChange={(e) => {
+                const options = e.target.options;
+                const selected = [];
+                for (let i = 0; i < options.length; i++) {
+                  if (options[i].selected)
+                    selected.push(parseInt(options[i].value));
                 }
-              />
-            </div>
-
-            <div className="col-md-6">
-              <input
-                type="date"
-                className="form-control"
-                value={libraryForm.fineDate}
-                onChange={(e) =>
-                  setLibraryForm({ ...libraryForm, fineDate: e.target.value })
-                }
-              />
-            </div>
-
-            <div className="col-md-6">
-              <input
-                type="number"
-                placeholder="Fine Amount"
-                className="form-control"
-                value={libraryForm.fineAmount}
-                onChange={(e) =>
-                  setLibraryForm({ ...libraryForm, fineAmount: e.target.value })
-                }
-              />
-            </div>
-
-            <div className="col-md-6">
-              <input
-                type="text"
-                placeholder="Bank Branch"
-                className="form-control"
-                value={libraryForm.bankBranch}
-                onChange={(e) =>
-                  setLibraryForm({ ...libraryForm, bankBranch: e.target.value })
-                }
-              />
-            </div>
+                setLibraryForm({ ...libraryForm, selectedIds: selected });
+              }}
+              className="form-select"
+            >
+              {libraryApplications
+                .filter(
+                  (app) => app.status === "Approved" && !app.fee_generated_status
+                )
+                .map((app) => (
+                  <option key={app.id} value={app.id}>
+                    {app.email} - {app.status}
+                  </option>
+                ))}
+            </select>
           </div>
 
-          <button
-            className="btn btn-primary mt-3"
-            onClick={handleGenerateLibraryFee}
-          >
-            Generate Library Fee
-          </button>
+          <div className="col-md-6">
+            <input
+              type="number"
+              placeholder="Fee Amount"
+              className="form-control"
+              value={libraryForm.amount}
+              onChange={(e) =>
+                setLibraryForm({ ...libraryForm, amount: e.target.value })
+              }
+            />
+          </div>
+
+          <div className="col-md-6">
+            <input
+              type="date"
+              className="form-control"
+              value={libraryForm.fineDate}
+              onChange={(e) =>
+                setLibraryForm({ ...libraryForm, fineDate: e.target.value })
+              }
+            />
+          </div>
+
+          <div className="col-md-6">
+            <input
+              type="number"
+              placeholder="Fine Amount"
+              className="form-control"
+              value={libraryForm.fineAmount}
+              onChange={(e) =>
+                setLibraryForm({ ...libraryForm, fineAmount: e.target.value })
+              }
+            />
+          </div>
+
+          <div className="col-md-6">
+            <input
+              type="text"
+              placeholder="Bank Branch"
+              className="form-control"
+              value={libraryForm.bankBranch}
+              onChange={(e) =>
+                setLibraryForm({ ...libraryForm, bankBranch: e.target.value })
+              }
+            />
+          </div>
         </div>
+
+        <button
+          onClick={handleGenerateLibraryFee}
+          style={{ ...buttonStyle("rgb(70,4,67)"), marginTop: "15px" }}
+        >
+          Generate Library Fee
+        </button>
       </div>
 
       {/* Voucher Table */}
-      <div className="card">
-        <div className="card-header fw-bold">Library Fee Vouchers</div>
-        <div className="card-body">
-          <table className="table table-bordered table-striped">
-            <thead className="table-dark">
+      <div
+        className="mt-5 shadow"
+        style={{
+          backgroundColor: "#f5ecf4ff",
+          padding: "20px",
+          borderRadius: "10px",
+          border: "2px solid white",
+        }}
+      >
+        <h5 style={{ color: "rgba(44, 44, 122, 1)" }}>Library Fee Vouchers</h5>
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+            textAlign: "center",
+            marginTop: "15px",
+          }}
+        >
+          <thead>
+            <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+              <th style={{ padding: "10px", border: "1px solid white" }}>
+                Challan No
+              </th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>
+                Challan Type
+              </th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>
+                Student
+              </th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>
+                Amount
+              </th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>
+                Fine Date
+              </th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>
+                Amount Date
+              </th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>
+                Fine Amount
+              </th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>
+                Branch
+              </th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>
+                Paid
+              </th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>
+                Status
+              </th>
+              <th style={{ padding: "10px", border: "1px solid white" }}>
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {vouchers.length === 0 ? (
               <tr>
-                <th>Challan No</th>
-                <th>Challan Type</th>
-                <th>Student</th>
-                <th>Amount</th>
-                <th>Fine Date</th>
-                <th>Amount Date</th>
-                <th>Fine Amount</th>
-                <th>Branch</th>
-                <th>Paid</th>
-                <th>Status</th>
-                <th>Action</th>
+                <td colSpan={11} style={{ padding: "10px", border: "1px solid white" }}>
+                  No vouchers found
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {vouchers.map((v) => (
+            ) : (
+              vouchers.map((v) => (
                 <tr key={v.id}>
-                  <td>{v.Challan_no}</td>
-                  <td>{v.Challan_Type}</td>
-                  <td>{v.Student_Name}</td>
-                  <td>{v.Amount_to_Pay}</td>
-                  <td>{v.Fine_Date || "-"}</td>
-                  <td>{v.Amount_Date || "-"}</td>
-                  <td>{v.Fine_Amount || "-"}</td>
-                  <td>{v.Bank_Branch || "-"}</td>
-                  <td>{v.Amount_Paid || "-"}</td>
-                  <td className={v.Status === "Paid" ? "text-success fw-bold" : "text-danger fw-bold"}>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
+                    {v.Challan_no}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
+                    {v.Challan_Type}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
+                    {v.Student_Name}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
+                    {v.Amount_to_Pay}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
+                    {v.Fine_Date || "-"}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
+                    {v.Amount_Date || "-"}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
+                    {v.Fine_Amount || "-"}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
+                    {v.Bank_Branch || "-"}
+                  </td>
+                  <td style={{ padding: "10px", border: "1px solid white" }}>
+                    {v.Amount_Paid || "-"}
+                  </td>
+                  <td
+                    style={{
+                      padding: "10px",
+                      border: "1px solid white",
+                      color: v.Status === "Paid" ? "green" : "red",
+                      fontWeight: "bold",
+                    }}
+                  >
                     {v.Status}
                   </td>
-                  <td>
+                  <td
+                    style={{
+                      padding: "10px",
+                      border: "1px solid white",
+                      display: "flex",
+                      justifyContent: "center",
+                      gap: "5px",
+                    }}
+                  >
                     {v.Status === "Unpaid" && (
                       <button
                         onClick={() => openModal(v)}
-                        className="btn btn-sm btn-warning me-1"
+                        style={buttonStyle("orange")}
                       >
                         Mark Paid
                       </button>
                     )}
                     <button
                       onClick={() => deleteVoucher(v.id)}
-                      className="btn btn-sm btn-danger"
+                      style={buttonStyle("red")}
                     >
                       Delete
                     </button>
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
 
       {/* Modal */}
       <div className="modal fade" id="markPaidModal" tabIndex="-1">
         <div className="modal-dialog">
           <div className="modal-content">
-            <div className="modal-header">
+            <div
+              className="modal-header"
+              style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}
+            >
               <h5 className="modal-title">Mark Voucher Paid</h5>
               <button className="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -310,7 +423,10 @@ export default function LibraryFeeVoucherPage() {
               <button className="btn btn-secondary" data-bs-dismiss="modal">
                 Cancel
               </button>
-              <button className="btn btn-success" onClick={confirmMarkPaid}>
+              <button
+                style={buttonStyle("green")}
+                onClick={confirmMarkPaid}
+              >
                 Confirm
               </button>
             </div>
