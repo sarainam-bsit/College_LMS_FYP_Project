@@ -54,7 +54,7 @@ def admin_login(request):
             return Response({"errors": {"password": password_errors}}, status=status.HTTP_400_BAD_REQUEST)
 
         # Save password & generate OTP
-        admin.Admin_Password = make_password(password)
+        admin.Temp_Password = make_password(password)
         otp = generate_otp()
         admin.OTP_Digits = otp
         admin.OTP_Expiry = timezone.now() + timedelta(minutes=5)
@@ -94,6 +94,10 @@ def verify_otp(request):
         if timezone.now() > admin.OTP_Expiry:
             return Response({"error": "OTP expired"}, status=status.HTTP_400_BAD_REQUEST)
 
+        if admin.Temp_Password:
+            admin.Admin_Password = admin.Temp_Password
+            admin.Temp_Password = None
+
         admin.Is_Verified = True
         admin.OTP_Digits = None
         admin.OTP_Expiry = None
@@ -113,6 +117,15 @@ def resend_otp(request):
     except Admin.DoesNotExist:
         return Response({"error": "Email not found"}, status=status.HTTP_404_NOT_FOUND)
 
+    # Check if existing OTP is still valid
+    if admin.OTP_Digits and admin.OTP_Expiry and timezone.now() < admin.OTP_Expiry:
+        remaining_seconds = int((admin.OTP_Expiry - timezone.now()).total_seconds())
+        return Response(
+            {"error": f"OTP is still valid. Please wait {remaining_seconds} seconds to resend."},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    # Generate new OTP if expired or not exists
     otp = generate_otp()
     admin.OTP_Digits = otp
     admin.OTP_Expiry = timezone.now() + timedelta(minutes=5)
@@ -120,7 +133,7 @@ def resend_otp(request):
     admin.save()
     print(f"Resent OTP for {email}: {otp}")
 
-    return Response({"message": "OTP resent"}, status=status.HTTP_200_OK)
+    return Response({"message": "New OTP sent"}, status=status.HTTP_200_OK)
 
 @csrf_exempt    
 @api_view(['POST'])
@@ -177,6 +190,8 @@ def admin_reset_password(request):
         admin = Admin.objects.get(Admin_Email=email)
     except Admin.DoesNotExist:
         return Response({'errors': {'email': ['Admin not found']}}, status=404)
+    if not admin.Admin_Password:
+        return Response({'errors': {'password': ['Cannot reset password. No existing password found.']}}, status=400)
 
     password_errors = validate_password(new_password)
     if password_errors:

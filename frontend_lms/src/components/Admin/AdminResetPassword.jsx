@@ -37,17 +37,19 @@ const AdminResetPassword = () => {
     setFieldErrors({});
 
     try {
-      const response = await axios.post(BASE_URL, formData, { withCredentials: true });
-      toast.success(response.data.message || "Password reset successful");
-      navigate('/adminlogin');
-      setFormData({ email: '', new_password: '', confirm_password: '' });
-    } catch (err) {
-      if (err.response?.data?.errors) {
-        setFieldErrors(err.response.data.errors);
-      } else {
-        setError(err.response?.data?.error || "Something went wrong.");
-      }
-    }
+  const response = await axios.post(BASE_URL, formData, { withCredentials: true });
+  toast.success(response.data.message || "Password reset successful");
+  navigate('/adminlogin');
+} catch (err) {
+  if (err.response?.status === 400 && err.response.data.errors?.password) {
+    toast.error(err.response.data.errors.password[0]); // Ye show karega "No existing password" message
+    navigate('/adminlogin');
+  } else if (err.response?.data?.errors) {
+    setFieldErrors(err.response.data.errors);
+  } else {
+    setError(err.response?.data?.error || "Something went wrong.");
+  }
+}
   };
 
   return (

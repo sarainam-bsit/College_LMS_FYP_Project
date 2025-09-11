@@ -8,4 +8,3 @@ urlpatterns = [
     path('admin_forget_password/', admin_forget_password, name='admin_forget_password'),
     path('admin_reset_password/', admin_reset_password, name='admin_reset_password'),
 ]
-

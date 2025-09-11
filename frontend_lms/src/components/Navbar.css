@@ -14,8 +14,9 @@
 
 /* Navbar link hover */
 .navlink:hover {
-  background-color: rgba(233, 18, 18, 0.729); /* Light hover effect */
+  background-color: rgb(74, 6, 71); /* Light hover effect */
   transform: scale(1.05);  /* Small zoom */
+  border: 1px solid white; 
     /* Slight zoom */
 }
 .logout-btn {
@@ -32,8 +33,9 @@
 }
 
 .logout-btn:hover {
-  background-color: rgba(233, 18, 18, 0.729);; /* Light hover effect */
+  background-color: rgb(74, 6, 71); /* Light hover effect */
   transform: scale(1.02);  /* Small zoom */
+  border: 1px solid white; 
 }
 
 .offcanvas-end {
@@ -43,6 +45,7 @@
 }
 
 .offcanvas-body {
+  background-color: rgb(2, 2, 40);
   overflow-y: auto;       /* Menu scrollable */
   max-height: 100vh;      /* Full height of viewport */
   -ms-overflow-style: none;
@@ -51,4 +54,13 @@
 
 .offcanvas-body::-webkit-scrollbar {
   display: none;
+}
+.navbar{
+  background-color: rgb(70, 4, 67);
+}
+.offcanvas-header{
+  background-color: rgb(4, 4, 63);
+}
+.offcanvas-title{
+  color: white
 }

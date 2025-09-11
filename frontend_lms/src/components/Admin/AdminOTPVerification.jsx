@@ -52,12 +52,12 @@ const AdminOTPVerification = ({ show, onClose, email, setIsLoggedIn, setUserRole
     <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.6)" }}>
       <div className="modal-dialog modal-dialog-centered" style={{ marginTop: "30px" }}>
         <div className="modal-content" style={{ borderRadius: "15px", overflow: "hidden" }}>
-          <div className="modal-header bg-dark text-white">
+          <div className="modal-header  text-white" style={{ backgroundColor: "rgb(70, 4, 67)" }}>
             <h5 className="modal-title">Admin OTP Verification</h5>
           </div>
-          <div className="modal-body">
+          <div className="modal-body" style={{ backgroundColor: "rgba(244, 219, 242, 1)" }} >
             {message && <div className="alert alert-info">{message}</div>}
-            <label className="form-label">Enter 6-digit OTP</label>
+            <label className="form-label" style={{ color: "rgb(4, 4, 63)" }}>Enter 6-digit OTP</label>
             <input
               type="text"
               className="form-control"
@@ -66,11 +66,11 @@ const AdminOTPVerification = ({ show, onClose, email, setIsLoggedIn, setUserRole
               onChange={(e) => setOtp(e.target.value)}
             />
           </div>
-          <div className="modal-footer">
-            <button className="btn btn-success" onClick={handleVerify}>
+          <div className="modal-footer" style={{ backgroundColor: "rgba(244, 219, 242, 1)" }}>
+            <button className="btn text-white" style={{ backgroundColor: "rgb(70, 4, 67)" }} onClick={handleVerify}>
               Verify OTP
             </button>
-            <button className="btn btn-primary" onClick={handleResend}>
+            <button className="btn text-white" style={{ backgroundColor: "rgb(4, 4, 63)" }} onClick={handleResend}>
               Resend OTP
             </button>
           </div>

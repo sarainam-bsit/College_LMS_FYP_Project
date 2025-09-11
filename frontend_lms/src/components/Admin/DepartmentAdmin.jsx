@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BASE_URL = "http://127.0.0.1:8000/dept/dept_api/";
 
@@ -13,14 +15,13 @@ const DepartmentAdmin = () => {
     Department_Image: null,
   });
   const [editingId, setEditingId] = useState(null);
-  const [errorMessage, setErrorMessage] = useState("");
 
   const fetchDepartments = async () => {
     try {
       const res = await axios.get(BASE_URL);
       setDepartments(res.data);
     } catch (err) {
-      console.error("Failed to fetch departments:", err);
+      toast.error("Failed to fetch departments");
     }
   };
 
@@ -29,7 +30,7 @@ const DepartmentAdmin = () => {
       const res = await axios.get(`${BASE_URL}superadmin_teachers/`);
       setTeachers(res.data);
     } catch (err) {
-      console.error("Failed to fetch teachers:", err.response || err);
+      toast.error("Failed to fetch teachers");
     }
   };
 
@@ -49,6 +50,12 @@ const DepartmentAdmin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.HOD) {
+      toast.warning("Please select HOD before saving!");
+      return;
+    }
+
     const data = new FormData();
     data.append("Department_Name", formData.Department_Name);
     data.append("Discription", formData.Discription);
@@ -60,53 +67,80 @@ const DepartmentAdmin = () => {
         await axios.put(`${BASE_URL}${editingId}/`, data, {
           headers: { "Content-Type": "multipart/form-data" },
         });
+        toast.success("Department updated successfully!");
       } else {
         await axios.post(BASE_URL, data, {
           headers: { "Content-Type": "multipart/form-data" },
         });
+        toast.success("Department created successfully!");
       }
 
       setFormData({ Department_Name: "", Discription: "", HOD: "", Department_Image: null });
       setEditingId(null);
-      setErrorMessage("");
       fetchDepartments();
     } catch (err) {
-      const backendError = err.response?.data?.HOD || err.response?.data?.detail || "Error saving department";
-      setErrorMessage(backendError);
+      const backendError =
+        (err.response?.data?.HOD && Array.isArray(err.response.data.HOD)
+          ? err.response.data.HOD.join(", ")
+          : err.response?.data?.HOD) ||
+        err.response?.data?.detail ||
+        "Error saving department";
+
+      toast.error(backendError);
     }
   };
 
   const handleEdit = (dept) => {
-    setFormData({
-      Department_Name: dept.Department_Name,
-      Discription: dept.Discription,
-      HOD: dept.HOD || "",
-      Department_Image: null,
-    });
-    setEditingId(dept.id);
-    setErrorMessage("");
-  };
+  setFormData({
+    Department_Name: dept.Department_Name,
+    Discription: dept.Discription,
+    HOD: dept.HOD || "",
+    Department_Image: null,
+  });
+  setEditingId(dept.id);
+
+  // Toast info message jab edit click ho
+  toast.info(`Editing Department: ${dept.Department_Name}`, {
+    
+  });
+};
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this department?")) {
-      await axios.delete(`${BASE_URL}${id}/`);
-      fetchDepartments();
+      try {
+        await axios.delete(`${BASE_URL}${id}/`);
+        toast.success("Department deleted successfully!");
+        fetchDepartments();
+      } catch (err) {
+        toast.error("Failed to delete department");
+      }
     }
   };
 
   return (
-    <div style={{ padding: "30px", fontFamily: "Arial, sans-serif", marginTop: "4%" }}>
-      <h2 style={{ marginBottom: "20px", color: "#333" }}>Department Admin</h2>
-
-      {/* Error Message */}
-      {errorMessage && (
-        <div style={{ color: "white", backgroundColor: "red", padding: "10px", marginBottom: "20px", borderRadius: "5px" }}>
-          {errorMessage}
-        </div>
-      )}
+    <div style={{ padding: "30px", fontFamily: "Arial, sans-serif", marginTop: "4%", backgroundColor: "#ebeaf2ff", color: "rgba(44, 44, 122, 1)" }}>
+      <h1
+  style={{
+    marginBottom: "20px",
+    color: "rgba(44, 44, 122, 1)",
+    textAlign: "center",   // center
+    fontWeight: "bold",    // bold
+  }}
+>
+  Department
+</h1>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} style={{ marginBottom: "30px", backgroundColor: "#f9f9f9", padding: "20px", borderRadius: "10px" }}>
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          marginBottom: "30px",
+          backgroundColor: "#f5ecf4ff",
+          padding: "20px",
+          borderRadius: "10px",
+          border: "2px solid white", 
+        }}
+      >
         <div style={{ marginBottom: "15px" }}>
           <label style={{ display: "block", marginBottom: "5px" }}>Department Name:</label>
           <input
@@ -115,7 +149,12 @@ const DepartmentAdmin = () => {
             value={formData.Department_Name}
             onChange={handleChange}
             required
-            style={{ padding: "8px", width: "100%", borderRadius: "5px", border: "1px solid #ccc" }}
+            style={{
+              padding: "8px",
+              width: "100%",
+              borderRadius: "5px",
+              border: "1px solid #ccc",
+            }}
           />
         </div>
 
@@ -125,7 +164,12 @@ const DepartmentAdmin = () => {
             name="Discription"
             value={formData.Discription}
             onChange={handleChange}
-            style={{ padding: "8px", width: "100%", borderRadius: "5px", border: "1px solid #ccc" }}
+            style={{
+              padding: "8px",
+              width: "100%",
+              borderRadius: "5px",
+              border: "1px solid #ccc",
+            }}
           />
         </div>
 
@@ -135,7 +179,12 @@ const DepartmentAdmin = () => {
             name="HOD"
             value={formData.HOD}
             onChange={handleChange}
-            style={{ padding: "8px", width: "100%", borderRadius: "5px", border: "1px solid #ccc" }}
+            style={{
+              padding: "8px",
+              width: "100%",
+              borderRadius: "5px",
+              border: "1px solid #ccc",
+            }}
           >
             <option value="">Select HOD</option>
             {teachers.map((t) => (
@@ -153,15 +202,39 @@ const DepartmentAdmin = () => {
 
         <button
           type="submit"
-          style={{ padding: "10px 20px", marginRight: "10px", borderRadius: "5px", backgroundColor: "#4CAF50", color: "white", border: "none", cursor: "pointer" }}
+          style={{
+            padding: "10px 20px",
+            marginRight: "10px",
+            borderRadius: "5px",
+            backgroundColor: "rgb(70, 4, 67)",
+            color: "white",
+            border: "none",
+            cursor: "pointer",
+            transition: "transform 0.2s",
+          }}
+          onMouseOver={(e) => (e.target.style.transform = "scale(1.05)")}
+          onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
         >
           {editingId ? "Update" : "Create"}
         </button>
+
         {editingId && (
           <button
             type="button"
-            onClick={() => setFormData({ Department_Name: "", Discription: "", HOD: "", Department_Image: null })}
-            style={{ padding: "10px 20px", borderRadius: "5px", backgroundColor: "#f44336", color: "white", border: "none", cursor: "pointer" }}
+            onClick={() =>
+              setFormData({ Department_Name: "", Discription: "", HOD: "", Department_Image: null })
+            }
+            style={{
+              padding: "10px 20px",
+              borderRadius: "5px",
+              backgroundColor: "rgb(4, 4, 63)",
+              color: "white",
+              border: "none",
+              cursor: "pointer",
+              transition: "transform 0.2s",
+            }}
+            onMouseOver={(e) => (e.target.style.transform = "scale(1.05)")}
+            onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
           >
             Cancel
           </button>
@@ -169,9 +242,9 @@ const DepartmentAdmin = () => {
       </form>
 
       {/* Table */}
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "center" }}>
         <thead>
-          <tr style={{ backgroundColor: "#4CAF50", color: "white" }}>
+          <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
             <th style={{ padding: "10px", border: "1px solid #ddd" }}>ID</th>
             <th style={{ padding: "10px", border: "1px solid #ddd" }}>Name</th>
             <th style={{ padding: "10px", border: "1px solid #ddd" }}>Description</th>
@@ -183,21 +256,55 @@ const DepartmentAdmin = () => {
         <tbody>
           {departments.map((d) => (
             <tr key={d.id} style={{ textAlign: "center" }}>
-              <td style={{ padding: "10px", border: "1px solid #ddd" }}>{d.id}</td>
-              <td style={{ padding: "10px", border: "1px solid #ddd" }}>{d.Department_Name}</td>
-              <td style={{ padding: "10px", border: "1px solid #ddd" }}>{d.Discription}</td>
-              <td style={{ padding: "10px", border: "1px solid #ddd" }}>{d.HOD_name || "-"}</td>
-              <td style={{ padding: "10px", border: "1px solid #ddd" }}>
+              <td style={{ padding: "10px", border: "1px solid white" }}>{d.id}</td>
+              <td style={{ padding: "10px", border: "1px solid white" }}>{d.Department_Name}</td>
+              <td style={{ padding: "10px", border: "1px solid white" }}>{d.Discription}</td>
+              <td style={{ padding: "10px", border: "1px solid white" }}>{d.HOD_name || "-"}</td>
+              <td style={{ padding: "10px", border: "1px solid white" }}>
                 {d.Department_Image && <img src={d.Department_Image} alt="dept" width="50" />}
               </td>
               <td style={{ padding: "10px", border: "1px solid #ddd" }}>
-                <button onClick={() => handleEdit(d)} style={{ marginRight: "5px", padding: "5px 10px" }}>Edit</button>
-                <button onClick={() => handleDelete(d.id)} style={{ padding: "5px 10px" }}>Delete</button>
+                <button
+                  onClick={() => handleEdit(d)}
+                  style={{
+                    marginRight: "5px",
+                    padding: "5px 10px",
+                    backgroundColor: "rgb(70, 4, 67)",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                    transition: "transform 0.2s",
+                  }}
+                  onMouseOver={(e) => (e.target.style.transform = "scale(1.1)")}
+                  onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(d.id)}
+                  style={{
+                    padding: "5px 10px",
+                    backgroundColor: "rgb(4, 4, 63)",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                    transition: "transform 0.2s",
+                  }}
+                  onMouseOver={(e) => (e.target.style.transform = "scale(1.1)")}
+                  onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {/* Toast container */}
+      {/* <ToastContainer position="top-right" autoClose={3000} hideProgressBar /> */}
     </div>
   );
 };

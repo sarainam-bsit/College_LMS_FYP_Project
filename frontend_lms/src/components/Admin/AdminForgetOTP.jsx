@@ -2,27 +2,26 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const BaseUrl = 'http://127.0.0.1:8000/adminaccount/verify-otp/'; // Tumhara backend reset OTP verify endpoint
+const VERIFY_URL = 'http://127.0.0.1:8000/adminaccount/verify-otp/';
+const RESEND_URL = 'http://127.0.0.1:8000/adminaccount/resend-otp/'; // Backend resend OTP endpoint
 
 const AdminForgetOTP = ({ show, onClose, email }) => {
     const [OTPData, setOTPData] = useState({ otp: '' });
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const [isSending, setIsSending] = useState(false); // resend button loading
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (show) {
-            document.title = "Forget Password OTP Verification";
-        }
+        if (show) document.title = "Forget Password OTP Verification";
     }, [show]);
 
-    const handleChange = (event) => {
-        setOTPData({ ...OTPData, [event.target.name]: event.target.value });
+    const handleChange = (e) => {
+        setOTPData({ ...OTPData, [e.target.name]: e.target.value });
     };
 
     const submitForm = async (e) => {
         e.preventDefault();
-
         if (!OTPData.otp) {
             setErrorMessage("Please enter OTP.");
             return;
@@ -30,11 +29,8 @@ const AdminForgetOTP = ({ show, onClose, email }) => {
 
         try {
             const response = await axios.post(
-                BaseUrl,
-                {
-                    otp: OTPData.otp,   // ✅ lowercase
-                    email: email,       // ✅ lowercase
-                },
+                VERIFY_URL,
+                { otp: OTPData.otp, email: email },
                 { withCredentials: true }
             );
 
@@ -42,12 +38,9 @@ const AdminForgetOTP = ({ show, onClose, email }) => {
             setErrorMessage('');
             setOTPData({ otp: '' });
 
-            // OTP verify hone ke baad reset password page pe le jao
             setTimeout(() => {
-                onClose(); // Modal band karo
-                navigate('/admin_reset_password', {
-                    state: { otpVerified: true, email: email },
-                });
+                onClose();
+                navigate('/admin_reset_password', { state: { otpVerified: true, email: email } });
             }, 1500);
         } catch (error) {
             setSuccessMessage('');
@@ -56,13 +49,11 @@ const AdminForgetOTP = ({ show, onClose, email }) => {
     };
 
     const resendOTP = async () => {
+        setIsSending(true);
         try {
             const response = await axios.post(
-                BaseUrl,
-                {
-                    resend: "true",
-                    email: email,   // ✅ lowercase
-                },
+                RESEND_URL,
+                { email: email },
                 { withCredentials: true }
             );
 
@@ -70,36 +61,32 @@ const AdminForgetOTP = ({ show, onClose, email }) => {
             setErrorMessage('');
         } catch (error) {
             setSuccessMessage('');
-            setErrorMessage(error.response?.data?.error || 'Something went wrong.');
+            // Agar OTP abhi valid hai to backend se ye message milega
+            setErrorMessage(
+                error.response?.data?.error ||
+                error.response?.data?.message ||
+                'Something went wrong.'
+            );
+        } finally {
+            setIsSending(false);
         }
     };
 
     if (!show) return null;
 
     return (
-        <div
-            className="modal d-block"
-            tabIndex="-1"
-            style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-        >
+        <div className="modal d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
             <div className="modal-dialog modal-dialog-centered" style={{ marginTop: "10px" }}>
                 <div className="modal-content" style={{ borderRadius: "15px", overflow: "hidden" }}>
                     <div className="modal-header bg-dark">
-                        <h5 className="modal-title text-white">Admin OTP Verification </h5>
-                       
+                        <h5 className="modal-title text-white">Admin OTP Verification</h5>
                     </div>
                     <div className="modal-body">
-                        {successMessage && (
-                            <p style={{ color: 'green', fontWeight: 'bold' }}>{successMessage}</p>
-                        )}
-                        {errorMessage && (
-                            <p style={{ color: 'red', fontWeight: 'bold' }}>{errorMessage}</p>
-                        )}
+                        {successMessage && <p style={{ color: 'green', fontWeight: 'bold' }}>{successMessage}</p>}
+                        {errorMessage && <p style={{ color: 'red', fontWeight: 'bold' }}>{errorMessage}</p>}
 
                         <div className="mt-3">
-                            <label htmlFor="6DigitOTP" className="form-label">
-                                Enter 6 digit OTP
-                            </label>
+                            <label htmlFor="6DigitOTP" className="form-label">Enter 6 digit OTP</label>
                             <input
                                 type="text"
                                 name="otp"
@@ -116,11 +103,9 @@ const AdminForgetOTP = ({ show, onClose, email }) => {
                         </div>
                     </div>
                     <div className="modal-footer">
-                        <button className="btn btn-dark" onClick={submitForm}>
-                            Submit
-                        </button>
-                        <button className="btn btn-primary" onClick={resendOTP}>
-                            Resend OTP
+                        <button className="btn btn-dark" onClick={submitForm}>Submit</button>
+                        <button className="btn btn-primary" onClick={resendOTP} disabled={isSending}>
+                            {isSending ? "Sending..." : "Resend OTP"}
                         </button>
                     </div>
                 </div>

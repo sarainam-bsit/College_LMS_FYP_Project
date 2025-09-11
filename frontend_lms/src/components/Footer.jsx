@@ -6,7 +6,7 @@ const Footer = () => {
     <>
 
 
-    <footer className='bg-dark text-light py-4  w-100 mb-0'>
+    <footer className='backgroundFooter text-light py-4  w-100 mb-0'>
       <div className="container px-4">
         <div className="row">
           <div className="col-12 col-md-6 col-lg-3">
@@ -15,7 +15,7 @@ const Footer = () => {
             <p>Lorem ipsum, dolor sit amet , aspernatur labore tempore?</p>
           </div>
           <div className="col-12 col-md-6 col-lg-3">
-            <h4 className='text-danger'>Menu</h4>
+            <h4 className='textcolor'>Menu</h4>
             <ul className="list-unstyled">
               <li className='footerlinks'><Link to=""className='text-decoration-none text-light'>Home</Link></li>
               <li className='footerlinks'><Link to="/about"className='text-decoration-none text-light'>About</Link></li>
@@ -23,7 +23,7 @@ const Footer = () => {
             </ul>
           </div>
           <div className="col-12 col-md-6 col-lg-3">
-            <h4 className='text-danger'>More</h4>
+            <h4 className='textcolor'>More</h4>
             <ul className="list-unstyled">
               <li className='footerlinks'><Link to=""className='text-decoration-none text-light'>Feedback</Link></li>
               <li className='footerlinks'><Link to="/notifications"className='text-decoration-none text-light'>Notifications</Link></li>
@@ -32,7 +32,7 @@ const Footer = () => {
             </ul>
           </div>
         <div className="col-12 col-md-6 col-lg-3">
-            <h4 className='text-danger'>Category</h4>
+            <h4 className='textcolor'>Category</h4>
             <ul className="list-unstyled">
               <li className='footerlinks'><Link to=""className='text-decoration-none text-light'>BS Programs</Link></li>
               <li className='footerlinks'><Link to=""className='text-decoration-none text-light'>Hostel</Link></li>

@@ -2,8 +2,25 @@ i:hover {
     transform: scale(1.3);
     transition: transform 0.3s ease, 
 }
+.footerlinks{
+    margin-left: 10px;
+}
 .footerlinks:hover{
  transform: scale(1.06);  
     transition: transform 0.3s ease, 
    
 }
+.backgroundFooter{
+    background-color: rgb(70, 4, 67);
+}
+.textcolor {
+  background-color: rgb(4, 4, 63);  /* Dark blue background */
+  color: white;                     /* White text */
+  font-weight: bold;                
+  font-size: 20px;                  /* Thoda bara text */
+  padding: 8px 16px;                /* Box ke andar space */
+  border-radius: 6px;               /* Rounded edges */
+  display: inline-block;            /* Box sirf text ke size ka hoga */
+  transition: all 0.3s ease;        
+}
+

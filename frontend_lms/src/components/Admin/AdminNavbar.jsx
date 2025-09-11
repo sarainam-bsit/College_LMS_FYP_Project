@@ -20,7 +20,7 @@ const AdminNavbar = ({ handleLogout }) => {
   };
 
   return (
-    <nav className="navbar navbar-dark bg-dark fixed-top">
+    <nav className="navbar navbar-dark  fixed-top">
       <div className="container-fluid">
         <Link className="navbar-brand d-flex align-items-center" to={isLoggedIn ? "/adminhome" : "#"}>
           <img
@@ -49,7 +49,7 @@ const AdminNavbar = ({ handleLogout }) => {
           }}
         >
           <div className="offcanvas-header">
-            <h5 className="offcanvas-title text-danger mx-3 fs-3">
+            <h5 className="offcanvas-title mx-3 fs-3">
               <b>Menu</b>
             </h5>
             <button type="button" className="btn-close btn-close-white fs-5" onClick={() => setMenuOpen(false)}></button>
@@ -65,14 +65,12 @@ const AdminNavbar = ({ handleLogout }) => {
 
               {isLoggedIn && (
                 <>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/adminhome">Dashboard</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/users">Manage Users</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/teachers">Manage Teachers</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/students">Manage Students</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/adminhome">Home</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/about">About</Link></li>
                   <li className="nav-item"><Link className="navlink nav-link" to="/admin/departments">Manage Programs</Link></li>
                   <li className="nav-item"><Link className="navlink nav-link" to="/admin/course-categories">Manage Courses Categories</Link></li>
                   <li className="nav-item"><Link className="navlink nav-link" to="/admin/courses">Manage Courses</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/hostel">Hostel Requests</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/timetable">Manage Timetable</Link></li>
                   <li className="nav-item"><Link className="navlink nav-link" to="/admin/notifications">Send Notifications</Link></li>
                   <li className="nav-item"><Link className="navlink nav-link" to="/admin/settings">Settings</Link></li>
                 </>
