@@ -9,7 +9,7 @@ const Navbar = ({ isLoggedIn, handleLogout }) => {
   const location = useLocation();
 
   useEffect(() => {
-    setMenuOpen(false); // Close menu on navigation
+    setMenuOpen(false); 
   }, [location.pathname]);
 
   const handleLogoutClick = () => {

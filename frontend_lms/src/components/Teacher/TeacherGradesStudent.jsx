@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Navbar from "../Navbar";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -22,67 +21,67 @@ const TeacherGradesStudent = () => {
       try {
         const res = await axios.get(`${API_BASE}courses_by_teacher/`, {
           params: {
-              teacher_id: teacherId,
-              category_id: categoryId,
-            },
+            teacher_id: teacherId,
+            category_id: categoryId,
+          },
         });
         setTimetables(res.data);
       } catch (err) {
-  if (err.response && err.response.data && err.response.data.error) {
-    setError(err.response.data.error);
-  } else {
-    setError("Error fetching timetable.");
-  }
-}
+        if (err.response && err.response.data && err.response.data.error) {
+          setError(err.response.data.error);
+        } else {
+          setError("Error fetching timetable.");
+        }
+      }
     };
 
-    if ( categoryId) {
+    if (categoryId) {
       fetchTimetable();
     }
-  }, [ categoryId]);
+  }, [categoryId]);
 
   return (
     <>
-    <Navbar />
+
       <div
         className="container p-1 text-center"
         style={{ marginTop: '80px', minHeight: '90vh' }}
       >
-<div className="row justify-content-center">
-        <div className="col-10 col-sm-8 col-md-6">
-          <h2 className="heading text-center mb-5 mt-3  text-white py-3 px-3 mx-auto rounded shadow-lg" style={{ maxWidth: '250px', backgroundColor: 'rgb(4, 4, 63)' }}>
-            Grades
-          </h2>
+        <div className="row justify-content-center">
+          <div className="col-10 col-sm-8 col-md-6">
+            <h2 className="heading text-center mb-5 mt-3  text-white py-3 px-3 mx-auto rounded shadow-lg" style={{ maxWidth: '250px', backgroundColor: 'rgb(4, 4, 63)' }}>
+              Grades
+            </h2>
+          </div>
         </div>
-      </div>
-      {error && <div className="alert alert-danger">{error}</div>}
+        {error && <div className="alert alert-danger">{error}</div>}
 
-      <div className="table-responsive card shadow-sm">
-        <table className="table table-striped table-hover text-center align-middle">
-          <thead >
-            <tr>
-              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px'}}>Course Code</th>
-              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px'}}>Course Title</th>
-              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px'}}>Credit Hour</th>
-              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px'}}>Category</th>
-              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px'}}>Teacher</th>
-              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px'}}>View Students</th>
-            </tr>
-          </thead>
-          <tbody>
-            {timetables.length === 0 ? (
+        <div className="table-responsive card shadow-sm">
+          <table className="table table-striped table-hover text-center align-middle">
+            <thead >
               <tr>
-                <td colSpan={5}>No Students found</td>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px' }}>Course Code</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px' }}>Course Title</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px' }}>Credit Hour</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px' }}>Category</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px' }}>Teacher</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px' }}>View Students</th>
               </tr>
-            ) : (
-              timetables.map((t) => (
-                <tr key={t.id}>
-                  <td>{t.C_Code}</td>
-                  <td>{t.C_Title}</td>
-                  <td>{t.Credit_Hour}</td>
-                  <td>{t.C_Category_Full}</td>
-                  <td>{t.Teacher_Name}</td>
-                  <td>
+            </thead>
+            <tbody>
+              {timetables.length === 0 ? (
+                <tr>
+                  <td colSpan={5}>No Students found</td>
+                </tr>
+              ) : (
+                timetables.map((t) => (
+                  <tr key={t.id}>
+                    <td>{t.C_Code}</td>
+                    <td>{t.C_Title}</td>
+                    <td>{t.Credit_Hour}</td>
+                    <td>{t.C_Category_Full}</td>
+                    <td>{t.Teacher_Name}</td>
+                    <td>
                       <Link
                         to={`/teacher/coursestudents/${t.id}`}
                         className="btn btn-sm btn-danger"
@@ -90,13 +89,13 @@ const TeacherGradesStudent = () => {
                         View Students
                       </Link>
                     </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
     </>
   );
 };

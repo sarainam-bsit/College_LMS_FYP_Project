@@ -27,7 +27,7 @@ const TeacherTasks = () => {
     Course_name: "",
   });
 
-  // Fetch teacher courses
+  
   useEffect(() => {
     if (!teacherId) return;
     const fetchCourses = async () => {
@@ -293,7 +293,7 @@ const TeacherTasks = () => {
           </div>
         )}
 
-        {/* Task List */}
+        
         <h4 style={{ fontWeight: "bold", marginBottom: "10px", fontSize: '27px' }}>Task List</h4>
         {tasks.length === 0 ? (
           <div className="alert alert-info">No tasks found for this course</div>

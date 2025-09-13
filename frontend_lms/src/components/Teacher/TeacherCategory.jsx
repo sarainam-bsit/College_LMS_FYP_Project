@@ -9,13 +9,13 @@ const TeacherCategory = () => {
   const [departmentName, setDepartmentName] = useState("");
 
   useEffect(() => {
-    // Fetch department name
+   
     axios
       .get(`http://127.0.0.1:8000/dept/dept_api/${deptId}/`)
       .then(res => setDepartmentName(res.data.Department_Name))
       .catch(err => console.error("Error fetching department:", err));
 
-    // Fetch categories
+ 
     axios
       .get(`http://127.0.0.1:8000/dept/course-categories/by_department/?department_id=${deptId}`)
       .then(res => setCategories(res.data))
@@ -27,7 +27,7 @@ const TeacherCategory = () => {
       className="container p-3" 
       style={{ marginTop: "80px", minHeight: "90vh", backgroundColor: "#ebeaf2ff", fontFamily: "Arial, sans-serif" }}
     >
-      {/* Page Heading */}
+    
       <h2
         className="text-center text-white p-3 rounded shadow-lg mx-auto mb-5"
         style={{ backgroundColor: "rgb(70, 4, 67)", maxWidth: "350px", fontWeight: "bold", letterSpacing: "1px" }}
@@ -35,7 +35,7 @@ const TeacherCategory = () => {
         {departmentName}
       </h2>
 
-      {/* Categories Grid */}
+    
       <div className="row g-4">
         {categories.length > 0 ? (
           categories.map(cat => (

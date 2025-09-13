@@ -10,7 +10,7 @@ const CarouselBackground = () => {
       className="carousel slide"
       data-bs-ride="carousel"
     >
-      {/* Indicators (dots) */}
+     
       <div className="carousel-indicators">
         <button
           type="button"
@@ -34,7 +34,7 @@ const CarouselBackground = () => {
         ></button>
       </div>
 
-      {/* Carousel Slides */}
+      
       <div className="carousel-inner">
         <div className="carousel-item active">
           <img
@@ -74,7 +74,7 @@ const CarouselBackground = () => {
         </div>
       </div>
 
-      {/* Controls (arrows) */}
+     
       <button
         className="carousel-control-prev"
         type="button"

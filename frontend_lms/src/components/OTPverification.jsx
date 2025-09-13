@@ -37,11 +37,11 @@ const OTPverification = ({ show, onClose, email, setIsLoggedIn, setUserRole }) =
 
             });
 
-            // setSuccessMessage(response.data.message);
+         
             toast.success(response.data.message)
             setErrorMessage('');
             setOTPData({ OTP_Digits: '' });
-            const role = response.data.role || ''; // pehle define karo
+            const role = response.data.role || ''; 
             if (role) {
                 localStorage.setItem('role', role);
             }
@@ -49,7 +49,7 @@ const OTPverification = ({ show, onClose, email, setIsLoggedIn, setUserRole }) =
             // Redirect after short delay
             setTimeout(() => {
                 localStorage.setItem("isLoggedIn", "true");
-                localStorage.setItem("userRole", role);  // Save here!
+                localStorage.setItem("userRole", role);  
                 setIsLoggedIn(true);
                 setUserRole(role);
                 if (role === 'student' && response.data.student_id) {
@@ -83,7 +83,7 @@ const OTPverification = ({ show, onClose, email, setIsLoggedIn, setUserRole }) =
 
             });
 
-            // setSuccessMessage(response.data.message);
+            
             toast.success(response.data.message)
             setErrorMessage('');
         } catch (error) {

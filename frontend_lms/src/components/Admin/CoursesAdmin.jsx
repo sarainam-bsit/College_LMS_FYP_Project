@@ -15,7 +15,7 @@ const CoursesAdmin = () => {
   });
   const [editId, setEditId] = useState(null);
 
-  // Fetch courses
+ 
   const fetchCourses = async () => {
     try {
       const res = await axios.get("http://127.0.0.1:8000/Course/courses/");
@@ -25,7 +25,7 @@ const CoursesAdmin = () => {
     }
   };
 
-  // Fetch dropdowns
+  
   const fetchDropdowns = async () => {
     try {
       const res = await axios.get("http://127.0.0.1:8000/Course/courses/dropdowns/");
@@ -110,7 +110,7 @@ const CoursesAdmin = () => {
         Courses
       </h2>
 
-      {/* Form */}
+     
       <form
         onSubmit={handleSubmit}
         style={{
@@ -122,7 +122,7 @@ const CoursesAdmin = () => {
         }}
         className="row g-3"
       >
-        {/* Category Dropdown */}
+       
         <div className="col-md-6">
           <select
             name="C_Category"

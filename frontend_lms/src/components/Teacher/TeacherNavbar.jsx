@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import "../Navbar.css"; 
 
 const TeacherNavbar = ({ isLoggedIn, handleLogout }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -34,7 +33,6 @@ const TeacherNavbar = ({ isLoggedIn, handleLogout }) => {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        {/* Glass overlay */}
         {menuOpen && (
           <div
             className="glass-overlay"

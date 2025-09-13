@@ -21,7 +21,7 @@ const AdminOTPVerification = ({ show, onClose, email, setIsLoggedIn, setUserRole
    localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("userRole", "admin");
 
-      // ✅ update React state so navbar shows
+      
       setIsLoggedIn(true);
       setUserRole("admin");
 
@@ -41,7 +41,7 @@ const AdminOTPVerification = ({ show, onClose, email, setIsLoggedIn, setUserRole
   const handleResend = async () => {
     try {
       const res = await axios.post(API_RESEND_OTP, { email });
-      // setMessage(res.data.message);
+     
       toast.success(res.data.message)
     } catch (err) {
       setMessage(err.response?.data?.error || "Resend OTP failed");

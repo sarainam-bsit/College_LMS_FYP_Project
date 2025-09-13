@@ -1,11 +1,10 @@
 import React from 'react';
-import Navbar from '../Navbar';
 import Footer from '../Footer';
 
 const Library = () => {
     return (
         <>
-            <Navbar />
+           
             <div className="container-fluid py-4" style={{ marginTop: "80px", minHeight: "90vh", backgroundColor: "#ebeaf2ff" }}>
                 <div className="card border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: "#f5ecf4ff" }}>
                     

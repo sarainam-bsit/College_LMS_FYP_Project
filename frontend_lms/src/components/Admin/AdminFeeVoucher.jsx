@@ -286,7 +286,7 @@ export default function AdminFeeVoucherPage() {
         </button>
       </div>
 
-      {/* Bulk Voucher */}
+    
       <div
         style={{
           marginBottom: "30px",
@@ -505,7 +505,7 @@ export default function AdminFeeVoucherPage() {
         </table>
       </div>
 
-      {/* Bootstrap Modal */}
+      
       <div
         className="modal fade"
         id="markPaidModal"

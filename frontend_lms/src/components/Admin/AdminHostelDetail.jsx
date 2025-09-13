@@ -14,7 +14,7 @@ const AdminHostelDetail = () => {
   });
   const [editId, setEditId] = useState(null);
 
-  // Fetch hostel details
+  
   const fetchHostels = async () => {
     try {
       const res = await axios.get(`${API_BASE}hosteldetail/`);
@@ -28,7 +28,7 @@ const AdminHostelDetail = () => {
     fetchHostels();
   }, []);
 
-  // Handle input change
+  
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (files) {
@@ -38,7 +38,7 @@ const AdminHostelDetail = () => {
     }
   };
 
-  // Submit form
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData();
@@ -64,7 +64,7 @@ const AdminHostelDetail = () => {
     }
   };
 
-  // Edit hostel
+  
   const handleEdit = (hostel) => {
     setEditId(hostel.id);
     setFormData({
@@ -75,7 +75,7 @@ const AdminHostelDetail = () => {
     toast.info(`Editing Hostel: ${hostel.Hostel_Rooms_Name}`);
   };
 
-  // Delete hostel
+  
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this hostel?")) return;
     try {
@@ -104,7 +104,7 @@ const AdminHostelDetail = () => {
         Hostel Details
       </h2>
 
-      {/* Form */}
+     
       <form
         onSubmit={handleSubmit}
         style={{
@@ -193,7 +193,7 @@ const AdminHostelDetail = () => {
         )}
       </form>
 
-      {/* Hostel Table */}
+     
       <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "center" }}>
         <thead>
           <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>

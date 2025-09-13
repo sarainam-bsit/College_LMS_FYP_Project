@@ -1,16 +1,15 @@
 import React from 'react';
-import Navbar from '../Navbar';
 import Footer from '../Footer';
 import Hostelroom from './Hostelroom';
 
 const Hostel = () => {
     return (
         <>
-            <Navbar />
+            
             <div className="container-fluid py-4" style={{ marginTop: "80px", minHeight: "90vh", backgroundColor: "#ebeaf2ff" }}>
                 <div className="card border-0 shadow-sm rounded-4 p-3" style={{ backgroundColor: "#f5ecf4ff" }}>
                     
-                    {/* Heading */}
+                 
                     <div className="row justify-content-center">
                         <div className="col-12 col-md-6">
                             <h2
@@ -27,10 +26,10 @@ const Hostel = () => {
                         </div>
                     </div>
 
-                    {/* Content */}
+                   
                     <div className="row g-4 align-items-center">
                         
-                        {/* Left Text */}
+                        
                         <div className="col-md-5">
                             <div className="card border-0 shadow-sm rounded-4 p-4 h-100"
                                 style={{ borderLeft: "5px solid rgb(70, 4, 67)", backgroundColor: "#fff" }}>
@@ -47,7 +46,7 @@ const Hostel = () => {
                             </div>
                         </div>
 
-                        {/* Right Carousel */}
+                       
                         <div className="col-md-7">
                             <div className="card border-0 shadow-lg rounded-4 overflow-hidden"
                                 style={{ border: "3px solid rgb(4, 4, 63)" }}>

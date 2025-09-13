@@ -26,7 +26,7 @@ export default function LibraryFeeVoucherPage() {
     fetchLibraryApplications();
   }, []);
 
-  // Fetch vouchers but only Library fee
+ 
   const fetchVouchers = async () => {
     try {
       const res = await axios.get(API_URL);
@@ -37,7 +37,7 @@ export default function LibraryFeeVoucherPage() {
     }
   };
 
-  // Fetch approved applications
+  
   const fetchLibraryApplications = async () => {
     try {
       const res = await axios.get(LIBRARY_API);
@@ -47,7 +47,7 @@ export default function LibraryFeeVoucherPage() {
     }
   };
 
-  // Generate Library Fee
+  
   const handleGenerateLibraryFee = async () => {
     if (libraryForm.selectedIds.length === 0 || !libraryForm.amount) {
       return toast.warn("Select at least one application and enter amount.");
@@ -84,7 +84,7 @@ export default function LibraryFeeVoucherPage() {
     }
   };
 
-  // Mark Paid
+  
   const openModal = (voucher) => {
     setSelectedVoucher({
       ...voucher,
@@ -115,7 +115,7 @@ export default function LibraryFeeVoucherPage() {
     }
   };
 
-  // Delete
+  
   const deleteVoucher = async (voucherId) => {
     if (!window.confirm("Are you sure?")) return;
 
@@ -156,7 +156,7 @@ export default function LibraryFeeVoucherPage() {
         Library Fee Vouchers
       </h2>
 
-      {/* Library Generate */}
+     
       <div
         className="shadow mt-4"
         style={{

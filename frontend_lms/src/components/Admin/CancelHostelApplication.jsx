@@ -3,12 +3,12 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const API_BASE = "http://127.0.0.1:8000"; // apna backend base URL lagao
+const API_BASE = "http://127.0.0.1:8000"; 
 
 const CancelHostelApplication = () => {
   const [applications, setApplications] = useState([]);
 
-  // ✅ Load all applications
+
   useEffect(() => {
     fetchApplications();
   }, []);
@@ -25,7 +25,7 @@ const CancelHostelApplication = () => {
     }
   };
 
-  // ✅ Update status
+ 
   const updateStatus = async (id, status) => {
     try {
       await axios.patch(`${API_BASE}/hostel/hostelcancelapplication/${id}/`, {

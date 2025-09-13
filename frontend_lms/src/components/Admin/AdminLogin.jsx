@@ -62,7 +62,7 @@ export default function AdminLogin({ setIsLoggedIn, setUserRole }) {
       `}</style>
 
       <div className="background-wrapper">
-        <CarouselBackground /> {/* Only images background */}
+        <CarouselBackground /> 
         <div className="login-overlay">
           <div className="login-card">
             <form onSubmit={handleLogin}>
@@ -111,7 +111,7 @@ export default function AdminLogin({ setIsLoggedIn, setUserRole }) {
         </div>
       </div>
 
-      {/* OTP Modal */}
+      
       <AdminOTPVerification
         show={showOtp}
         onClose={() => setShowOtp(false)}

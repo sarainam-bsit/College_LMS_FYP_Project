@@ -24,7 +24,7 @@ export default function AdminDateSheet() {
     is_datesheet: true,
   });
 
-  // ✅ Fetch all data
+  
   const fetchAll = async () => {
     try {
       const [dRes, cRes, crRes, tRes, dsRes] = await Promise.all([
@@ -48,12 +48,12 @@ export default function AdminDateSheet() {
     fetchAll();
   }, []);
 
-  // ✅ Form change
+  
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // ✅ Submit
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -76,7 +76,7 @@ export default function AdminDateSheet() {
     }
   };
 
-  // ✅ Button style helper
+  
   const buttonStyle = (bg) => ({
     padding: "10px 20px",
     borderRadius: "5px",
@@ -105,7 +105,7 @@ export default function AdminDateSheet() {
         DateSheet
       </h2>
 
-      {/* Form */}
+      
       <div
         style={{
           marginBottom: "30px",
@@ -116,7 +116,7 @@ export default function AdminDateSheet() {
         }}
       >
         <form onSubmit={handleSubmit} className="row g-3">
-          {/* Department */}
+         
           <div className="col-md-6">
             <label className="fs-5 fw-bold">Department</label>
             <select
@@ -134,7 +134,7 @@ export default function AdminDateSheet() {
             </select>
           </div>
 
-          {/* Category */}
+     
           <div className="col-md-6">
             <label className="fs-5 fw-bold">Category</label>
             <select
@@ -152,7 +152,7 @@ export default function AdminDateSheet() {
             </select>
           </div>
 
-          {/* Course */}
+        
           <div className="col-md-6">
             <label className="fs-5 fw-bold">Courses</label>
             <select
@@ -172,7 +172,7 @@ export default function AdminDateSheet() {
             </select>
           </div>
 
-          {/* Teacher */}
+       
           <div className="col-md-6">
             <label className="fs-5 fw-bold">Teacher</label>
             <select
@@ -191,7 +191,7 @@ export default function AdminDateSheet() {
             </select>
           </div>
 
-          {/* Day */}
+       
           <div className="col-md-4">
             <label className="fs-5 fw-bold">Day</label>
             <select
@@ -210,7 +210,7 @@ export default function AdminDateSheet() {
             </select>
           </div>
 
-          {/* Date */}
+       
           <div className="col-md-4">
             <label className="fs-5 fw-bold">Date</label>
             <input
@@ -223,7 +223,7 @@ export default function AdminDateSheet() {
             />
           </div>
 
-          {/* Start Time */}
+          
           <div className="col-md-2">
             <label className="fs-5 fw-bold">End Time</label>
             <input
@@ -237,7 +237,7 @@ export default function AdminDateSheet() {
             />
           </div>
 
-          {/* End Time */}
+         
           <div className="col-md-2">
             <label className="fs-5 fw-bold">Start Time</label>
             <input
@@ -258,7 +258,7 @@ export default function AdminDateSheet() {
         </form>
       </div>
 
-      {/* Table */}
+     
       <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "center" }}>
         <thead>
           <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>

@@ -8,7 +8,7 @@ const API_BASE = "http://127.0.0.1:8000"; // apna backend base URL lagao
 const AdminLibraryApplications = () => {
   const [applications, setApplications] = useState([]);
 
-  // ✅ Load all applications
+  
   useEffect(() => {
     fetchApplications();
   }, []);
@@ -23,7 +23,7 @@ const AdminLibraryApplications = () => {
     }
   };
 
-  // ✅ Update status
+  
   const updateStatus = async (id, status) => {
     try {
       await axios.patch(`${API_BASE}/library/libraryform/${id}/`, {
@@ -34,7 +34,7 @@ const AdminLibraryApplications = () => {
           ? "✅ Application Approved"
           : "❌ Application Rejected"
       );
-      fetchApplications(); // refresh list
+      fetchApplications(); 
     } catch (error) {
       console.error("Error updating status", error);
       toast.error("⚠️ Error updating status");

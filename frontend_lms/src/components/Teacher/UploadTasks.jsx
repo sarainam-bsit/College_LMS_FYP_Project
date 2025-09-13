@@ -81,7 +81,7 @@ const UploadTasks = () => {
     <div className="container mt-4">
       <h2 className="mb-4 text-primary">Manage Assignments & Quizzes</h2>
 
-      {/* Form */}
+     
       <div className="card mb-4 shadow-sm">
         <div className="card-body">
           <form onSubmit={handleSubmit} className="row g-3">
@@ -122,7 +122,7 @@ const UploadTasks = () => {
         </div>
       </div>
 
-      {/* Table */}
+      
       <div className="table-responsive card shadow-sm">
         <table className="table table-striped table-hover mb-0">
           <thead className="table-primary">

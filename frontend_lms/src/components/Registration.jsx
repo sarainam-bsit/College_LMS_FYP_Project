@@ -36,8 +36,7 @@ const Registration = ({ setIsLoggedIn, setUserRole }) => {
 
    
     if (isLoggedIn) {
-        // Agar login hai to registration page block
-
+        
         return <Navigate to="/home" replace />;
     }
 
@@ -56,7 +55,7 @@ const Registration = ({ setIsLoggedIn, setUserRole }) => {
             const response = await axios.post(BaseUrl, studentFormData);
 
             if (response.status === 200) {
-                // localStorage.setItem('userRole', 'student'); 
+                
                 setstudentData({
                     Reg_No: '',
                     Roll_No: '',
@@ -70,11 +69,11 @@ const Registration = ({ setIsLoggedIn, setUserRole }) => {
                 toast.success(response.data.message);
 
                 if (response.data.student_id) {
-                    // If backend sends Student_Email in response, use that:
+                    
                     if (response.data.Student_Email) {
                         setUserEmail(response.data.Student_Email);
                     } else {
-                        // fallback to frontend state:
+                        
                         setUserEmail(studentData.Student_Email);
                     }
                     setTimeout(() => {
@@ -249,11 +248,11 @@ const Registration = ({ setIsLoggedIn, setUserRole }) => {
                                 onClose={() => {
                                     setShowOTP(false);
                                     setUserEmail(null);
-                                    setIsLoggedIn(true);  // ✅ braces properly closed
+                                    setIsLoggedIn(true);  
                                 }}
                                 email={userEmail}
                                 setIsLoggedIn={setIsLoggedIn}
-                                setUserRole={setUserRole} // agar role bhi update karna hai
+                                setUserRole={setUserRole} 
                             />
 
                         </form>

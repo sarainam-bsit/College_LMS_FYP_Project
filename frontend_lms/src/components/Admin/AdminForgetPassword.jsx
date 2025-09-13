@@ -27,7 +27,7 @@ const AdminForgetPassword = () => {
         try {
             const response = await axios.post(
                 'http://127.0.0.1:8000/adminaccount/admin_forget_password/',
-                { email: emailData.email },   // ✅ lowercase key
+                { email: emailData.email },   
                 { withCredentials: true }
             );
 
@@ -121,7 +121,7 @@ const AdminForgetPassword = () => {
                     <label style={{ fontWeight: '500', marginBottom: '5px', display: 'block', color: 'rgb(4, 4, 63)' }}>Email:</label>
                     <input
                         type="email"
-                        name='email'   // ✅ lowercase
+                        name='email'   
                         value={emailData.email}
                         onChange={handleChange}
                         placeholder="Enter your registered email"
@@ -135,7 +135,7 @@ const AdminForgetPassword = () => {
                     <AdminForgetOTP
                         show={showOTP}
                         onClose={() => setShowOTP(false)}
-                        email={emailData.email}   // ✅ lowercase
+                        email={emailData.email}  
                     />
                 </form>
             </div>

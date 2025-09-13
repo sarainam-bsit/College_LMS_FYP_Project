@@ -21,7 +21,7 @@ const AdminResetPassword = () => {
     if (!location.state?.otpVerified) {
       navigate('/admin_forget_password');
     } else {
-      // OTP verify hone ke baad email set karo
+      
       setFormData(prev => ({ ...prev, email: location.state.email || '' }));
     }
   }, [location.state, navigate]);
@@ -126,7 +126,7 @@ const AdminResetPassword = () => {
             value={formData.email}
             onChange={handleChange}
             className="reset-input"
-            readOnly // email OTP ke baad set hoga
+            readOnly 
           />
           {fieldErrors.email && (
             <div style={{

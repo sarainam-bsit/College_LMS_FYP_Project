@@ -5,14 +5,14 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const TeacherTaskDetail = () => {
-  const { categoryId } = useParams(); // URL se le raha hai
+  const { categoryId } = useParams(); 
   const [timetables, setTimetables] = useState([]);
   const [error, setError] = useState("");
 
   const API_BASE = "http://127.0.0.1:8000/Course/courses/";
 
   useEffect(() => {
-    const teacherId = localStorage.getItem("teacherId"); // student id login ke time save hogi
+    const teacherId = localStorage.getItem("teacherId"); 
 
     if (!teacherId) {
       setError("teacher not found. Please login again.");

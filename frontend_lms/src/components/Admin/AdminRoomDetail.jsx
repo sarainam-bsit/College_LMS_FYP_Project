@@ -138,7 +138,7 @@ const AdminRoomDetail = () => {
         Room Details
       </h2>
 
-      {/* Form Card */}
+      
       <div style={{ marginBottom: "20px",
           color: "rgba(8, 8, 104, 1)",
          
@@ -199,7 +199,7 @@ const AdminRoomDetail = () => {
           </div>
         </div>
 
-        {/* Image Upload */}
+        
         <div className="mb-3">
           <label className="form-label">Room Image</label>
           <input
@@ -210,7 +210,7 @@ const AdminRoomDetail = () => {
           />
         </div>
 
-        {/* Facilities */}
+       
         <div className="mb-3 row g-2">
           {[
             { label: "AC", key: "ac" },
@@ -238,7 +238,7 @@ const AdminRoomDetail = () => {
           ))}
         </div>
 
-        {/* Description */}
+       
         <div className="mb-3">
           <textarea
             className="form-control"
@@ -248,7 +248,7 @@ const AdminRoomDetail = () => {
           />
         </div>
 
-        {/* Buttons */}
+        
         <button
           className={`btn ${roomForm.id ? "btn-warning" : "btn-primary"}`}
           onClick={handleSubmit}
@@ -262,7 +262,7 @@ const AdminRoomDetail = () => {
         )}
       </div>
 
-      {/* Rooms Table */}
+     
       <div className="card shadow-sm p-3">
         <h4>Rooms List</h4>
         <div className="table-responsive">

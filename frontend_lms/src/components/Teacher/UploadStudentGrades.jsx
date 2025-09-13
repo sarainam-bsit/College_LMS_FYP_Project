@@ -25,7 +25,7 @@ const UploadStudentGrades = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
 
-  // Fetch categories
+  
   useEffect(() => {
     axios
       .get("http://127.0.0.1:8000/Grade/grades/category_dropdown/")
@@ -33,7 +33,7 @@ const UploadStudentGrades = () => {
       .catch((err) => console.error("Error fetching categories:", err));
   }, []);
 
-  // Fetch course info if missing
+ 
   useEffect(() => {
     if ((!courseInfo.code || !courseInfo.title) && courseId) {
       axios
@@ -48,7 +48,7 @@ const UploadStudentGrades = () => {
     }
   }, [courseId]);
 
-  // Fetch existing grade
+ 
   useEffect(() => {
     if (!student || !courseId) return;
 
@@ -163,7 +163,7 @@ const UploadStudentGrades = () => {
         </div>
       </div>
         <form onSubmit={handleSubmit}>
-          {/* Student Info */}
+          
           <div className="row mb-3">
             <div className="col-md-6 mb-3">
               <label className="fw-bold">Student Name</label>
@@ -186,7 +186,7 @@ const UploadStudentGrades = () => {
             </div>
           </div>
 
-          {/* Category */}
+        
           <div className="row mb-3">
             <div className="col-md-6 mb-3">
               <label className="fw-bold">Course Category (Semester/Part)</label>
@@ -206,7 +206,7 @@ const UploadStudentGrades = () => {
             </div>
           </div>
 
-          {/* Course Code & Title */}
+         
           <div className="row mb-3">
             <div className="col-md-6 mb-3">
               <label className="fw-bold">Course Code</label>
@@ -218,7 +218,6 @@ const UploadStudentGrades = () => {
             </div>
           </div>
 
-          {/* Marks */}
           <div className="row mb-3">
             <div className="col-md-4 mb-3">
               <label className="fw-bold">Course Total</label>
@@ -243,7 +242,7 @@ const UploadStudentGrades = () => {
             </div>
           </div>
 
-          {/* Totals & Grade */}
+        
           <div className="row mb-3 text-center">
             <div className="col-md-4 mb-3">
               <label className="fw-bold">Total Obtained</label>
@@ -259,7 +258,7 @@ const UploadStudentGrades = () => {
             </div>
           </div>
 
-          {/* Remarks */}
+        
           <div className="card bg-white shadow-sm mb-3 p-3">
             <label className="fw-bold text-secondary">Remarks</label>
             <textarea
@@ -272,7 +271,7 @@ const UploadStudentGrades = () => {
             ></textarea>
           </div>
 
-          {/* Buttons */}
+      
           <div className="text-center">
             <button type="submit" className="btn btn-success me-2">
               {gradeId ? "Update Grade" : "Submit Grade"}

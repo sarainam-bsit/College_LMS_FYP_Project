@@ -38,7 +38,7 @@ const Feedback = ({ isAdmin = false }) => {
     }
   };
 
-  // Chunk array into groups of 3
+  
   const chunkArray = (arr, size) => {
     const chunks = [];
     for (let i = 0; i < arr.length; i += size) {
@@ -49,14 +49,14 @@ const Feedback = ({ isAdmin = false }) => {
 
   return (
     <div className="container my-5 feedback-section">
-      {/* 🔹 Heading */}
+      
       <div className="row justify-content-center">
         <div className="col-10 col-sm-8 col-md-6 text-center">
           <h2 className="feedback-title mb-5">Student Feedback</h2>
         </div>
       </div>
 
-      {/* 🔹 Admin Feedback Form */}
+      
       {isAdmin && (
         <div className="mb-4 card shadow-lg border-0 feedback-form">
           <input
@@ -85,7 +85,7 @@ const Feedback = ({ isAdmin = false }) => {
         </div>
       )}
 
-      {/* 🔹 Carousel */}
+     
       <div id="feedbackCarousel" className="carousel slide" data-bs-ride="carousel">
         <div className="carousel-inner">
           {feedbacks.length === 0 ? (
@@ -118,7 +118,7 @@ const Feedback = ({ isAdmin = false }) => {
           )}
         </div>
 
-        {/* 🔹 Custom Arrows */}
+       
         <button
           className="carousel-control-prev"
           type="button"

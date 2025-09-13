@@ -27,16 +27,16 @@ const StudentGrades = () => {
       style={{
         marginTop: "80px",
         minHeight: "90vh",
-        backgroundColor: "#ebeaf2ff", // light background like DeptAdmin
+        backgroundColor: "#ebeaf2ff", 
         borderRadius: "12px",
       }}
     >
-      {/* Heading */}
+     
       <h2
         className="mb-4 py-2 px-3 mx-auto rounded shadow"
         style={{
           maxWidth: "380px",
-          backgroundColor: "rgb(70, 4, 67)", // deep purple
+          backgroundColor: "rgb(70, 4, 67)", 
           color: "white",
           fontWeight: "bold",
           textAlign: "center",
@@ -54,15 +54,15 @@ const StudentGrades = () => {
               key={index}
               className="mb-5 p-4 rounded shadow-lg"
               style={{
-                backgroundColor: "#f5ecf4ff", // soft pinkish like DeptAdmin form
+                backgroundColor: "#f5ecf4ff", 
                 border: "2px solid white",
               }}
             >
-              {/* Semester Info */}
+              
               <h4
                 className="mb-3 py-2 px-3 rounded"
                 style={{
-                  backgroundColor: "rgba(216, 216, 241, 1)", // dark navy
+                  backgroundColor: "rgba(216, 216, 241, 1)", 
                   color: "white",
                   fontWeight: "bold",
                   textAlign: "center",
@@ -74,7 +74,7 @@ const StudentGrades = () => {
                 <span className="fw-bold">{semester.category}</span>
               </h4>
 
-              {/* Table */}
+            
               <div className="table-responsive card shadow-sm mt-3">
                 <table className="table table-bordered align-middle mb-0 text-center">
                   <thead>
@@ -124,14 +124,14 @@ const StudentGrades = () => {
                 </table>
               </div>
 
-              {/* Supply Courses */}
+              
               {(semester.supply_courses || []).length > 0 && (
                 <div className="mt-3 text-danger fw-bold text-start">
                   Supply Courses: {(semester.supply_courses || []).join(", ")}
                 </div>
               )}
 
-              {/* Summary Box */}
+           
               <div
                 className="mt-3 p-3 rounded shadow-sm"
                 style={{ backgroundColor: "#ffffff" }}

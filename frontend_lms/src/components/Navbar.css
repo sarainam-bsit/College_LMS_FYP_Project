@@ -39,16 +39,16 @@
 }
 
 .offcanvas-end {
-  width: 250px;           /* Set a fixed width */
-  max-width: 80vw;        /* Responsive */
+  width: 250px;          
+  max-width: 80vw;        
   /* max-height: 100vh; */
   z-index: 1050; 
 }
 
 .offcanvas-body {
   background-color: rgb(2, 2, 40);
-  overflow-y: auto;       /* Menu scrollable */
-  max-height: 100vh;      /* Full height of viewport */
+  overflow-y: auto;       
+  max-height: 100vh;      
   -ms-overflow-style: none;
   scrollbar-width: none;
 }

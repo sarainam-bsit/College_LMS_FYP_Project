@@ -77,7 +77,7 @@ import StudentDateSheet from './StudentDateSheet';
 import TeacherDateSheet from './Teacher/TeacherDateSheet';
 
 
-// ✅ Student & Teacher Protected Route
+
 function ProtectedRoute({ children, allowedRoles }) {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   const userRole = localStorage.getItem("userRole");
@@ -95,7 +95,7 @@ function ProtectedRoute({ children, allowedRoles }) {
   return children;
 }
 
-// ✅ Admin Protected Route
+
 function AdminProtectedRoute({ children }) {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   const userRole = localStorage.getItem("userRole");
@@ -107,7 +107,7 @@ function AdminProtectedRoute({ children }) {
   return children;
 }
 
-// ✅ Registration Route
+
 function RegistrationRoute({ children }) {
   const location = useLocation();
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -141,7 +141,7 @@ const Main = () => {
     setIsLoggedIn(false);
     setUserRole(null);
 
-    // ✅ Redirect based on role
+   
     if (location.pathname.includes("/admin")) {
       navigate("/adminlogin", { replace: true });
     } else {
@@ -149,7 +149,7 @@ const Main = () => {
     }
   };
   useEffect(() => {
-    // Tab title set karo
+    
     document.title = "College LMS";
 
   }, [location]);
@@ -158,23 +158,22 @@ const Main = () => {
   return (
 
     <>
-      {/* Admin Navbar by default on login pages */}
+     
 {(location.pathname === "/login" || location.pathname === "/adminlogin" || userRole === "admin") && (
   <AdminNavbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
 )}
 
-      {/* Student Navbar */}
+      
 {(userRole === "student" || location.pathname === "/registration") && (
   <Navbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} role={userRole} />
 )}
 
-      {/* Teacher Navbar */}
+      
       {userRole === "teacher" && isLoggedIn && (
         <TeacherNavbar isLoggedIn={isLoggedIn} handleLogout={handleLogout} role={userRole} />
       )}
       <Routes>
-        {/* Auth */}
-        {/* Auth */}
+        
         <Route path="/login" element={
           <PublicRoute>
             <Login setIsLoggedIn={setIsLoggedIn} setUserRole={setUserRole} />
@@ -191,7 +190,7 @@ const Main = () => {
         <Route path="/admin_reset_password" element={<AdminResetPassword />} />
         <Route path="/registration" element={<RegistrationRoute><Registration setIsLoggedIn={setIsLoggedIn} setUserRole={setUserRole} /></RegistrationRoute>} />
 
-        {/* Student & Teacher Routes */}
+      
         <Route path="/" element={<ProtectedRoute allowedRoles={["student", "teacher"]}><Home /></ProtectedRoute>} />
         <Route path="/home" element={<ProtectedRoute allowedRoles={["student", "teacher"]}><Home /></ProtectedRoute>} />
         <Route path="/about" element={<ProtectedRoute allowedRoles={["student", "teacher", "admin"]}><About /></ProtectedRoute>} />
@@ -238,7 +237,7 @@ const Main = () => {
         <Route path="/teacherprofile" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherProfile /></ProtectedRoute>} />
         <Route path="/staff" element={<ProtectedRoute allowedRoles={["student","teacher", "admin"]}><Staff /></ProtectedRoute>} />
 
-        {/* Admin Routes */}
+      
         <Route path="/adminhome" element={<AdminProtectedRoute><AdminHome /></AdminProtectedRoute>} />
         <Route path="/admin/departments" element={<AdminProtectedRoute><DepartmentAdmin /></AdminProtectedRoute>} />
         <Route path="/admin/course-categories" element={<AdminProtectedRoute><CourseCategoriesAdmin /></AdminProtectedRoute>} />

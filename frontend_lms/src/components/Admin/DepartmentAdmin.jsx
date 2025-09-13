@@ -99,7 +99,7 @@ const DepartmentAdmin = () => {
   });
   setEditingId(dept.id);
 
-  // Toast info message jab edit click ho
+  
   toast.info(`Editing Department: ${dept.Department_Name}`, {
     
   });
@@ -134,7 +134,7 @@ const DepartmentAdmin = () => {
         Programs
       </h2>
 
-      {/* Form */}
+    
       <form
         onSubmit={handleSubmit}
         style={{
@@ -245,7 +245,7 @@ const DepartmentAdmin = () => {
         )}
       </form>
 
-      {/* Table */}
+    
       <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "center" }}>
         <thead>
           <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
@@ -307,7 +307,7 @@ const DepartmentAdmin = () => {
         </tbody>
       </table>
 
-      {/* Toast container */}
+      
       {/* <ToastContainer position="top-right" autoClose={3000} hideProgressBar /> */}
     </div>
   );

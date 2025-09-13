@@ -144,7 +144,7 @@ const TeacherLectures = () => {
         padding: "30px",
         fontFamily: "Arial, sans-serif",
         marginTop: "4%",
-        backgroundColor: "#ebeaf2ff", // light purple background
+        backgroundColor: "#ebeaf2ff", 
         color: "rgba(44, 44, 122, 1)",
       }}
     >
@@ -167,7 +167,7 @@ const TeacherLectures = () => {
 
       {teacherId && selectedCourse && (
         <>
-          {/* Form */}
+        
           <form
             onSubmit={handleSubmit}
             style={{
@@ -245,7 +245,7 @@ const TeacherLectures = () => {
                 padding: "10px 20px",
                 marginRight: "10px",
                 borderRadius: "5px",
-                backgroundColor: "rgb(70, 4, 67)", // dark purple
+                backgroundColor: "rgb(70, 4, 67)", 
                 color: "white",
                 border: "none",
                 cursor: "pointer",
@@ -271,7 +271,7 @@ const TeacherLectures = () => {
                 style={{
                   padding: "10px 20px",
                   borderRadius: "5px",
-                  backgroundColor: "rgb(4, 4, 63)", // navy blue
+                  backgroundColor: "rgb(4, 4, 63)", 
                   color: "white",
                   border: "none",
                   cursor: "pointer",
@@ -287,7 +287,6 @@ const TeacherLectures = () => {
             )}
           </form>
 
-          {/* Lecture Table */}
           <table
             style={{
               width: "100%",

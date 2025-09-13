@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../Navbar";
 import Footer from "../Footer";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
@@ -63,14 +62,14 @@ const RoomDetail = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div
         className="container py-4"
         style={{ marginTop: "80px", minHeight: "90vh", backgroundColor: "#ebeaf2ff" }}
       >
         <div className="card border-0 shadow-lg overflow-hidden">
           <div className="row g-0">
-            {/* Left Side - Image */}
+          
             <div className="col-md-5">
               <img
                 src={room.room_image ? room.room_image : "/default-room.jpg"}
@@ -80,7 +79,7 @@ const RoomDetail = () => {
               />
             </div>
 
-            {/* Right Side - Details */}
+            
             <div className="col-md-7 p-4">
               <h2
                 className="mb-3 fw-bold"
@@ -90,7 +89,7 @@ const RoomDetail = () => {
               </h2>
               <p style={{ lineHeight: "1.7", color: "#333" }}>{room.description}</p>
 
-              {/* Facilities */}
+              
               <h4 className="text-primary mt-3 mb-2">
                 <i className="fa-solid fa-house me-2"></i> Facilities
               </h4>
@@ -106,7 +105,7 @@ const RoomDetail = () => {
                 <FacilityItem label="Laundry Facility" available={room.laundry_facility} icon="fa-solid fa-shirt" />
               </ul>
 
-              {/* Room Info - Cards */}
+             
               <div className="row text-center mt-4 g-3">
                 {[
                   { title: "Booked", value: room.booked_room, color: "text-primary" },
@@ -128,7 +127,7 @@ const RoomDetail = () => {
                 ))}
               </div>
 
-              {/* Apply Button */}
+             
               <div className="d-grid mt-4">
                 <Link
                   to="/hosteladmissionform"

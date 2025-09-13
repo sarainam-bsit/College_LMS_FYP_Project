@@ -143,7 +143,7 @@ export default function AdminNotifications() {
         Notifications
       </h2>
 
-      {/* Form */}
+     
       <form
         onSubmit={onSubmit}
         style={{
@@ -189,7 +189,7 @@ export default function AdminNotifications() {
             />
           </div>
 
-          {/* Audience */}
+        
           <div className="col-12">
             <label className="fs-5 fw-bold d-block">Audience</label>
             <div className="d-flex flex-wrap gap-3">
@@ -286,7 +286,7 @@ export default function AdminNotifications() {
         </div>
       </form>
 
-      {/* Table */}
+     
       <table
         style={{
           width: "100%",
@@ -367,7 +367,7 @@ export default function AdminNotifications() {
         </tbody>
       </table>
 
-      {/* Toast container */}
+      
       <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
     </div>
   );

@@ -45,7 +45,7 @@ export default function StudentHostelApplication() {
     try {
       await axios.post(API_URL, { ...formData, Student_ID: studentId, status: "Pending" });
       setSubmitted(true);
-      fetchApplications(); // refresh list
+      fetchApplications(); 
     } catch (err) {
       if (err.response && err.response.data.error) {
         setError(err.response.data.error);
@@ -67,7 +67,7 @@ export default function StudentHostelApplication() {
             border: "2px solid white",
           }}
         >
-          {/* Heading */}
+          
           <h3
             className="text-center fw-bold mb-3"
             style={{
@@ -86,7 +86,7 @@ export default function StudentHostelApplication() {
 
           {error && <p className="text-danger text-center">{error}</p>}
 
-          {/* Inputs */}
+         
           <input type="text" name="Student_Name" placeholder="Name" className="form-control mb-2" onChange={handleChange} required />
           <input type="text" name="Father_Name" placeholder="Father Name" className="form-control mb-2" onChange={handleChange} required />
           <input type="email" name="Email" placeholder="Email" className="form-control mb-2" onChange={handleChange} required />
@@ -108,7 +108,7 @@ export default function StudentHostelApplication() {
           <input type="text" name="Phone_No" placeholder="Phone Number" className="form-control mb-2" onChange={handleChange} required />
           <textarea name="Home_Address" placeholder="Home Address" className="form-control mb-2" onChange={handleChange} required />
 
-          {/* Submit Button */}
+          
           <button
             type="submit"
             className="fw-bold"
@@ -133,7 +133,7 @@ export default function StudentHostelApplication() {
         </form>
       )}
 
-      {/* Applications Table */}
+      
       <h4
         className="mt-5 text-center fw-bold fs-3 mb-3"
         style={{ color: "rgb(70, 4, 67)" }}

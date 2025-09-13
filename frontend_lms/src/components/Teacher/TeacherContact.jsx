@@ -15,12 +15,12 @@ const TeacherContact = () => {
   });
   const [loading, setLoading] = useState(false);
 
-  // Input change handler
+  
   const handleChange = (e) => {
     setFormData({...formData, [e.target.name]: e.target.value});
   };
 
-  // Form submit
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -28,7 +28,7 @@ const TeacherContact = () => {
     try {
       await axios.post(API_CONTACT, formData);
       toast.success("Your message has been sent successfully!");
-      setFormData({ name: "", email: "", message: "" }); // Reset form
+      setFormData({ name: "", email: "", message: "" }); 
     } catch (err) {
       toast.error("Something went wrong. Please try again.");
       console.error(err);
@@ -47,7 +47,7 @@ const TeacherContact = () => {
                 className="heading text-center mb-5 mt-4 py-3 px-3 mx-auto rounded shadow-lg"
                 style={{
                   maxWidth: '250px',
-                  backgroundColor: "rgb(70, 4, 67)", // purple theme
+                  backgroundColor: "rgb(70, 4, 67)", 
                   color: "white",
                   fontWeight: "bold",
                   letterSpacing: "1px"
@@ -141,7 +141,7 @@ const TeacherContact = () => {
         </div>
       </div> 
 
-      {/* Toast Notification */}
+    
       <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
 
       <Footer/>

@@ -118,7 +118,7 @@ const AdminTimetable = () => {
         Timetable
       </h2>
 
-      {/* Form */}
+      
       <div
         style={{
           marginBottom: "30px",
@@ -129,7 +129,7 @@ const AdminTimetable = () => {
         }}
       >
         <form onSubmit={handleSubmit} className="row g-3">
-          {/* Department */}
+       
           <div className="col-md-6">
             <select
               name="Department"
@@ -147,7 +147,7 @@ const AdminTimetable = () => {
             </select>
           </div>
 
-          {/* Category */}
+       
           <div className="col-md-6">
             <select
               name="Category"
@@ -165,7 +165,7 @@ const AdminTimetable = () => {
             </select>
           </div>
 
-          {/* Course */}
+          
           <div className="col-md-6">
             <select
               name="Course"
@@ -183,7 +183,7 @@ const AdminTimetable = () => {
             </select>
           </div>
 
-          {/* Teacher */}
+     
           <div className="col-md-6">
             <select
               name="Teacher"
@@ -201,7 +201,7 @@ const AdminTimetable = () => {
             </select>
           </div>
 
-          {/* Day */}
+       
           <div className="col-md-6">
             <select
               name="Day"
@@ -219,7 +219,7 @@ const AdminTimetable = () => {
             </select>
           </div>
 
-          {/* Buttons */}
+      
           <div className="col-12 d-flex gap-2">
             <button
               type="submit"
@@ -244,7 +244,7 @@ const AdminTimetable = () => {
         </form>
       </div>
 
-      {/* Table */}
+   
       <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "center" }}>
         <thead>
           <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>

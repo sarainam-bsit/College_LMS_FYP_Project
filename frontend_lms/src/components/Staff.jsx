@@ -61,7 +61,7 @@ const Staff = () => {
                         borderRadius: "12px",
                     }}
                 >
-                    {/* Department Name in a Box */}
+                    
                     <div style={{ textAlign: "center", marginBottom: '4%' }}>
                         <div
                             style={{

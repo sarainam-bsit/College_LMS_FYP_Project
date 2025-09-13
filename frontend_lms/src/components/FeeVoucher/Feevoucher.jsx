@@ -42,7 +42,7 @@ function Feevoucher() {
         paddingBottom: "50px",
       }}
     >
-      {/* Heading */}
+    
       <div
         style={{
           backgroundColor: "rgb(70, 4, 67)",
@@ -60,7 +60,7 @@ function Feevoucher() {
         My Fee Vouchers
       </div>
 
-      {/* Card */}
+     
       <div
         className="card"
         style={{

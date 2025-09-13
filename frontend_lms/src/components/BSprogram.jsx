@@ -49,7 +49,7 @@ const BSprogram = () => {
         }
       `}</style>
 
-      <Navbar />
+    
       <div className="container p-1" style={{ marginTop: "80px", minHeight: "90vh", backgroundColor: "#ebeaf2ff" }}>
         <div className="row justify-content-center">
           <div className="col-10 col-sm-8 col-md-6">

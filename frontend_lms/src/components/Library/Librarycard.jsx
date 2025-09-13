@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import Navbar from "../Navbar";
 import axios from "axios";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -52,7 +51,7 @@ const Librarycard = () => {
   if (loading)
     return (
       <>
-        <Navbar />
+        
         <div className="container text-center mt-5">Loading...</div>
       </>
     );
@@ -60,7 +59,7 @@ const Librarycard = () => {
   if (expired)
     return (
       <>
-        <Navbar />
+        
         <div className="container text-center mt-5">
           <h3 className="text-danger">Your Library Card has Expired</h3>
           <p>Please contact admin for renewal.</p>
@@ -71,7 +70,7 @@ const Librarycard = () => {
   if (!cardData)
     return (
       <>
-        <Navbar />
+        
         <div className="container text-center mt-5">
           <h3>No Library Card Found</h3>
         </div>
@@ -80,7 +79,7 @@ const Librarycard = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div
         className="container p-3"
         style={{ marginTop: "80px", minHeight: "90vh", backgroundColor: "#f7f7f9" }}
@@ -95,7 +94,7 @@ const Librarycard = () => {
             border: "1px solid #e3e3e3",
           }}
         >
-          {/* Heading + Download Button */}
+          
           <div className="text-center mb-4">
             <h2
               style={{
@@ -137,10 +136,10 @@ const Librarycard = () => {
             </button>
           </div>
 
-          {/* Library Card */}
+         
           <div ref={cardRef} className="p-3" style={{ backgroundColor: "#fdf6fb", borderRadius: "20px" }}>
             <div className="row g-0 align-items-center">
-              {/* Logo */}
+             
               <div className="col-md-4 text-center mb-3 mb-md-0">
                 <img
                   src="/logo-removebg-preview (1).png"
@@ -153,7 +152,6 @@ const Librarycard = () => {
                 />
               </div>
 
-              {/* Info */}
               <div className="col-md-8">
                 <ul
                   className="list-group list-group-flush"

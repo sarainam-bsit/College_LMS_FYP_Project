@@ -1,17 +1,17 @@
-// src/components/Teacher/TeacherDateSheet.jsx
+
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const TeacherDateSheet = () => {
-  const { categoryId } = useParams(); // sirf category le raha hoon
+  const { categoryId } = useParams(); 
   const [datesheet, setDatesheet] = useState([]);
   const [error, setError] = useState("");
 
   const API_BASE = "http://127.0.0.1:8000/TimeTable/datesheet/";
 
   useEffect(() => {
-    const teacherId = localStorage.getItem("teacherId"); // login ke time save hoga
+    const teacherId = localStorage.getItem("teacherId"); 
 
     if (!teacherId) {
       setError("Teacher not found. Please login again.");

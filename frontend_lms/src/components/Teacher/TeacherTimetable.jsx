@@ -4,14 +4,14 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const TeacherTimetable = () => {
-  const { departmentId, categoryId } = useParams(); // URL se le raha hai
+  const { departmentId, categoryId } = useParams(); 
   const [timetables, setTimetables] = useState([]);
   const [error, setError] = useState("");
 
   const API_BASE = "http://127.0.0.1:8000/TimeTable/timetable/";
 
   useEffect(() => {
-    const teacherId = localStorage.getItem("teacherId"); // student id login ke time save hogi
+    const teacherId = localStorage.getItem("teacherId"); 
 
     if (!teacherId) {
       setError("Student not found. Please login again.");

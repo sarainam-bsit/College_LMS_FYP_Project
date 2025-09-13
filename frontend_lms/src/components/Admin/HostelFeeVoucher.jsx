@@ -119,7 +119,7 @@ export default function AdminHostelFeeVoucher() {
         Hostel Fee Voucher 
       </h2>
 
-      {/* Form */}
+    
       <form
         className="shadow mt-4"
         onSubmit={handleGenerate}
@@ -193,7 +193,7 @@ export default function AdminHostelFeeVoucher() {
         </div>
       </form>
 
-      {/* Table */}
+     
       <div
         className="mt-5 shadow"
         style={{

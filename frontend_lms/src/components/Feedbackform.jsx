@@ -15,7 +15,7 @@ export default function StudentFeedback() {
     });
     const [loading, setLoading] = useState(false);
 
-    // Input change
+   
     const handleChange = (e) => {
         const { name, value, files } = e.target;
         if (name === "image") {
@@ -25,7 +25,7 @@ export default function StudentFeedback() {
         }
     };
 
-    // Form submit
+   
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);

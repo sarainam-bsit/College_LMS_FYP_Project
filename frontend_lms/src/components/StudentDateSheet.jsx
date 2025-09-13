@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Navbar from "./Navbar";
+
 import axios from "axios";
 
 const StudentDateSheet = () => {
@@ -44,7 +44,7 @@ const StudentDateSheet = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div
         className="container p-1 text-center"
         style={{ marginTop: "80px", minHeight: "90vh" }}
@@ -64,7 +64,7 @@ const StudentDateSheet = () => {
 
         {error && <div className="alert alert-danger">{error}</div>}
 
-        {/* Table */}
+    
         <div className="table-responsive card shadow-lg mt-3">
           <table className="table table-bordered table-hover text-center align-middle mb-0">
             <thead>

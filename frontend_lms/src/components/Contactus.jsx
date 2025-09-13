@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Navbar from './Navbar';
+
 import Footer from './Footer';
 
 const API_CONTACT = "http://127.0.0.1:8000/Contact/contact/";
@@ -15,12 +15,12 @@ const Contactus = () => {
   });
   const [loading, setLoading] = useState(false);
 
-  // Input change handler
+  
   const handleChange = (e) => {
     setFormData({...formData, [e.target.name]: e.target.value});
   };
 
-  // Form submit
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -39,7 +39,7 @@ const Contactus = () => {
 
   return (
     <>
-      <Navbar />
+   
       <div className="container p-1" style={{ marginTop: "80px", minHeight: "90vh" }}>
         <div className="card border-0">
           <div className="row justify-content-center">
@@ -142,7 +142,7 @@ const Contactus = () => {
         </div>
       </div> 
 
-      {/* Toast Notification */}
+     
       <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
 
       <Footer />

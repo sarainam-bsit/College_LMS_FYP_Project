@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import Navbar from "./Navbar";
 import axios from "axios";
 
 const Lectures = () => {
@@ -38,17 +37,17 @@ const Lectures = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div
         className="container p-1 text-center"
         style={{ marginTop: "80px", minHeight: "90vh" }}
       >
-        {/* Heading */}
+        
         <h2
           className="mb-4 py-2 px-3 mx-auto rounded shadow-lg"
           style={{
             maxWidth: "350px",
-            backgroundColor: "rgb(70, 4, 67)", // deep purple
+            backgroundColor: "rgb(70, 4, 67)", 
             color: "white",
             fontWeight: "bold",
           }}
@@ -122,7 +121,7 @@ const Lectures = () => {
           </table>
         </div>
 
-        {/* Video Modal */}
+        
         <div
           className="modal fade modal-xl"
           id="videoModal"

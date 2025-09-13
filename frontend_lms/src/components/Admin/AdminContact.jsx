@@ -27,21 +27,21 @@ export default function AdminContact() {
     };
     const markAsSeen = async (id) => {
     try {
-        // 1. State ko turant update karo (instant Seen dikhane ke liye)
+        
         setMessages(prevMessages =>
             prevMessages.map(msg =>
                 msg.id === id ? { ...msg, is_seen: true } : msg
             )
         );
 
-        // 2. Backend ko bhi update bhejo
+       
         await axios.put(`${API_CONTACT}${id}/mark_seen/`, {}, {
             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         });
 
     } catch (error) {
         console.error("Error marking message as seen:", error);
-        // Agar error aaye to optionally alert ya state rollback kar sakti ho
+        
     }
 };
 

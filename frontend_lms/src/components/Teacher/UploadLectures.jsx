@@ -16,7 +16,7 @@ const UploadLectures = () => {
   const [editId, setEditId] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch lectures from API
+
   const fetchLectures = async () => {
     setLoading(true);
     try {
@@ -29,7 +29,7 @@ const UploadLectures = () => {
     }
   };
 
-  // Fetch courses for dropdown
+ 
   const fetchCourses = async () => {
     try {
       const res = await axios.get("http://127.0.0.1:8000/Course/courses/");
@@ -44,7 +44,7 @@ const UploadLectures = () => {
     fetchCourses();
   }, []);
 
-  // Handle form input changes
+  
   const handleChange = (e) => {
     if (e.target.name === "Video") {
       setForm({ ...form, Video: e.target.files[0] });
@@ -53,7 +53,7 @@ const UploadLectures = () => {
     }
   };
 
-  // Submit form: Add or Update
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -85,7 +85,7 @@ const UploadLectures = () => {
     }
   };
 
-  // Edit lecture
+  
   const handleEdit = (lec) => {
     setEditId(lec.id);
     setForm({
@@ -98,7 +98,7 @@ const UploadLectures = () => {
     toast.info(`Editing Lecture: ${lec.Title}`);
   };
 
-  // Delete lecture
+ 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this lecture?")) return;
     try {
@@ -131,7 +131,7 @@ const UploadLectures = () => {
         Manage Lectures
       </h1>
 
-      {/* Form */}
+     
       <form
         onSubmit={handleSubmit}
         style={{
@@ -280,7 +280,7 @@ const UploadLectures = () => {
         )}
       </form>
 
-      {/* Table */}
+    
       <table
         style={{
           width: "100%",

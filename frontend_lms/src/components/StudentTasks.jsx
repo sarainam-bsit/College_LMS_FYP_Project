@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Navbar from "./Navbar";
 import axios from "axios";
 
 const StudentTasks = () => {
@@ -43,17 +42,17 @@ const StudentTasks = () => {
 
   return (
     <>
-      <Navbar />
+     
       <div
         className="container p-1 text-center"
         style={{ marginTop: "80px", minHeight: "90vh" }}
       >
-        {/* Heading */}
+      
         <h2
           className="mb-4 py-2 px-3 mx-auto rounded shadow-lg"
           style={{
             maxWidth: "350px",
-            backgroundColor: "rgb(70, 4, 67)", // deep purple
+            backgroundColor: "rgb(70, 4, 67)", 
             color: "white",
             fontWeight: "bold",
           }}
@@ -63,7 +62,7 @@ const StudentTasks = () => {
 
         {error && <div className="alert alert-danger">{error}</div>}
 
-        {/* Table */}
+       
         <div className="table-responsive card shadow-lg mt-3">
           <table className="table table-bordered table-hover text-center align-middle mb-0">
             <thead>

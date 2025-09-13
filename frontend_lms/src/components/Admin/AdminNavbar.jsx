@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import "../Navbar.css";
+
 
 const AdminNavbar = ({ handleLogout }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isLoggedIn") === "true");
@@ -41,7 +41,7 @@ const AdminNavbar = ({ handleLogout }) => {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        {/* Glass overlay */}
+       
         {menuOpen && (
           <div
             className="glass-overlay"

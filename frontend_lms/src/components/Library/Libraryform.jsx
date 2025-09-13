@@ -70,7 +70,7 @@ export default function LibraryForm() {
             border: "2px solid white",
           }}
         >
-          {/* Heading */}
+          
           <h3
             className="text-center fw-bold mb-3"
             style={{
@@ -89,7 +89,7 @@ export default function LibraryForm() {
 
           {error && <p className="text-danger text-center">{error}</p>}
 
-          {/* Inputs */}
+          
           <input
             type="email"
             name="email"
@@ -130,7 +130,7 @@ export default function LibraryForm() {
             required
           />
 
-          {/* Submit Button */}
+          
           <button
             type="submit"
             className="fw-bold"
@@ -155,7 +155,7 @@ export default function LibraryForm() {
         </form>
       )}
 
-      {/* Applications Table */}
+      
       <h4
         className="mt-5 text-center fw-bold fs-3 mb-3"
         style={{ color: "rgb(70, 4, 67)" }}

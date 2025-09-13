@@ -68,7 +68,7 @@ export default function Hostelcancelform() {
             border: "2px solid white",
           }}
         >
-          {/* Heading */}
+         
           <h3
             className="text-center fw-bold mb-3"
             style={{
@@ -87,7 +87,7 @@ export default function Hostelcancelform() {
 
           {error && <p className="text-danger text-center">{error}</p>}
 
-          {/* Inputs */}
+          
           <input type="text" name="Student_Name" placeholder="Name" className="form-control mb-2" onChange={handleChange} required />
           <input type="text" name="Father_Name" placeholder="Father Name" className="form-control mb-2" onChange={handleChange} required />
           <input type="email" name="Email" placeholder="Email" className="form-control mb-2" onChange={handleChange} required />
@@ -110,7 +110,7 @@ export default function Hostelcancelform() {
           <textarea name="Home_Address" placeholder="Home Address" className="form-control mb-2" onChange={handleChange} required />
           <textarea name="Reason" placeholder="Reason" className="form-control mb-2" onChange={handleChange} required />
 
-          {/* Submit Button */}
+          
           <button
             type="submit"
             className="fw-bold"
@@ -135,7 +135,7 @@ export default function Hostelcancelform() {
         </form>
       )}
 
-      {/* Applications Table */}
+      
       <h4
         className="mt-5 text-center fw-bold fs-3 mb-3"
         style={{ color: "rgb(70, 4, 67)" }}

@@ -34,7 +34,7 @@ const TeacherGradesStuDetail = () => {
         </div>
       </div>
 
-      {/* Normal Students */}
+      
       {normalStudents.length > 0 && (
         <div className="mb-5">
           <h2 className="text-center mb-4 fw-bold" style={{ color: "rgb(70, 4, 67)"}}>Regular Students</h2>
@@ -77,7 +77,7 @@ const TeacherGradesStuDetail = () => {
         </div>
       )}
 
-      {/* Supply Students */}
+    
       {supplyStudents.length > 0 && (
         <div className="mb-5">
           <h2 className="text-center mb-4 fw-bold" style={{ color: "rgb(70, 4, 67)"}}>Supply Students</h2>

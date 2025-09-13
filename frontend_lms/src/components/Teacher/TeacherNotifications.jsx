@@ -25,7 +25,7 @@ export default function TeacherNotifications() {
     };
 
     fetchNotifications();
-  }, [teacherId]); // ESLint satisfied
+  }, [teacherId]); 
 
   const getBadgeColor = (type) => {
     switch (type) {

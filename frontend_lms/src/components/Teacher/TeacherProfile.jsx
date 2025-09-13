@@ -92,7 +92,7 @@ const TeacherProfile = () => {
       }}
     >
       <div className="row justify-content-center g-4">
-        {/* Profile Card */}
+     
         <div className="col-12 col-md-4">
           <div
             style={{
@@ -163,7 +163,6 @@ const TeacherProfile = () => {
           </div>
         </div>
 
-        {/* Info Card */}
         <div className="col-12 col-md-6">
           <div
             style={{
@@ -235,7 +234,7 @@ const TeacherProfile = () => {
         </div>
       </div>
 
-      {/* Toast Container */}
+     
       <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
     </div>
   );

@@ -92,7 +92,7 @@ const About = () => {
         className="container p-3"
         style={{ marginTop: "50px", minHeight: "90vh" }}
       >
-        {/* 🔹 Principal Section */}
+       
         <div className="text-center my-4 ">
           <h2 className="Aboutsection-title">PRINCIPLE</h2>
         </div>
@@ -122,12 +122,12 @@ const About = () => {
           </div>
         </div>
 
-        {/* 🔹 College Intro */}
+       
         <div className="text-center my-5">
           <h2 className="section-title">About Our College</h2>
         </div>
 
-        {/* 🎥 Video Box */}
+       
         <div
           className="about-video mb-5 mx-auto"
           style={{ maxWidth: "1100px" }}
@@ -147,7 +147,7 @@ const About = () => {
           />
         </div>
 
-        {/* 📖 Text Box */}
+       
         <div className="about-box mx-auto mb-5" style={{ maxWidth: "1100px" }}>
           <p className="about-text mb-3">
             <strong>Government College Civil Lines Sheikhupura</strong> is one

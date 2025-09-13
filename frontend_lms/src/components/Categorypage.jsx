@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from './Navbar';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 
@@ -43,7 +42,7 @@ const Categorypage = () => {
         }
       `}</style>
 
-      <Navbar />
+      
 
       <div className="container p-3" style={{ marginTop: "80px", minHeight: "90vh", backgroundColor: "#ebeaf2ff" }}>
         <div className="row justify-content-center">

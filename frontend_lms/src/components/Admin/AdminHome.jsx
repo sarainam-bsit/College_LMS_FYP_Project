@@ -48,9 +48,9 @@ const AdminHome = () => {
             </div>
           )}
 
-          {/* Carousel */}
+          
           <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
-            {/* Dots */}
+            
             <div className="carousel-indicators">
               <button
                 type="button"
@@ -74,7 +74,7 @@ const AdminHome = () => {
               ></button>
             </div>
 
-            {/* Slides */}
+          
             <div className="carousel-inner">
               <div className="carousel-item active">
                 <img
@@ -102,7 +102,7 @@ const AdminHome = () => {
               </div>
             </div>
 
-            {/* Arrows */}
+           
             <button
               className="carousel-control-prev"
               type="button"
@@ -123,7 +123,7 @@ const AdminHome = () => {
             </button>
           </div>
 
-          {/* Overlay Content */}
+      
           <div className="card-img-overlay d-flex justify-content-center align-items-center text-center text-white">
             <div className="px-2 px-md-5">
               <h1 className="fw-bold fs-1 fs-md-1">Welcome to Our College LMS</h1>

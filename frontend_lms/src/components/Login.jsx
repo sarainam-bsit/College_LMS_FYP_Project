@@ -96,7 +96,7 @@ const Login = ({ setIsLoggedIn, setUserRole }) => {
       `}</style>
 
       <div className="background-wrapper">
-        <CarouselBackground /> {/* Only images background */}
+        <CarouselBackground /> 
         <div className="login-overlay">
           <div className="login-card">
             <form onSubmit={submitForm}>
