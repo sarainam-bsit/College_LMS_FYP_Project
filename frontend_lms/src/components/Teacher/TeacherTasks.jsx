@@ -168,7 +168,7 @@ const TeacherTasks = () => {
         }}
       >
         <h2 style={{ textAlign: "center", marginBottom: "20px", fontWeight: "bold" }}>
-          📌 Teacher Tasks
+           Teacher Tasks
         </h2>
 
         {selectedCourse && (
@@ -181,12 +181,12 @@ const TeacherTasks = () => {
               marginBottom: "30px",
             }}
           >
-            <h4 style={{ textAlign: "center", color: "rgb(70, 4, 67)", marginBottom: "15px" }}>
-              {editingTaskId ? "✏️ Edit Task" : "➕ Add Task"}
+            <h4 style={{ textAlign: "center", color: "rgb(70, 4, 67)", marginBottom: "15px", fontSize: '30px', fontWeight: "bold" }}>
+              {editingTaskId ? " Edit Task" : " Add Task"}
             </h4>
 
             <div style={{ marginBottom: "15px" }}>
-              <label className="form-label fw-bold">🎯 Selected Course</label>
+              <label className="form-label fw-bold fs-5"> Selected Course</label>
               <input
                 type="text"
                 className="form-control"
@@ -294,13 +294,13 @@ const TeacherTasks = () => {
         )}
 
         {/* Task List */}
-        <h4 style={{ fontWeight: "bold", marginBottom: "10px" }}>📋 Task List</h4>
+        <h4 style={{ fontWeight: "bold", marginBottom: "10px", fontSize: '27px' }}>Task List</h4>
         {tasks.length === 0 ? (
-          <div className="alert alert-info">ℹ️ No tasks found for this course</div>
+          <div className="alert alert-info">No tasks found for this course</div>
         ) : (
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "center" }}>
-              <thead style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+              <thead style={{ backgroundColor: "rgb(70, 4, 67)", color: "white", fontSize:'20px' }}>
                 <tr>
                   <th style={{ padding: "10px", border: "1px solid #ddd" }}>Title</th>
                   <th style={{ padding: "10px", border: "1px solid #ddd" }}>Type</th>
@@ -328,7 +328,7 @@ const TeacherTasks = () => {
                           textDecoration: "none",
                         }}
                       >
-                        🔗 Open
+                         Open
                       </a>
                     </td>
                     <td style={{ padding: "10px", border: "1px solid #ddd" }}>
@@ -350,7 +350,7 @@ const TeacherTasks = () => {
                           cursor: "pointer",
                         }}
                       >
-                        ✏️ Edit
+                         Edit
                       </button>
                       <button
                         onClick={() => handleDelete(task.id)}
@@ -363,7 +363,7 @@ const TeacherTasks = () => {
                           cursor: "pointer",
                         }}
                       >
-                        🗑 Delete
+                        Delete
                       </button>
                     </td>
                   </tr>

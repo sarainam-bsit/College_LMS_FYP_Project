@@ -102,8 +102,9 @@ export default function AdminHostelFeeVoucher() {
   });
 
   return (
+  
     <div
-      className="container"
+      
       style={{
         marginTop: "6%",
         backgroundColor: "#ebeaf2ff",
@@ -115,7 +116,7 @@ export default function AdminHostelFeeVoucher() {
         className="text-center"
         style={{ color: "rgba(44, 44, 122, 1)", fontWeight: "bold" }}
       >
-        🏠 Hostel Fee Voucher Management
+        Hostel Fee Voucher 
       </h2>
 
       {/* Form */}
@@ -129,12 +130,16 @@ export default function AdminHostelFeeVoucher() {
           border: "2px solid white",
         }}
       >
-        <h5 style={{ color: "rgba(44, 44, 122, 1)" }}>
-          Generate Yearly Hostel Fee Vouchers
-        </h5>
+        <h3 style={{
+          marginBottom: "20px",
+          color: "rgb(70, 4, 67)",
+          fontWeight: "bold",
+        }}>
+          Yearly Hostel Fee Vouchers
+        </h3>
         <div className="row g-3">
           <div className="col-md-3">
-            <label>Amount</label>
+            <label className="fs-5 fw-bold">Amount</label>
             <input
               type="number"
               className="form-control"
@@ -145,7 +150,7 @@ export default function AdminHostelFeeVoucher() {
             />
           </div>
           <div className="col-md-3">
-            <label>Fine Date</label>
+            <label className="fs-5 fw-bold">Fine Date</label>
             <input
               type="date"
               className="form-control"
@@ -156,7 +161,7 @@ export default function AdminHostelFeeVoucher() {
             />
           </div>
           <div className="col-md-2">
-            <label>Fine Amount</label>
+            <label className="fs-5 fw-bold">Fine Amount</label>
             <input
               type="number"
               className="form-control"
@@ -166,7 +171,7 @@ export default function AdminHostelFeeVoucher() {
             />
           </div>
           <div className="col-md-3">
-            <label>Bank Branch</label>
+            <label className="fs-5 fw-bold">Bank Branch</label>
             <input
               type="text"
               className="form-control"
@@ -198,7 +203,11 @@ export default function AdminHostelFeeVoucher() {
           border: "2px solid white",
         }}
       >
-        <h5 style={{ color: "rgba(44, 44, 122, 1)" }}>Hostel Fee Vouchers</h5>
+        <h3 style={{
+          marginBottom: "20px",
+          color: "rgb(70, 4, 67)",
+          fontWeight: "bold",
+        }}>Hostel Fee Vouchers</h3>
         <table
           style={{
             width: "100%",
@@ -209,31 +218,31 @@ export default function AdminHostelFeeVoucher() {
         >
           <thead>
             <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Challan No
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Amount
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Fine Date
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Amount Date
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Fine Amount
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Bank Branch
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Paid
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Status
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Action
               </th>
             </tr>
@@ -309,8 +318,6 @@ export default function AdminHostelFeeVoucher() {
           </tbody>
         </table>
       </div>
-
-      {/* Modal */}
       <div className="modal fade" id="markPaidModal" tabIndex="-1">
         <div className="modal-dialog">
           <div className="modal-content">
@@ -357,5 +364,6 @@ export default function AdminHostelFeeVoucher() {
         </div>
       </div>
     </div>
+    
   );
 }

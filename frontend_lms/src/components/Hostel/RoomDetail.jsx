@@ -29,7 +29,7 @@ const RoomDetail = () => {
     return (
       <p
         className="text-center"
-        style={{ marginTop: "80px", minHeight: "90vh" }}
+        style={{ marginTop: "80px", minHeight: "90vh", color: "#4c4c91" }}
       >
         Loading room...
       </p>
@@ -47,12 +47,12 @@ const RoomDetail = () => {
     );
   }
 
-  // Helper to show ✔️ or ❌
   const FacilityItem = ({ label, available, icon }) => (
     <li
       className={`list-group-item d-flex justify-content-between align-items-center ${
         available ? "text-success" : "text-danger"
       }`}
+      style={{ backgroundColor: "#f5ecf4" }}
     >
       <span>
         <i className={`${icon} me-2`}></i> {label}
@@ -64,26 +64,34 @@ const RoomDetail = () => {
   return (
     <>
       <Navbar />
-      <div className="container py-4" style={{ marginTop: "80px", minHeight: "90vh" }}>
-        <div className="card shadow-lg border-0 rounded-3 overflow-hidden">
+      <div
+        className="container py-4"
+        style={{ marginTop: "80px", minHeight: "90vh", backgroundColor: "#ebeaf2ff" }}
+      >
+        <div className="card border-0 shadow-lg overflow-hidden">
           <div className="row g-0">
             {/* Left Side - Image */}
             <div className="col-md-5">
               <img
                 src={room.room_image ? room.room_image : "/default-room.jpg"}
                 className="img-fluid h-100 w-100"
-                style={{ objectFit: "cover" }}
+                style={{ objectFit: "cover", filter: "brightness(0.95)" }}
                 alt={room.rooms}
               />
             </div>
 
             {/* Right Side - Details */}
             <div className="col-md-7 p-4">
-              <h2 className="mb-3 text-primary fw-bold">{room.rooms}</h2>
-              <p className="text-muted">{room.description}</p>
+              <h2
+                className="mb-3 fw-bold"
+                style={{ color: "rgb(70, 4, 67)", borderBottom: "3px solid #6f42c1", paddingBottom: "6px" }}
+              >
+                {room.rooms}
+              </h2>
+              <p style={{ lineHeight: "1.7", color: "#333" }}>{room.description}</p>
 
               {/* Facilities */}
-              <h4 className="text-danger mt-3 mb-2">
+              <h4 className="text-primary mt-3 mb-2">
                 <i className="fa-solid fa-house me-2"></i> Facilities
               </h4>
               <ul className="list-group list-group-flush mb-3">
@@ -99,48 +107,33 @@ const RoomDetail = () => {
               </ul>
 
               {/* Room Info - Cards */}
-              <div className="row text-center mt-4">
-                <div className="col-md-4 mb-3">
-                  <div className="card border-0 shadow-sm bg-light">
-                    <div className="card-body">
-                      <h6 className="text-muted">Booked</h6>
-                      <h5 className=" fw-bold">{room.booked_room} </h5>
+              <div className="row text-center mt-4 g-3">
+                {[
+                  { title: "Booked", value: room.booked_room, color: "text-primary" },
+                  { title: "Total Rooms", value: room.total_room, color: "text-dark" },
+                  { title: "Available", value: room.available_room, color: "text-success" },
+                  { title: "Rent", value: room.rent, color: "text-danger" },
+                ].map((item, idx) => (
+                  <div className={`col-md-${item.title === "Rent" ? 12 : 4}`} key={idx}>
+                    <div
+                      className="card border-0 shadow-sm"
+                      style={{ backgroundColor: "#f5ecf4" }}
+                    >
+                      <div className="card-body">
+                        <h6 className="text-muted">{item.title}</h6>
+                        <h5 className={`fw-bold ${item.color}`}>{item.value}</h5>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-md-4 mb-3">
-                  <div className="card border-0 shadow-sm bg-light">
-                    <div className="card-body">
-                      <h6 className="text-muted">Total Rooms</h6>
-                      <h5 className="fw-bold">{room.total_room}</h5>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-4 mb-3">
-                  <div className="card border-0 shadow-sm bg-light">
-                    <div className="card-body">
-                      <h6 className="text-muted">Available</h6>
-                      <h5 className="fw-bold text-primary">{room.available_room}</h5>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-md-12 mb-3">
-                  <div className="card border-0 shadow-sm bg-light">
-                    <div className="card-body">
-                      <h6 className="text-muted">Rent</h6>
-                      <h5 className="fw-bold text-success">{room.rent}</h5>
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
-
 
               {/* Apply Button */}
               <div className="d-grid mt-4">
                 <Link
                   to="/hosteladmissionform"
-                  className="btn btn-lg btn-danger shadow-sm"
+                  className="btn btn-lg"
+                  style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}
                 >
                   <i className="fa-solid fa-file-pen me-2"></i> Apply Online
                 </Link>

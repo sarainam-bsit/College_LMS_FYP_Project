@@ -16,7 +16,6 @@ export default function LibraryForm() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
 
-  // assume student_id is stored in localStorage
   const studentId = localStorage.getItem("studentId");
 
   const fetchApplications = async () => {
@@ -43,7 +42,7 @@ export default function LibraryForm() {
     try {
       await axios.post(API_URL, formData);
       setSubmitted(true);
-      fetchApplications(); // refresh list
+      fetchApplications();
     } catch (err) {
       if (err.response && err.response.data.error) {
         setError(err.response.data.error);
@@ -54,12 +53,43 @@ export default function LibraryForm() {
   };
 
   return (
-    <div className="container" style={{ marginTop: "10%" }}>
+    <div
+      className="container"
+      style={{
+        marginTop: "7%",
+        minHeight: "80vh",
+      }}
+    >
       {!submitted && (
-        <form onSubmit={handleSubmit} className="card p-3 shadow-sm">
-          <h3>Library Card Application</h3>
-          {error && <p className="text-danger">{error}</p>}
+        <form
+          onSubmit={handleSubmit}
+          className="card shadow-sm p-4"
+          style={{
+            backgroundColor: "#f5ecf4ff",
+            borderRadius: "12px",
+            border: "2px solid white",
+          }}
+        >
+          {/* Heading */}
+          <h3
+            className="text-center fw-bold mb-3"
+            style={{
+              backgroundColor: "rgb(70, 4, 67)",
+              color: "white",
+              padding: "10px 15px",
+              borderRadius: "10px",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+              width: "100%",
+              maxWidth: "500px",
+              margin: "0 auto 20px auto",
+            }}
+          >
+            Library Card Application
+          </h3>
 
+          {error && <p className="text-danger text-center">{error}</p>}
+
+          {/* Inputs */}
           <input
             type="email"
             name="email"
@@ -99,20 +129,49 @@ export default function LibraryForm() {
             onChange={handleChange}
             required
           />
-          <button type="submit" className="btn btn-primary w-100">
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="fw-bold"
+            style={{
+              backgroundColor: "rgb(70, 4, 67)",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              padding: "10px",
+              cursor: "pointer",
+              transition: "transform 0.2s",
+              width: "100%",
+              maxWidth: "400px",
+              display: "block",
+              margin: "20px auto 0 auto",
+            }}
+            onMouseOver={(e) => (e.target.style.transform = "scale(1.05)")}
+            onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
+          >
             Apply
           </button>
         </form>
       )}
 
-      <h4 className="mt-4">Your Applications</h4>
-      <table className="table table-bordered mt-2">
-        <thead className="table-light">
+      {/* Applications Table */}
+      <h4
+        className="mt-5 text-center fw-bold fs-3 mb-3"
+        style={{ color: "rgb(70, 4, 67)" }}
+      >
+        Your Applications
+      </h4>
+      <table
+        className="table table-bordered mt-4 shadow-sm"
+        style={{ textAlign: "center" }}
+      >
+        <thead >
           <tr>
-            <th>Email</th>
-            <th>Gender</th>
-            <th>Phone</th>
-            <th>Status</th>
+            <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>Email</th>
+            <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>Gender</th>
+            <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>Phone</th>
+            <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -130,13 +189,12 @@ export default function LibraryForm() {
                 <td>{app.phone}</td>
                 <td>
                   <span
-                    className={`badge ${
-                      app.status === "Pending"
+                    className={`badge ${app.status === "Pending"
                         ? "bg-warning"
                         : app.status === "Approved"
-                        ? "bg-success"
-                        : "bg-danger"
-                    }`}
+                          ? "bg-success"
+                          : "bg-danger"
+                      }`}
                   >
                     {app.status}
                   </span>

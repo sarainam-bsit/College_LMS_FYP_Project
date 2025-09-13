@@ -72,6 +72,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AdminForgetPassword from './Admin/AdminForgetPassword';
 import AdminResetPassword from './Admin/AdminResetPassword';
+import AdminDateSheet from './Admin/AdminDateSheet';
+import StudentDateSheet from './StudentDateSheet';
+import TeacherDateSheet from './Teacher/TeacherDateSheet';
 
 
 // ✅ Student & Teacher Protected Route
@@ -145,6 +148,11 @@ const Main = () => {
       navigate("/login", { replace: true });
     }
   };
+  useEffect(() => {
+    // Tab title set karo
+    document.title = "College LMS";
+
+  }, [location]);
 
 
   return (
@@ -208,6 +216,7 @@ const Main = () => {
         <Route path="/department/:departmentId/category/:categoryId/courses" element={<ProtectedRoute allowedRoles={["student"]}><StudentCourses /></ProtectedRoute>} />
         <Route path="/department/:departmentId/category/:categoryId/tasks" element={<ProtectedRoute allowedRoles={["student"]}><StudentTasks /></ProtectedRoute>} />
         <Route path="/department/:departmentId/category/:categoryId/timetable" element={<ProtectedRoute allowedRoles={["student"]}><StudentTimetable /></ProtectedRoute>} />
+        <Route path="/department/:departmentId/category/:categoryId/datesheet" element={<ProtectedRoute allowedRoles={["student"]}><StudentDateSheet /></ProtectedRoute>} />
         <Route path="/teacher/notifications" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherNotifications /></ProtectedRoute>} />
         <Route path="/teacher/sendnotification" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherSendNotification /></ProtectedRoute>} />
         <Route path="/teacher/contact" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherContact /></ProtectedRoute>} />
@@ -222,11 +231,12 @@ const Main = () => {
         <Route path="/teacher/department/:deptId/categories" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherCategory /></ProtectedRoute>} />
         <Route path="/teacher/department/:departmentId/category/:categoryId" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherCategoryDetails /></ProtectedRoute>} />
         <Route path="/teacher/department/:departmentId/category/:categoryId/timetable" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherTimetable /></ProtectedRoute>} />
+        <Route path="/teacher/department/:departmentId/category/:categoryId/datesheet" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherDateSheet /></ProtectedRoute>} />
         <Route path="/teacher/department/:departmentId/category/:categoryId/courses" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherCourses /></ProtectedRoute>} />
         <Route path="/teacher/department/:departmentId/category/:categoryId/TaskDetail" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherTaskDetail /></ProtectedRoute>} />
         <Route path="/teacher/uploadstudentgrades" element={<ProtectedRoute allowedRoles={["teacher"]}><UploadStudentGrades /></ProtectedRoute>} />
         <Route path="/teacherprofile" element={<ProtectedRoute allowedRoles={["teacher"]}><TeacherProfile /></ProtectedRoute>} />
-        <Route path="/staff" element={<ProtectedRoute allowedRoles={["student","teacher"]}><Staff /></ProtectedRoute>} />
+        <Route path="/staff" element={<ProtectedRoute allowedRoles={["student","teacher", "admin"]}><Staff /></ProtectedRoute>} />
 
         {/* Admin Routes */}
         <Route path="/adminhome" element={<AdminProtectedRoute><AdminHome /></AdminProtectedRoute>} />
@@ -245,8 +255,10 @@ const Main = () => {
         <Route path="/admin/contact" element={<AdminProtectedRoute><AdminContact /></AdminProtectedRoute>} />
         <Route path="/admin/feedback" element={<AdminProtectedRoute><AdminFeedback /></AdminProtectedRoute>} />
         <Route path="/admin/timetable" element={<AdminProtectedRoute><AdminTimetable /></AdminProtectedRoute>} />
+        <Route path="/admin/datesheet" element={<AdminProtectedRoute><AdminDateSheet /></AdminProtectedRoute>} />
+
       </Routes>
-       {/* Toast ek hi dafa lagana hota hai pura app me */}
+       
       <ToastContainer 
     position="top-center"
     autoClose={3000}

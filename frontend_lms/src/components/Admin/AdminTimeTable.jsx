@@ -103,26 +103,20 @@ const AdminTimetable = () => {
 
   return (
     <div
+      
       style={{
-        padding: "30px",
-        fontFamily: "Arial, sans-serif",
+        marginTop: "6%",
         backgroundColor: "#ebeaf2ff",
-        color: "rgba(44, 44, 122, 1)",
+        padding: "20px",
+        borderRadius: "12px",
       }}
     >
-      
-  
-      <h1
-        style={{
-          marginTop: "50px",
-          textAlign: "center",
-          marginBottom: "20px",
-          color: "rgba(44, 44, 122, 1)",
-          fontWeight: "bold",
-        }}
+      <h2
+        className="text-center"
+        style={{ color: "rgba(44, 44, 122, 1)", fontWeight: "bold" }}
       >
-        Manage Timetable
-      </h1>
+        Timetable
+      </h2>
 
       {/* Form */}
       <div
@@ -254,13 +248,13 @@ const AdminTimetable = () => {
       <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "center" }}>
         <thead>
           <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
-            <th style={{ padding: "10px", border: "1px solid white" }}>Department</th>
-            <th style={{ padding: "10px", border: "1px solid white" }}>Category</th>
-            <th style={{ padding: "10px", border: "1px solid white" }}>Course Code</th>
-            <th style={{ padding: "10px", border: "1px solid white" }}>Course</th>
-            <th style={{ padding: "10px", border: "1px solid white" }}>Teacher</th>
-            <th style={{ padding: "10px", border: "1px solid white" }}>Day</th>
-            <th style={{ padding: "10px", border: "1px solid white" }}>Actions</th>
+            <th style={{ padding: "10px", border: "1px solid white", fontSize: '25px' }}>Department</th>
+            <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>Category</th>
+            <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>Course Code</th>
+            <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>Course</th>
+            <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>Teacher</th>
+            <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>Day</th>
+            <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>Actions</th>
           </tr>
         </thead>
         <tbody>

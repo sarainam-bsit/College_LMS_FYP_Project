@@ -50,7 +50,7 @@ const TeacherTimetable = () => {
       >
       <div className="row justify-content-center">
         <div className="col-10 col-sm-8 col-md-6">
-          <h2 className="heading text-center mb-4 mt-3  text-white py-3 px-3 mx-auto rounded shadow-lg" style={{ maxWidth: '400px', backgroundColor: 'rgba(6, 6, 93, 1)' }}>
+          <h2 className="heading text-center mb-5 mt-3  text-white py-3 px-3 mx-auto rounded shadow-lg" style={{ maxWidth: '250px', backgroundColor: 'rgb(4, 4, 63)' }}>
             TimeTable
           </h2>
         </div>
@@ -62,11 +62,11 @@ const TeacherTimetable = () => {
         <table className="table table-striped table-hover text-center align-middle">
           <thead >
             <tr >
-              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Department</th>
-              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Category</th>
-              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Course</th>
-              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Teacher</th>
-              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Day</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px'}}>Department</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px'}}>Category</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px'}}>Course</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px'}}>Teacher</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px'}}>Day</th>
             </tr>
           </thead>
           <tbody>

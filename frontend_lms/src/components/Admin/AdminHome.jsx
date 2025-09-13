@@ -8,9 +8,7 @@ const AdminHome = () => {
   const location = useLocation();
   const [successMessage, setSuccessMessage] = useState("");
 
-  useEffect(() => {
-    document.title = "Admin-Dashboard";
-  }, []);
+ 
 
   useEffect(() => {
     if (location.state && location.state.successMessage) {

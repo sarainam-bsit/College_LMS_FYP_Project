@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Profile = () => {
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isEditing, setIsEditing] = useState(false);
 
   const studentId = localStorage.getItem("studentId");
 
@@ -16,45 +17,20 @@ const Profile = () => {
           setLoading(false);
           return;
         }
-
         const response = await axios.get(
           `http://127.0.0.1:8000/Account/studentprofile/${studentId}/`
         );
         setStudent(response.data);
       } catch (error) {
         console.error("Error fetching student data:", error);
+        toast.error("Failed to fetch student profile");
       } finally {
         setLoading(false);
       }
     };
-
     fetchStudent();
   }, [studentId]);
 
-  // Handle input changes
-  const handleChange = (e) => {
-    setStudent({
-      ...student,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  // Profile update
-  const handleUpdate = async () => {
-    try {
-      const response = await axios.patch(
-        `http://127.0.0.1:8000/Account/studentprofile/${studentId}/`,
-        student
-      );
-      setStudent(response.data);
-      setIsEditing(false);
-      alert("Profile updated successfully!");
-    } catch (error) {
-      console.error("Error updating profile:", error);
-    }
-  };
-
-  // Profile picture change
   const handlePictureUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -66,199 +42,206 @@ const Profile = () => {
       const response = await axios.patch(
         `http://127.0.0.1:8000/Account/studentprofile/${studentId}/`,
         formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
       setStudent(response.data);
-      alert("Profile picture updated!");
+      toast.success("Profile picture updated successfully!");
     } catch (error) {
       console.error("Error uploading picture:", error);
+      toast.error("Failed to update profile picture");
     }
   };
 
-  if (loading) return <p className="text-white text-center mt-5">Loading profile...</p>;
-  if (!student) return <p className="text-danger text-center mt-5">Student not found</p>;
+  if (loading)
+    return (
+      <p style={{ color: "rgba(44, 44, 122, 1)", textAlign: "center", marginTop: "5%" }}>
+        Loading profile...
+      </p>
+    );
+  if (!student)
+    return (
+      <p style={{ color: "rgb(70, 4, 67)", textAlign: "center", marginTop: "5%" }}>
+        Student not found
+      </p>
+    );
 
   return (
-    <div className="container-fluid d-flex justify-content-center align-items-center min-vh-100 bg-dark" style={{ marginTop: "4%" }}>
-      <div className="row justify-content-center">
-        {/* Profile Picture */}
-        <div className="col-12 col-md-4 mt-4">
-          <div className="card">
-            <img
-              src={student.Student_Image}
-              alt="Student"
-              className="card-img-top mt-4"
-              style={{
-                width: "150px",
-                height: "150px",
-                borderRadius: "50%", // ye circle banayega
-                objectFit: "cover",  // image stretch na ho
-                margin: "auto",      // center karne ke liye
-                display: "block"
-              }}
-            />
-            <div className="card-body">
-              <ul className="list-group">
-                <li className="list-group-item">
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={student.Student_Name || ""}
-                    readOnly
-                  />
-                </li>
-                <li className="list-group-item">
-                  <input
-                    type="text"
-                    className="form-control"
-                    value="Government Graduate College Civil Line SKP"
-                    readOnly
-                  />
-                </li>
-              </ul>
+    <div
+      style={{
+        marginTop: "5%",
+        padding: "20px",
+        background: "linear-gradient(135deg, #ebeaf2ff, #f5ecf4ff)",
+        minHeight: "100vh",
+        fontFamily: "Segoe UI, sans-serif",
+      }}
+    >
+      <div className="row justify-content-center g-4">
 
-              {/* Change Picture */}
-              <div className="d-flex justify-content-center mt-3">
-                <label className="btn btn-primary w-50">
-                  Change Picture
-                  <input
-                    type="file"
-                    accept="image/*"
-                    hidden
-                    onChange={handlePictureUpload}
-                  />
-                </label>
-              </div>
+        {/* Profile Card */}
+        <div className="col-12 col-md-4 d-flex justify-content-center">
+          <div
+            style={{
+              background: "#f5ecf4ff",
+              backdropFilter: "blur(10px)",
+              padding: "20px",
+              borderRadius: "20px",
+              border: "1px solid rgba(255,255,255,0.3)",
+              textAlign: "center",
+              boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
+              transition: "transform 0.3s",
+              width: "100%",
+              maxWidth: "350px",
+            }}
+          >
+            <div
+              style={{
+                width: "160px",
+                height: "160px",
+                margin: "0 auto 15px auto",
+                borderRadius: "50%",
+                overflow: "hidden",
+                border: "5px solid rgb(70, 4, 67)",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+              }}
+            >
+              <img
+                src={student.Student_Image || "/default-profile.png"}
+                alt="Student"
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
             </div>
+
+            <h4 style={{ color: "rgba(44, 44, 122, 1)", fontWeight: "700", marginBottom: "5px" }}>
+              {student.Student_Name}
+            </h4>
+            <p style={{ color: "rgba(44, 44, 122, 0.7)", marginBottom: "12px" }}>
+              {student.Student_Email}
+            </p>
+
+            <label
+              style={{
+                display: "inline-block",
+                padding: "10px 18px",
+                background: "rgb(70, 4, 67)",
+                color: "white",
+                borderRadius: "10px",
+                cursor: "pointer",
+                fontSize: "0.9rem",
+                fontWeight: "500",
+                transition: "all 0.3s ease",
+              }}
+              onMouseOver={(e) => (e.currentTarget.style.background = "rgba(44, 44, 122, 1)")}
+              onMouseOut={(e) => (e.currentTarget.style.background = "rgb(70, 4, 67)")}
+            >
+              Change Picture
+              <input type="file" accept="image/*" hidden onChange={handlePictureUpload} />
+            </label>
           </div>
         </div>
 
         {/* Personal Information */}
-        <div className="col-12 col-md-6 mt-4">
-          <div className="card">
-            <div className="card-body">
-              <form>
-                <h5 className="text-center mt-2 bg-dark text-white py-2 px-2 mx-auto rounded shadow-lg" style={{ maxWidth: "400px" }}>
-                  Personal Information
-                </h5>
+        <div className="col-12 col-md-6">
+          <div
+            style={{
+              background: "#f5ecf4ff",
+              backdropFilter: "blur(8px)",
+              padding: "25px",
+              borderRadius: "20px",
+              border: "1px solid rgba(255,255,255,0.3)",
+              boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
+            }}
+          >
+            <h5
+              style={{
+                textAlign: "center",
+                background: "rgb(70, 4, 67)",
+                color: "white",
+                padding: "12px 20px",
+                borderRadius: "10px",
+                marginBottom: "25px",
+                maxWidth: "270px",
+                marginLeft: "auto",
+                marginRight: "auto",
+                fontWeight: "600",
+                boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
+              }}
+            >
+              Personal Information
+            </h5>
 
-                <div className="row mb-3 g-2 mt-3">
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      name="Student_Name"
-                      className="form-control"
-                      value={student.Student_Name || ""}
-                      onChange={handleChange}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      name="Student_Father_Name"
-                      className="form-control"
-                      value={student.Student_Father_Name || ""}
-                      onChange={handleChange}
-                      readOnly
-                    />
-                  </div>
-                </div>
-
-                <div className="row mb-3 g-2 mt-3">
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      name="Reg_No"
-                      className="form-control"
-                      value={student.Reg_No || ""}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      name="Roll_No"
-                      className="form-control"
-                      value={student.Roll_No || ""}
-                      readOnly
-                    />
-                  </div>
-                </div>
-
-                <div className="row mb-3 g-2 mt-3">
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      name="Student_CNIC"
-                      className="form-control"
-                      value={student.Student_CNIC || ""}
-                      readOnly
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      name="Father_CNIC_No"
-                      className="form-control"
-                      value={student.Father_CNIC_No || ""}
-                      readOnly
-                    />
-                  </div>
-                </div>
-
-                <div className="mb-3 mt-3">
-                  <input
-                    type="email"
-                    name="Student_Email"
-                    className="form-control"
-                    value={student.Student_Email || ""}
-                    onChange={handleChange}
-                    readOnly
-                  />
-                </div>
-
-                <div className="mb-3 mt-3">
-                  <input
-                    type="text"
-                    name="Address"
-                    className="form-control"
-                    value={student.Address || ""}
-                    onChange={handleChange}
-                    readOnly
-                  />
-                </div>
-
-                <div className="mb-3 mt-3">
-                  <input
-                    type="tel"
-                    name="Student_Phone_No"
-                    className="form-control"
-                    value={student.Student_Phone_No || ""}
-                    onChange={handleChange}
-                    readOnly
-                  />
-                </div>
-
-
-
-
-
-
-              </form>
-            </div>
+            {[ 
+              { label: "Full Name", value: student.Student_Name },
+              { label: "Father Name", value: student.Student_Father_Name },
+              { label: "Registration No", value: student.Reg_No },
+              { label: "Roll No", value: student.Roll_No },
+              { label: "CNIC", value: student.Student_CNIC },
+              { label: "Father CNIC", value: student.Father_CNIC_No },
+              { label: "Email", value: student.Student_Email },
+              { label: "Address", value: student.Address },
+              { label: "Phone No", value: student.Student_Phone_No },
+            ].map((field, index) => (
+              <div style={{ marginBottom: "15px" }} key={index}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "6px",
+                    color: "rgba(44, 44, 122, 1)",
+                    fontWeight: "500",
+                  }}
+                >
+                  {field.label}
+                </label>
+                <input
+                  type="text"
+                  value={field.value || ""}
+                  readOnly
+                  className="form-control"
+                  style={{
+                    width: "100%",
+                    padding: "10px 12px",
+                    borderRadius: "10px",
+                    border: "1px solid #ddd",
+                    backgroundColor: "#f9f9f9",
+                    fontSize: "0.95rem",
+                    boxShadow: "inset 0 2px 5px rgba(0,0,0,0.05)",
+                  }}
+                />
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Academic Details */}
         <div className="col-12 mt-4 mb-4">
-          <div className="card">
-            <h5 className="text-center mt-2 bg-dark text-white py-2 px-2 mx-auto rounded shadow-lg" style={{ maxWidth: "400px" }}>
+          <div
+            style={{
+              background: "#f5ecf4ff",
+              backdropFilter: "blur(8px)",
+              padding: "25px",
+              borderRadius: "20px",
+              border: "1px solid rgba(255,255,255,0.3)",
+              boxShadow: "0 8px 20px rgba(0,0,0,0.1)",
+              overflowX: "auto",
+            }}
+          >
+            <h5
+              style={{
+                textAlign: "center",
+                background: "rgb(70, 4, 67)",
+                color: "white",
+                padding: "12px 20px",
+                borderRadius: "10px",
+                marginBottom: "25px",
+                maxWidth: "270px",
+                marginLeft: "auto",
+                marginRight: "auto",
+                fontWeight: "600",
+                boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
+              }}
+            >
               Academic Details
             </h5>
-            <table className="table mt-3">
+            <table className="table table-striped table-responsive">
               <thead>
                 <tr>
                   <th>Level</th>
@@ -288,6 +271,9 @@ const Profile = () => {
           </div>
         </div>
       </div>
+
+      {/* Toast Container */}
+      <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
     </div>
   );
 };

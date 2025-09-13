@@ -116,9 +116,11 @@ class CourseTaskViewSet(viewsets.ModelViewSet):
         except CourseCategories.DoesNotExist:
             return Response({"error": "Category not found"}, status=404)
 
-  
+        if student.Degree_Status == 'Complete':
+            return Response({"error": "Degree Complete"}, status=403)
         if not student.Fee_Status:
             return Response({"error": "Access denied: fee not paid"}, status=403)
+        
 
         try:
         # 1. Get all courses in this category

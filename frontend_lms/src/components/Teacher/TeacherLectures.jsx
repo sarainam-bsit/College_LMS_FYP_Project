@@ -156,7 +156,7 @@ const TeacherLectures = () => {
           fontWeight: "bold",
         }}
       >
-        📚 Teacher Lectures
+        Teacher Lectures
       </h1>
 
       {!teacherId && (
@@ -178,12 +178,12 @@ const TeacherLectures = () => {
               border: "2px solid white",
             }}
           >
-            <h4 style={{ textAlign: "center", fontWeight: "bold" }}>
-              {editingLectureId ? "✏️ Edit Lecture" : "➕ Add Lecture"}
+            <h4 style={{ textAlign: "center", fontWeight: "bold", fontSize: '30px' }}>
+              {editingLectureId ? " Edit Lecture" : " Add Lecture"}
             </h4>
 
             <div style={{ marginBottom: "15px" }}>
-              <label className="form-label fw-bold">🎯 Selected Course</label>
+              <label className="form-label fw-bold fs-5">Selected Course</label>
               <input
                 type="text"
                 className="form-control"
@@ -296,7 +296,7 @@ const TeacherLectures = () => {
             }}
           >
             <thead>
-              <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+              <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white", fontSize:'20px' }}>
                 <th style={{ padding: "10px", border: "1px solid #ddd" }}>
                   Code
                 </th>
@@ -323,7 +323,7 @@ const TeacherLectures = () => {
             <tbody>
               {lectures.length === 0 ? (
                 <tr>
-                  <td colSpan={7}>ℹ️ No lectures found</td>
+                  <td colSpan={7}> No lectures found</td>
                 </tr>
               ) : (
                 lectures.map((lec) => (
@@ -354,7 +354,7 @@ const TeacherLectures = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          ▶ View
+                          View
                         </a>
                       ) : (
                         "No Video"

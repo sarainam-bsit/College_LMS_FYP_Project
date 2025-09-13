@@ -50,7 +50,7 @@ const TeacherTaskDetail = () => {
       >
       <div className="row justify-content-center">
         <div className="col-10 col-sm-8 col-md-6">
-          <h2 className="heading text-center mb-4 mt-3  text-white py-3 px-3 mx-auto rounded shadow-lg" style={{ maxWidth: '400px', backgroundColor: 'rgba(4, 4, 61, 1)' }}>
+          <h2 className="heading text-center mb-5 mt-3  text-white py-3 px-3 mx-auto rounded shadow-lg" style={{ maxWidth: '250px', backgroundColor: 'rgb(4, 4, 63)' }}>
             Tasks
           </h2>
         </div>
@@ -62,12 +62,12 @@ const TeacherTaskDetail = () => {
         <table className="table table-striped table-hover text-center align-middle">
           <thead>
             <tr>
-              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Course Code</th>
-              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Course Title</th>
-              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Credit Hour</th>
-              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Category</th>
-              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Teacher</th>
-              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Upload Tasks</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px'}}>Course Code</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px'}}>Course Title</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px'}}>Credit Hour</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px'}}>Category</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px'}}>Teacher</th>
+              <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize: '20px'}}>Upload Tasks</th>
             </tr>
           </thead>
           <tbody>

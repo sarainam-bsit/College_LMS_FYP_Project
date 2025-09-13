@@ -48,20 +48,46 @@ export default function AdminContact() {
     if (loading) return <p>Loading messages...</p>;
 
     return (
-        <div className="container mt-4">
-            <h2 className="mb-4">📩 Contact Messages</h2>
+        <div
+      style={{
+        padding: "30px",
+        fontFamily: "Arial, sans-serif",
+        marginTop: "4%",
+        backgroundColor: "#ebeaf2ff",
+        color: "rgba(44, 44, 122, 1)",
+      }}
+    >
+      <div
+        style={{
+          background: "#f5ecf4ff",
+          borderRadius: "12px",
+          padding: "25px",
+          boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+          margin: "0 auto",
+        }}
+      >
+      <h1
+        style={{
+          marginBottom: "20px",
+          color: "rgba(44, 44, 122, 1)",
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
+      >
+        Contact
+      </h1>
             {messages.length === 0 ? (
                 <p>No messages yet.</p>
             ) : (
                 <table className="table table-bordered shadow-sm">
                     <thead className="table-dark">
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Message</th>
-                            <th>Received</th>
-                            <th>Seen</th>
+                            <th style={{ backgroundColor: "rgb(70,4,67)", color: "white" }}>ID</th>
+                            <th style={{ backgroundColor: "rgb(70,4,67)", color: "white" }}>Name</th>
+                            <th style={{ backgroundColor: "rgb(70,4,67)", color: "white" }}>Email</th>
+                            <th style={{ backgroundColor: "rgb(70,4,67)", color: "white" }}>Message</th>
+                            <th style={{ backgroundColor: "rgb(70,4,67)", color: "white" }}>Received</th>
+                            <th style={{ backgroundColor: "rgb(70,4,67)", color: "white" }}>Seen</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -87,6 +113,7 @@ export default function AdminContact() {
                     </tbody>
                 </table>
             )}
+        </div>
         </div>
     );
 }

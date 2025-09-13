@@ -18,61 +18,45 @@ class StudentAdmin(ExtraButtonsMixin, ImportExportModelAdmin):
         'Degree_Status'
     )
     list_filter = ('Course_Category', 'Is_Registered', 'Status', 'Degree_Status')
-    search_fields = ('Student_Name', 'Reg_No')
+    search_fields = ('Student_Name', 'Reg_No', 'Degree_Status' )
     actions = ["promote_students"] 
 
     @admin.action(description="Promote Selected Students")
     def promote_students(modeladmin, request, queryset):
         for student in queryset:
-            # 1. Agar supply courses hain → promote to next semester, status blank
-            if student.Status == "Supply" and student.Supply_Courses:
-                if student.Course_Category:
-                    next_category = CourseCategories.objects.filter(
-                        id__gt=student.Course_Category.id
-                    ).order_by("id").first()
-                    if next_category:
-                        student.Course_Category = next_category
-                        student.Status = ""  # next semester, signal update karega grades/status
-                        student.Degree_Status = "Running"
-                    else:
-                        # Last semester ho aur courses supply me hain → Degree running, category blank
-                        student.Course_Category = None
-                        student.Status = ""
-                        student.Degree_Status = "Running"
-                student.save()
-                continue
+            if not student.Course_Category:
+                continue  # skip students without a category
 
-            # 2. Agar last semester/Part2 hai aur supply courses khali hain → Degree complete
-            if student.Course_Category and student.Course_Category.Category_Name in ["Semester 8", "Part 2"]:
-                if not student.Supply_Courses:
-                    student.Course_Category = None
-                    student.Degree_Status = "Complete"
+        # 1. If student is passing → promote to next category within same department
+            if student.Status == "Pass" or student.Status == "Fail" or student.Status == "Supply":
+                next_category = CourseCategories.objects.filter(
+                    Related_Department=student.Course_Category.Related_Department,
+                    id__gt=student.Course_Category.id
+                ).order_by("id").first()
+
+                if next_category:
+                    student.Course_Category = next_category
                     student.Status = ""
-                    student.save()
-                    continue
-                else:
-                    # Agar supply courses hain last semester me → Degree running
+                    student.Fee_Status = False
+                    student.Supply_Courses = '[]'
                     student.Degree_Status = "Running"
-                    student.Status = "Supply"
-                    student.save()
-                    continue
+                else:
+                # Last semester → Degree Complete
+                    student.Course_Category = None
+                    student.Status = ""
+                    student.Fee_Status = False
+                    student.Supply_Courses = '[]'
+                    student.Degree_Status = "Complete"
 
-            # 3. Agar student pass hai aur next semester available hai → promote
-            if student.Status == "Pass":
-                if student.Course_Category:
-                    next_category = CourseCategories.objects.filter(
-                        id__gt=student.Course_Category.id
-                    ).order_by("id").first()
-                    if next_category:
-                        student.Course_Category = next_category
-                        student.Status = ""
-                        student.Degree_Status = "Running"
-                    else:
-                        # Last semester complete → Degree complete
-                        student.Course_Category = None
-                        student.Degree_Status = "Complete"
-                        student.Status = ""
-                    student.save()
+                student.save()
+
+        # 2. If student is in last semester (e.g., Semester 8 / Part 2) → Degree Complete
+            elif student.Course_Category.Category_Name in ["Semester 8", "Part 2"]:
+                student.Course_Category = None
+                student.Status = ""
+                student.Fee_Status = False
+                student.Degree_Status = "Complete"
+                student.save()
 
 
 @admin.register(Teacher)

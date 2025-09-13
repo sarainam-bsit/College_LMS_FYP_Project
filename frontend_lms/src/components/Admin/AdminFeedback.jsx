@@ -61,7 +61,7 @@ export default function AdminFeedback() {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setFeedbacks(prev => prev.filter(fb => fb.id !== id));
-      console.log("❌ Feedback deleted:", id);
+      console.log(" Feedback deleted:", id);
     } catch (err) {
       console.error(err);
     }
@@ -70,21 +70,47 @@ export default function AdminFeedback() {
   if (loading) return <p>Loading feedback...</p>;
 
   return (
-    <div className="container mt-4">
-      <h2 className="mb-4">📝 Student Feedback (Admin)</h2>
+    <div
+      style={{
+        padding: "30px",
+        fontFamily: "Arial, sans-serif",
+        marginTop: "4%",
+        backgroundColor: "#ebeaf2ff",
+        color: "rgba(44, 44, 122, 1)",
+      }}
+    >
+      <div
+        style={{
+          background: "#f5ecf4ff",
+          borderRadius: "12px",
+          padding: "25px",
+          boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+          margin: "0 auto",
+        }}
+      >
+      <h1
+        style={{
+          marginBottom: "20px",
+          color: "rgba(44, 44, 122, 1)",
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
+      >
+        Student Feedbacks
+      </h1>
 
       {feedbacks.length === 0 ? (
         <p>No feedback yet.</p>
       ) : (
         <table className="table table-bordered shadow-sm">
-          <thead className="table-dark">
+          <thead className="table">
             <tr>
-              <th>ID</th>
-              <th>Student Name</th>
-              <th>Message</th>
-              <th>Received</th>
-              <th>Seen</th>
-              <th>Actions</th>
+              <th style={{ backgroundColor: "rgb(70,4,67)", color: "white", fontSize: '20px' }}>ID</th>
+              <th style={{ backgroundColor: "rgb(70,4,67)", color: "white", fontSize: '20px' }}>Student Name</th>
+              <th style={{ backgroundColor: "rgb(70,4,67)", color: "white", fontSize: '20px' }}>Message</th>
+              <th style={{ backgroundColor: "rgb(70,4,67)", color: "white", fontSize: '20px' }}>Received</th>
+              <th style={{ backgroundColor: "rgb(70,4,67)", color: "white", fontSize: '20px' }}>Seen</th>
+              <th style={{ backgroundColor: "rgb(70,4,67)", color: "white", fontSize: '20px' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -127,6 +153,7 @@ export default function AdminFeedback() {
           </tbody>
         </table>
       )}
+    </div>
     </div>
   );
 }

@@ -17,9 +17,7 @@ const Login = ({ setIsLoggedIn, setUserRole }) => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    document.title = 'Login';
-  }, []);
+ 
 
   const handleChange = (e) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });

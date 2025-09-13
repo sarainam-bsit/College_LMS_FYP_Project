@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CoursesAdmin = () => {
@@ -95,24 +95,20 @@ const CoursesAdmin = () => {
 
   return (
     <div
+      
       style={{
-        padding: "30px",
-        fontFamily: "Arial, sans-serif",
-        marginTop: "4%",
+        marginTop: "6%",
         backgroundColor: "#ebeaf2ff",
-        color: "rgba(44, 44, 122, 1)",
+        padding: "20px",
+        borderRadius: "12px",
       }}
     >
-      <h1
-        style={{
-          marginBottom: "20px",
-          color: "rgba(44, 44, 122, 1)",
-          textAlign: "center",
-          fontWeight: "bold",
-        }}
+      <h2
+        className="text-center mb-4"
+        style={{ color: "rgba(44, 44, 122, 1)", fontWeight: "bold" }}
       >
-        Manage Courses
-      </h1>
+        Courses
+      </h2>
 
       {/* Form */}
       <form
@@ -144,8 +140,6 @@ const CoursesAdmin = () => {
             ))}
           </select>
         </div>
-
-        {/* Teacher Dropdown */}
         <div className="col-md-6">
           <select
             name="Teacher"
@@ -163,7 +157,6 @@ const CoursesAdmin = () => {
           </select>
         </div>
 
-        {/* Course Code */}
         <div className="col-md-6">
           <input
             type="text"
@@ -176,7 +169,6 @@ const CoursesAdmin = () => {
           />
         </div>
 
-        {/* Credit Hour */}
         <div className="col-md-6">
           <input
             type="number"
@@ -189,7 +181,6 @@ const CoursesAdmin = () => {
           />
         </div>
 
-        {/* Course Title */}
         <div className="col-md-12">
           <input
             type="text"
@@ -202,7 +193,6 @@ const CoursesAdmin = () => {
           />
         </div>
 
-        {/* Buttons */}
         <div className="col-12 d-flex gap-2">
           <button
             type="submit"
@@ -252,16 +242,16 @@ const CoursesAdmin = () => {
         </div>
       </form>
 
-      {/* Courses Table */}
+ 
       <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "center" }}>
         <thead>
           <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
-            <th style={{ padding: "10px", border: "1px solid white" }}>Code</th>
-            <th style={{ padding: "10px", border: "1px solid white" }}>Credit Hour</th>
-            <th style={{ padding: "10px", border: "1px solid white" }}>Title</th>
-            <th style={{ padding: "10px", border: "1px solid white" }}>Category</th>
-            <th style={{ padding: "10px", border: "1px solid white" }}>Teacher</th>
-            <th style={{ padding: "10px", border: "1px solid white" }}>Actions</th>
+            <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>Code</th>
+            <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>Credit Hour</th>
+            <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>Title</th>
+            <th style={{ padding: "10px", border: "1px solid white", fontSize: '23px' }}>Category</th>
+            <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>Teacher</th>
+            <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>Actions</th>
           </tr>
         </thead>
         <tbody>

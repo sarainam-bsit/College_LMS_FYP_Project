@@ -42,9 +42,11 @@ const AdminHostelApplications = () => {
   return (
     <div
       style={{
+        padding: "30px",
+        fontFamily: "Arial, sans-serif",
+        marginTop: "4%",
         backgroundColor: "#ebeaf2ff",
-        minHeight: "100vh",
-        padding: "20px",
+        color: "rgba(44, 44, 122, 1)",
       }}
     >
       <div
@@ -53,16 +55,19 @@ const AdminHostelApplications = () => {
           borderRadius: "12px",
           padding: "25px",
           boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-          maxWidth: "1000px",
           margin: "0 auto",
         }}
       >
-        <h2
-          className="mb-4 text-center"
-          style={{ color: "rgba(44,44,122,1)", fontWeight: "bold", marginTop: '40px' }}
-        >
-          Hostel Applications 
-        </h2>
+      <h1
+        style={{
+          marginBottom: "20px",
+          color: "rgba(44, 44, 122, 1)",
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
+      >
+        Hostel Applications
+      </h1>
 
         <div className="table-responsive">
           <table
@@ -73,12 +78,12 @@ const AdminHostelApplications = () => {
               overflow: "hidden",
             }}
           >
-            <thead style={{ backgroundColor: "rgb(70,4,67)", color: "white" }}>
+            <thead >
               <tr>
-                <th>Application ID</th>
-                <th>Student Email</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th style={{ backgroundColor: "rgb(70,4,67)", color: "white", fontSize: '20px' }}>Application ID</th>
+                <th style={{ backgroundColor: "rgb(70,4,67)", color: "white", fontSize: '20px' }}>Student Email</th>
+                <th style={{ backgroundColor: "rgb(70,4,67)", color: "white", fontSize: '20px' }}>Status</th>
+                <th style={{ backgroundColor: "rgb(70,4,67)", color: "white", fontSize: '20px' }}>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -143,7 +148,7 @@ const AdminHostelApplications = () => {
         </div>
       </div>
 
-      <ToastContainer position="top-right" autoClose={2000} />
+      <ToastContainer position="top-center" autoClose={2000} />
     </div>
   );
 };

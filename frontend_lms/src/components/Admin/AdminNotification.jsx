@@ -128,24 +128,20 @@ export default function AdminNotifications() {
 
   return (
     <div
+      
       style={{
-        padding: "30px",
-        fontFamily: "Arial, sans-serif",
-        marginTop: "3%",
+        marginTop: "6%",
         backgroundColor: "#ebeaf2ff",
-        color: "rgba(44, 44, 122, 1)",
+        padding: "20px",
+        borderRadius: "12px",
       }}
     >
-      <h1
-        style={{
-          marginBottom: "20px",
-          color: "rgba(44, 44, 122, 1)",
-          textAlign: "center",
-          fontWeight: "bold",
-        }}
+      <h2
+        className="text-center"
+        style={{ color: "rgba(44, 44, 122, 1)", fontWeight: "bold" }}
       >
-        Admin — Notifications
-      </h1>
+        Notifications
+      </h2>
 
       {/* Form */}
       <form
@@ -160,7 +156,7 @@ export default function AdminNotifications() {
       >
         <div className="row g-3">
           <div className="col-md-6">
-            <label className="form-label">Title</label>
+            <label className="fs-5 fw-bold">Title</label>
             <input
               className="form-control"
               value={form.title}
@@ -169,7 +165,7 @@ export default function AdminNotifications() {
             />
           </div>
           <div className="col-md-3">
-            <label className="form-label">Type</label>
+            <label className="fs-5 fw-bold">Type</label>
             <select
               className="form-select"
               value={form.type}
@@ -183,7 +179,7 @@ export default function AdminNotifications() {
             </select>
           </div>
           <div className="col-12">
-            <label className="form-label">Message</label>
+            <label className="fs-5 fw-bold">Message</label>
             <textarea
               className="form-control"
               rows={3}
@@ -195,7 +191,7 @@ export default function AdminNotifications() {
 
           {/* Audience */}
           <div className="col-12">
-            <label className="form-label d-block">Audience</label>
+            <label className="fs-5 fw-bold d-block">Audience</label>
             <div className="d-flex flex-wrap gap-3">
               {[
                 ["all_students", "All Students"],
@@ -300,11 +296,11 @@ export default function AdminNotifications() {
       >
         <thead>
           <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
-            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Title</th>
-            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Type</th>
-            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Audience</th>
-            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Created</th>
-            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Action</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd", fontSize: '20px' }}>Title</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd", fontSize: '20px' }}>Type</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd", fontSize: '20px' }}>Audience</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd", fontSize: '20px' }}>Created</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd", fontSize: '20px' }}>Action</th>
           </tr>
         </thead>
         <tbody>

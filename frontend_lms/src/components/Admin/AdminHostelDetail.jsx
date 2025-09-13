@@ -89,24 +89,20 @@ const AdminHostelDetail = () => {
 
   return (
     <div
+      
       style={{
-        padding: "30px",
-        fontFamily: "Arial, sans-serif",
-        marginTop: "4%",
+        marginTop: "6%",
         backgroundColor: "#ebeaf2ff",
-        color: "rgba(44, 44, 122, 1)",
+        padding: "20px",
+        borderRadius: "12px",
       }}
     >
-      <h1
-        style={{
-          marginBottom: "20px",
-          color: "rgba(44, 44, 122, 1)",
-          textAlign: "center",
-          fontWeight: "bold",
-        }}
+      <h2
+        className="text-center"
+        style={{ color: "rgba(44, 44, 122, 1)", fontWeight: "bold" }}
       >
-        Manage Hostel Details
-      </h1>
+        Hostel Details
+      </h2>
 
       {/* Form */}
       <form
@@ -120,7 +116,7 @@ const AdminHostelDetail = () => {
         }}
       >
         <div style={{ marginBottom: "15px" }}>
-          <label style={{ display: "block", marginBottom: "5px" }}>Hostel Room Name:</label>
+          <label className="fs-5 fw-bold">Hostel Room Name:</label>
           <input
             type="text"
             name="Hostel_Rooms_Name"
@@ -137,7 +133,7 @@ const AdminHostelDetail = () => {
         </div>
 
         <div style={{ marginBottom: "15px" }}>
-          <label style={{ display: "block", marginBottom: "5px" }}>Description:</label>
+          <label className="fs-5 fw-bold">Description:</label>
           <textarea
             name="Discription"
             value={formData.Discription}
@@ -152,7 +148,7 @@ const AdminHostelDetail = () => {
         </div>
 
         <div style={{ marginBottom: "15px" }}>
-          <label style={{ display: "block", marginBottom: "5px" }}>Hostel Room Image:</label>
+          <label className="fs-5 fw-bold">Hostel Room Image:</label>
           <input type="file" name="Hostel_Room_Image" onChange={handleChange} />
         </div>
 
@@ -201,10 +197,10 @@ const AdminHostelDetail = () => {
       <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "center" }}>
         <thead>
           <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
-            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Name</th>
-            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Description</th>
-            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Image</th>
-            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Actions</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd", fontSize: '20px' }}>Name</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd", fontSize: '20px' }}>Description</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd", fontSize: '20px' }}>Image</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd", fontSize: '20px' }}>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -235,7 +231,7 @@ const AdminHostelDetail = () => {
                     style={{
                       marginRight: "5px",
                       padding: "5px 10px",
-                      backgroundColor: "orange",
+                      backgroundColor: "rgb(70, 4, 67)",
                       color: "white",
                       border: "none",
                       borderRadius: "5px",
@@ -251,7 +247,7 @@ const AdminHostelDetail = () => {
                     onClick={() => handleDelete(hostel.id)}
                     style={{
                       padding: "5px 10px",
-                      backgroundColor: "red",
+                      backgroundColor: "rgb(4, 4, 63)",
                       color: "white",
                       border: "none",
                       borderRadius: "5px",

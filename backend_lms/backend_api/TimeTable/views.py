@@ -2,10 +2,11 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Timetable
-from .serializers import TimetableSerializer
+from .serializers import TimetableSerializer, DateSheetSerializer
 from Departments.models import Department, CourseCategories
 from Courses.models import Course
 from Account.models import Teacher, Student
+from rest_framework import status  
 
 class TimetableViewSet(viewsets.ModelViewSet):
     queryset = Timetable.objects.all()
@@ -61,9 +62,9 @@ class TimetableViewSet(viewsets.ModelViewSet):
                 status=403
             )
 
-    # Boolean check (optional)
-        if hasattr(student, "can_access_Course") and not student.can_access_Course:
-            return Response({"error": "Access denied: fee or permission not granted"}, status=403)
+    # # Boolean check (optional)
+    #     if hasattr(student, "can_access_Course") and not student.can_access_Course:
+    #         return Response({"error": "Access denied: fee or permission not granted"}, status=403)
 
     # Courses filter by names
         try:
@@ -114,3 +115,65 @@ class TimetableViewSet(viewsets.ModelViewSet):
         timetable = Timetable.objects.filter(Course__C_Category=category, Course__in=courses_in_category)
         serializer = self.get_serializer(timetable, many=True)
         return Response(serializer.data)
+    
+class DateSheetViewSet(viewsets.ModelViewSet):
+    queryset = Timetable.objects.all()
+    serializer_class = DateSheetSerializer
+
+    @action(detail=False, methods=['get'], url_path="student-datesheet")
+    def student_datesheet(self, request):
+        student_id = request.query_params.get("student_id")
+        department_id = request.query_params.get("department_id")
+        category_id = request.query_params.get("category_id")
+
+        if not student_id or not department_id or not category_id:
+            return Response(
+                {"error": "student_id, department_id and category_id required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # timetables filter only datesheet ones
+        timetables = Timetable.objects.filter(
+            Course__C_Category__id=category_id,
+            Course__C_Category__Related_Department__id=department_id,
+            is_datesheet=True
+        )
+        serializer = DateSheetSerializer(timetables, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'], url_path="teacher-datesheet")
+    def teacher_datesheet(self, request):
+        teacher_id = request.query_params.get("teacher_id")
+        category_id = request.query_params.get("category_id")
+
+        if not teacher_id or not category_id:
+            return Response(
+                {"error": "teacher_id and category_id required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Teacher fetch
+        teacher = Teacher.objects.filter(id=teacher_id).first()
+        if not teacher:
+            return Response({"error": "Teacher not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Courses of this teacher in given category
+        courses_in_category = Course.objects.filter(
+            C_Category__id=category_id,
+            Teacher=teacher
+        )
+
+        if not courses_in_category.exists():
+            return Response(
+                {"error": "No courses assigned in this category for this teacher."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # Datesheet filter
+        timetables = Timetable.objects.filter(
+            Course__in=courses_in_category,
+            is_datesheet=True
+        )
+
+        serializer = DateSheetSerializer(timetables, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

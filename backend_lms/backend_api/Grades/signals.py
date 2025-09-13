@@ -85,19 +85,19 @@ def update_student_grade_history(sender, instance, **kwargs):
         g.save()
 
     # GPA if all courses uploaded
-    if pending_courses_count == 0:
-        all_grades = StudentGradeHistory.objects.filter(student=student, course__in=semester_courses)
-        total_obtained = sum((g.course_obtained or 0) + (g.sessional_obtained or 0) for g in all_grades)
-        total_max = sum((g.course_total or 0) + (g.sessional_total or 0) for g in all_grades)
-        total_points = sum((g.grade_point() * g.credit_hour) for g in all_grades)
-        total_credits = sum(g.credit_hour for g in all_grades)
-        gpa = round(total_points / total_credits, 2) if total_credits else 0
+    # if pending_courses_count == 0:
+    #     all_grades = StudentGradeHistory.objects.filter(student=student, course__in=semester_courses)
+    #     total_obtained = sum((g.course_obtained or 0) + (g.sessional_obtained or 0) for g in all_grades)
+    #     total_max = sum((g.course_total or 0) + (g.sessional_total or 0) for g in all_grades)
+    #     total_points = sum((g.grade_point() * g.credit_hour) for g in all_grades)
+    #     total_credits = sum(g.credit_hour for g in all_grades)
+    #     gpa = round(total_points / total_credits, 2) if total_credits else 0
 
-        for g in all_grades:
-            g.total_obtained = total_obtained
-            g.total_max = total_max
-            g.GPA = gpa
-            g.save()
+    #     for g in all_grades:
+    #         g.total_obtained = total_obtained
+    #         g.total_max = total_max
+    #         g.GPA = gpa
+    #         g.save()
     
     
         

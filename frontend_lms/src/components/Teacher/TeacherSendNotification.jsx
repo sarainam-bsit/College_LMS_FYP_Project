@@ -100,16 +100,22 @@ export default function TeacherSendNotifications() {
         color: "rgba(44, 44, 122, 1)",
       }}
     >
-      <h1
-        style={{
-          marginBottom: "20px",
-          color: "rgba(44, 44, 122, 1)",
-          textAlign: "center",
-          fontWeight: "bold",
-        }}
-      >
-        Teacher — Notifications
-      </h1>
+      <div className="row justify-content-center">
+          <div className="col-10 col-sm-8 col-md-6">
+            <h2
+              className="heading text-center mb-5 mt-4 py-3 px-3 mx-auto rounded shadow-lg"
+              style={{
+                maxWidth: '400px',
+                backgroundColor: "rgb(70, 4, 67)",
+                color: "white",
+                fontWeight: "bold",
+                letterSpacing: "1px"
+              }}
+            >
+              Send Notifications
+            </h2>
+          </div>
+        </div>
 
       <form
         onSubmit={onSubmit}
@@ -123,7 +129,7 @@ export default function TeacherSendNotifications() {
       >
         <div className="row g-3">
           <div className="col-md-6">
-            <label className="form-label">Title</label>
+            <label className="fs-5 fw-bold">Title</label>
             <input
               className="form-control"
               value={form.title}
@@ -132,7 +138,7 @@ export default function TeacherSendNotifications() {
             />
           </div>
           <div className="col-md-3">
-            <label className="form-label">Type</label>
+            <label className="fs-5 fw-bold">Type</label>
             <select
               className="form-select"
               value={form.type}
@@ -146,7 +152,7 @@ export default function TeacherSendNotifications() {
             </select>
           </div>
           <div className="col-12">
-            <label className="form-label">Message</label>
+            <label className="fs-5 fw-bold">Message</label>
             <textarea
               className="form-control"
               rows={3}
@@ -157,7 +163,7 @@ export default function TeacherSendNotifications() {
           </div>
 
           <div className="col-12">
-            <label className="form-label d-block">Audience</label>
+            <label className="fs-5 fw-bold">Audience</label>
             <div className="d-flex flex-wrap gap-3">
               {[
                 ["all_students", "All Students"],
@@ -231,7 +237,7 @@ export default function TeacherSendNotifications() {
         }}
       >
         <thead>
-          <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+          <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white", fontSize: '20px' }}>
             <th style={{ padding: "10px", border: "1px solid #ddd" }}>Title</th>
             <th style={{ padding: "10px", border: "1px solid #ddd" }}>Type</th>
             <th style={{ padding: "10px", border: "1px solid #ddd" }}>Audience</th>

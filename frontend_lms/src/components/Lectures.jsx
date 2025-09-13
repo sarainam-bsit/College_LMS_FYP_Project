@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
-import Navbar from './Navbar';
-import axios from 'axios';
+import React, { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
+import Navbar from "./Navbar";
+import axios from "axios";
 
 const Lectures = () => {
   const { courseId } = useParams();
   const [lectures, setLectures] = useState([]);
   const [selectedVideo, setSelectedVideo] = useState(null);
-  const [selectedTitle, setSelectedTitle] = useState('');
-  const videoRef = useRef(null); // ✅ video element ka ref
+  const [selectedTitle, setSelectedTitle] = useState("");
+  const videoRef = useRef(null);
 
   useEffect(() => {
     const fetchLectures = async () => {
@@ -32,7 +32,7 @@ const Lectures = () => {
   const closeModal = () => {
     if (videoRef.current) {
       videoRef.current.pause();
-      videoRef.current.currentTime = 0; // ✅ video reset
+      videoRef.current.currentTime = 0;
     }
   };
 
@@ -40,21 +40,45 @@ const Lectures = () => {
     <>
       <Navbar />
       <div
-        className="container p-1"
-        style={{ marginTop: '80px', minHeight: '90vh' }}
+        className="container p-1 text-center"
+        style={{ marginTop: "80px", minHeight: "90vh" }}
       >
-        <h2 className="text-center mt-4">Lectures</h2>
+        {/* Heading */}
+        <h2
+          className="mb-4 py-2 px-3 mx-auto rounded shadow-lg"
+          style={{
+            maxWidth: "350px",
+            backgroundColor: "rgb(70, 4, 67)", // deep purple
+            color: "white",
+            fontWeight: "bold",
+          }}
+        >
+          Lectures
+        </h2>
 
-        <div className="table-responsive">
-          <table className="table mt-4">
+        {/* Table */}
+        <div className="table-responsive card shadow-lg mt-3">
+          <table className="table table-bordered table-hover text-center align-middle mb-0">
             <thead>
               <tr>
-                <th>C. Code</th>
-                <th>C. Name</th>
-                <th>Title</th>
-                <th>Time</th>
-                <th>Date</th>
-                <th>Videos</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+                  C. Code
+                </th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+                  C. Name
+                </th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+                  Title
+                </th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+                  Time
+                </th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+                  Date
+                </th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+                  Videos
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -69,7 +93,12 @@ const Lectures = () => {
                     <td>
                       {lec.Video ? (
                         <button
-                          className="btn btn-sm btn-danger"
+                          className="btn btn-sm"
+                          style={{
+                            backgroundColor: "rgb(2, 2, 40)",
+                            color: "white",
+                            fontWeight: "bold",
+                          }}
                           data-bs-toggle="modal"
                           data-bs-target="#videoModal"
                           onClick={() => openModal(lec)}
@@ -77,14 +106,14 @@ const Lectures = () => {
                           <i className="fa-solid fa-play"></i>
                         </button>
                       ) : (
-                        'No Video'
+                        "No Video"
                       )}
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="text-center">
+                  <td colSpan={6} className="py-3">
                     No lectures found
                   </td>
                 </tr>
@@ -101,25 +130,28 @@ const Lectures = () => {
           aria-labelledby="videoModalLabel"
           aria-hidden="true"
         >
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
+          <div className="modal-dialog modal-dialog-centered modal-xl">
+            <div className="modal-content shadow-lg">
+              <div
+                className="modal-header"
+                style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}
+              >
                 <h5 className="modal-title">{selectedTitle}</h5>
                 <button
                   type="button"
-                  className="btn-close"
+                  className="btn-close btn-close-white"
                   data-bs-dismiss="modal"
-                  onClick={closeModal} // ✅ close button click par stop
+                  onClick={closeModal}
                 ></button>
               </div>
-              <div className="modal-body">
+              <div className="modal-body bg-light">
                 {selectedVideo ? (
                   <div className="ratio ratio-16x9">
                     <video
-                      ref={videoRef} // ✅ videoRef attach
+                      ref={videoRef}
                       controls
                       src={selectedVideo}
-                      style={{ width: '100%' }}
+                      style={{ width: "100%" }}
                     />
                   </div>
                 ) : (

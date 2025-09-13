@@ -157,7 +157,7 @@ const UploadStudentGrades = () => {
       <div className="card shadow-lg p-4 bg-light">
 <div className="row justify-content-center">
         <div className="col-10 col-sm-8 col-md-6">
-          <h2 className="heading text-center mb-4 mt-3  text-white py-3 px-3 mx-auto rounded shadow-lg" style={{ maxWidth: '400px', backgroundColor: 'rgba(6, 6, 93, 1)' }}>
+          <h2 className="heading text-center mb-4 mt-3  text-white py-3 px-3 mx-auto rounded shadow-lg" style={{ maxWidth: '300px', backgroundColor: 'rgb(4, 4, 63)' }}>
            Upload Grades
           </h2>
         </div>

@@ -118,17 +118,21 @@ const DepartmentAdmin = () => {
   };
 
   return (
-    <div style={{ padding: "30px", fontFamily: "Arial, sans-serif", marginTop: "4%", backgroundColor: "#ebeaf2ff", color: "rgba(44, 44, 122, 1)" }}>
-      <h1
-  style={{
-    marginBottom: "20px",
-    color: "rgba(44, 44, 122, 1)",
-    textAlign: "center",   // center
-    fontWeight: "bold",    // bold
-  }}
->
-  Department
-</h1>
+    <div
+      
+      style={{
+        marginTop: "6%",
+        backgroundColor: "#ebeaf2ff",
+        padding: "20px",
+        borderRadius: "12px",
+      }}
+    >
+      <h2
+        className="text-center mb-3"
+        style={{ color: "rgba(44, 44, 122, 1)", fontWeight: "bold" }}
+      >
+        Programs
+      </h2>
 
       {/* Form */}
       <form
@@ -142,7 +146,7 @@ const DepartmentAdmin = () => {
         }}
       >
         <div style={{ marginBottom: "15px" }}>
-          <label style={{ display: "block", marginBottom: "5px" }}>Department Name:</label>
+          <label className="fs-5 fw-bold">Department Name:</label>
           <input
             type="text"
             name="Department_Name"
@@ -159,7 +163,7 @@ const DepartmentAdmin = () => {
         </div>
 
         <div style={{ marginBottom: "15px" }}>
-          <label style={{ display: "block", marginBottom: "5px" }}>Description:</label>
+          <label className="fs-5 fw-bold">Description:</label>
           <textarea
             name="Discription"
             value={formData.Discription}
@@ -174,7 +178,7 @@ const DepartmentAdmin = () => {
         </div>
 
         <div style={{ marginBottom: "15px" }}>
-          <label style={{ display: "block", marginBottom: "5px" }}>HOD (Teacher):</label>
+          <label className="fs-5 fw-bold">HOD (Teacher):</label>
           <select
             name="HOD"
             value={formData.HOD}
@@ -196,7 +200,7 @@ const DepartmentAdmin = () => {
         </div>
 
         <div style={{ marginBottom: "15px" }}>
-          <label style={{ display: "block", marginBottom: "5px" }}>Department Image:</label>
+          <label className="fs-5 fw-bold">Department Image:</label>
           <input type="file" name="Department_Image" onChange={handleChange} />
         </div>
 
@@ -245,12 +249,12 @@ const DepartmentAdmin = () => {
       <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "center" }}>
         <thead>
           <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
-            <th style={{ padding: "10px", border: "1px solid #ddd" }}>ID</th>
-            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Name</th>
-            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Description</th>
-            <th style={{ padding: "10px", border: "1px solid #ddd" }}>HOD</th>
-            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Image</th>
-            <th style={{ padding: "10px", border: "1px solid #ddd" }}>Actions</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd", fontSize: '25px' }}>ID</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd", fontSize: '25px' }}>Name</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd", fontSize: '25px' }}>Description</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd", fontSize: '25px' }}>HOD</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd", fontSize: '25px' }}>Image</th>
+            <th style={{ padding: "10px", border: "1px solid #ddd", fontSize: '25px' }}>Actions</th>
           </tr>
         </thead>
         <tbody>

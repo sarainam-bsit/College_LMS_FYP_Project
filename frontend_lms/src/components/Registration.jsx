@@ -34,9 +34,7 @@ const Registration = ({ setIsLoggedIn, setUserRole }) => {
         });
     };
 
-    useEffect(() => {
-        document.title = 'Student Registration';
-    }, []);
+   
     if (isLoggedIn) {
         // Agar login hai to registration page block
 

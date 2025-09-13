@@ -30,7 +30,7 @@ const AdminRoomDetail = () => {
     room_image: null,
   });
 
-  // Fetch rooms + room types
+ 
   const fetchData = async () => {
     try {
       const typeRes = await axios.get(`${API_BASE}/hosteldetail/`);
@@ -122,13 +122,27 @@ const AdminRoomDetail = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div style={{ padding: "30px", marginTop: "4%", backgroundColor: "#ebeaf2ff", color: "rgba(44, 44, 122, 1)" }}>
-      <h2 style={{ textAlign: "center", color: "rgba(44, 44, 122, 1)", fontWeight: "bold", marginBottom: "20px" }}>
-        Admin Room Management
+    <div
+      
+      style={{
+        marginTop: "6%",
+        backgroundColor: "#ebeaf2ff",
+        padding: "20px",
+        borderRadius: "12px",
+      }}
+    >
+      <h2
+        className="text-center"
+        style={{ color: "rgba(44, 44, 122, 1)", fontWeight: "bold" }}
+      >
+        Room Details
       </h2>
 
       {/* Form Card */}
-      <div style={{ backgroundColor: "#f5ecf4ff", padding: "20px", borderRadius: "10px", border: "2px solid white", marginBottom: "30px" }}>
+      <div style={{ marginBottom: "20px",
+          color: "rgba(8, 8, 104, 1)",
+         
+          fontWeight: "bolder"}}>
         <h4>{roomForm.id ? "Update Room" : "Add Room"}</h4>
 
         <div className="row g-3 mb-3">
@@ -253,25 +267,25 @@ const AdminRoomDetail = () => {
         <h4>Rooms List</h4>
         <div className="table-responsive">
           <table className="table table-striped table-hover text-center align-middle mb-0">
-            <thead style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+            <thead >
               <tr>
-                <th>Type</th>
-                <th>Total</th>
-                <th>Booked</th>
-                <th>Available</th>
-                <th>Rent</th>
-                <th>Image</th>
-                <th>AC</th>
-                <th>Bathroom</th>
-                <th>WiFi</th>
-                <th>TV</th>
-                <th>Wardrobe</th>
-                <th>Study Table</th>
-                <th>Common Area</th>
-                <th>Mess</th>
-                <th>Laundry</th>
-                <th>Description</th>
-                <th>Actions</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", padding: '10px',border: "1px solid #ddd",color: "white", fontSize: '17px' }}>Type</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", padding: '10px',border: "1px solid #ddd",color: "white", fontSize: '17px' }}>Total</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", padding: '10px',border: "1px solid #ddd",color: "white", fontSize: '17px' }}>Booked</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", padding: '10px',border: "1px solid #ddd",color: "white", fontSize: '17px' }}>Available</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", padding: '10px',border: "1px solid #ddd",color: "white", fontSize: '17px' }}>Rent</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", padding: '10px',border: "1px solid #ddd",color: "white", fontSize: '17px' }}>Image</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", padding: '10px',border: "1px solid #ddd",color: "white", fontSize: '17px' }}>AC</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", padding: '10px',border: "1px solid #ddd",color: "white", fontSize: '17px' }}>Bathroom</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", padding: '10px',border: "1px solid #ddd",color: "white", fontSize: '17px' }}>WiFi</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", padding: '10px',border: "1px solid #ddd",color: "white", fontSize: '17px' }}>TV</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", padding: '10px',border: "1px solid #ddd",color: "white", fontSize: '17px' }}>Wardrobe</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", padding: '10px',border: "1px solid #ddd",color: "white", fontSize: '17px' }}>Study Table</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", padding: '10px',border: "1px solid #ddd",color: "white", fontSize: '17px' }}>Common Area</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", padding: '10px',border: "1px solid #ddd",color: "white", fontSize: '17px' }}>Mess</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", padding: '10px',border: "1px solid #ddd",color: "white", fontSize: '17px' }}>Laundry</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", padding: '10px',border: "1px solid #ddd",color: "white", fontSize: '17px' }}>Description</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", padding: '10px',border: "1px solid #ddd",color: "white", fontSize: '17px' }}>Actions</th>
               </tr>
             </thead>
             <tbody>

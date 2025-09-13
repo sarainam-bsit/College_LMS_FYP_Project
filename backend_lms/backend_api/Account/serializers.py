@@ -1,5 +1,7 @@
 from .models import Student, Teacher
 from rest_framework import serializers
+from Courses.models import Course 
+
 from django.contrib.auth.hashers import make_password
 
 class StudentRegistrationSerializer(serializers.ModelSerializer):
@@ -37,4 +39,23 @@ class TeacherProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teacher
         fields = "__all__"
+class SataffSerializer(serializers.ModelSerializer):
+    Department_Name = serializers.CharField(source="Department.Department_Name", read_only=True)
+    Courses = serializers.SerializerMethodField()
+    class Meta:
+        model = Teacher
+        fields = ['id', 'Teacher_Image', 'Teacher_Name', 'Department_Name', 'Qualification', 'Courses']
+    def get_Courses(self, obj):
+        # teacher ka courses fetch kar rahe hain
+        courses = Course.objects.filter(Teacher=obj)
+        # har course ka name aur category fetch kar rahe hain
+        return [
+            {
+                "Course_Name": course.C_Title,
+                "Course_Code": course.C_Code,
+                "Category_Name": course.C_Category.Category_Name if course.C_Category else None
+            }
+            for course in courses
+        ]
+
             

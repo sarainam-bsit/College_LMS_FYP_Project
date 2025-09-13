@@ -12,7 +12,7 @@ from rest_framework import viewsets
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
-from .serializers import StudentSerializer, TeacherSerializer, StudentProfileSerializer, TeacherProfileSerializer
+from .serializers import StudentSerializer, TeacherSerializer, StudentProfileSerializer, TeacherProfileSerializer, SataffSerializer
 
 class StudentListAPIView(generics.ListAPIView):
     serializer_class = StudentSerializer
@@ -183,7 +183,11 @@ def verify_otp(request):
                 user.Student_Password = user.Temp_Password
                 user.Temp_Password = None
             user.save()
-            return Response({"message": "OTP verified successfully", "role": "student"}, status=status.HTTP_200_OK)
+            return Response({
+            "message": "OTP verified successfully",
+            "role": "student",
+            "student_id": user.id   # ye add karo
+            }, status=status.HTTP_200_OK)
     else:
         if otp and user.Teacher_OTP_Digits == otp and user.Teacher_OTP_Expiry and timezone.now() < user.Teacher_OTP_Expiry:
             user.Teacher_Is_Verified = True
@@ -193,7 +197,11 @@ def verify_otp(request):
                 user.Teacher_Password = user.Temp_Password
                 user.Temp_Password = None
             user.save()
-            return Response({"message": "OTP verified successfully", "role": "teacher"}, status=status.HTTP_200_OK)
+            return Response({
+            "message": "OTP verified successfully",
+            "role": "teacher",
+            "teacher_id": user.id   # ye add karo
+        }, status=status.HTTP_200_OK)
 
     return Response({"error": "Invalid or expired OTP"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -463,3 +471,10 @@ def get_teachers_by_department(request, department_id):
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Teacher.DoesNotExist:
         return Response({"message": "No teachers found for this department"}, status=status.HTTP_404_NOT_FOUND)
+    
+class StaffViewSet(viewsets.ModelViewSet):
+    queryset = Teacher.objects.all()
+    serializer_class = SataffSerializer
+
+
+

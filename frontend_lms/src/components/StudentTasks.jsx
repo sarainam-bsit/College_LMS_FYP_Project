@@ -11,7 +11,7 @@ const StudentTasks = () => {
   const API_BASE = "http://127.0.0.1:8000/Tasks/tasks/";
 
   useEffect(() => {
-    const studentId = localStorage.getItem("studentId"); // Logged-in student ID
+    const studentId = localStorage.getItem("studentId");
 
     if (!studentId) {
       setError("Student not found. Please login again.");
@@ -26,7 +26,7 @@ const StudentTasks = () => {
             category_id: categoryId,
           },
         });
-        setTasks(res.data); // Set all tasks from this category
+        setTasks(res.data);
       } catch (err) {
         if (err.response?.data?.error) {
           setError(err.response.data.error);
@@ -48,27 +48,55 @@ const StudentTasks = () => {
         className="container p-1 text-center"
         style={{ marginTop: "80px", minHeight: "90vh" }}
       >
-        <h2 className="text-primary mb-4">My Tasks</h2>
+        {/* Heading */}
+        <h2
+          className="mb-4 py-2 px-3 mx-auto rounded shadow-lg"
+          style={{
+            maxWidth: "350px",
+            backgroundColor: "rgb(70, 4, 67)", // deep purple
+            color: "white",
+            fontWeight: "bold",
+          }}
+        >
+          My Tasks
+        </h2>
 
         {error && <div className="alert alert-danger">{error}</div>}
 
-        <div className="table-responsive card shadow-sm">
-          <table className="table table-striped table-hover text-center align-middle">
-            <thead className="table-primary">
+        {/* Table */}
+        <div className="table-responsive card shadow-lg mt-3">
+          <table className="table table-bordered table-hover text-center align-middle mb-0">
+            <thead>
               <tr>
-                <th>Course Code</th>
-                <th>Course Title</th>
-                <th>Task Type</th>
-                <th>Title</th>
-                <th>Link</th>
-                <th>Created</th>
-                <th>Ended</th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+                  Course Code
+                </th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+                  Course Title
+                </th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+                  Task Type
+                </th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+                  Title
+                </th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+                  Link
+                </th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+                  Created
+                </th>
+                <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
+                  Ended
+                </th>
               </tr>
             </thead>
             <tbody>
               {tasks.length === 0 ? (
                 <tr>
-                  <td colSpan={7}>No tasks found</td>
+                  <td colSpan={7} className="py-3">
+                    No tasks found
+                  </td>
                 </tr>
               ) : (
                 tasks.map((task) => (
@@ -93,7 +121,12 @@ const StudentTasks = () => {
                           href={task.Link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="btn btn-sm btn-primary"
+                          className="btn btn-sm"
+                          style={{
+                            backgroundColor: "rgb(2, 2, 40)",
+                            color: "white",
+                            fontWeight: "bold",
+                          }}
                         >
                           Open
                         </a>

@@ -75,21 +75,23 @@ const AdminNavbar = ({ handleLogout }) => {
                 <>
                   <li className="nav-item"><Link className="navlink nav-link" to="/adminhome">Home</Link></li>
                   <li className="nav-item"><Link className="navlink nav-link" to="/about">About</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/feevoucher">Manage Fee Voucher</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/hostelfeevoucher">Manage Hostel Fee Voucher</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/libraryfeevoucher">Manage Library Fee Voucher</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/departments">Manage Programs</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/course-categories">Manage Courses Categories</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/courses">Manage Courses</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/timetable">Manage Timetable</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/hosteldetail">Manage Hostel Details</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/roomdetail">Manage Room Details</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/hostelapplication">Manage Hostel Applications</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/cancelhostelapplication">Manage Cancel Hostel Applications</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/libraryapplications">Manage Library Applications</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/feedback">Manage Feedback</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/contact">Manage Contact</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/feevoucher">Fee Voucher</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/hostelfeevoucher"> Hostel Fee Voucher</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/libraryfeevoucher">Library Fee Voucher</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/departments"> Programs</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/course-categories">Courses Categories</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/courses"> Courses</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/timetable"> Timetable</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/datesheet">Datesheet</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/hosteldetail"> Hostel Details</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/roomdetail"> Room Details</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/hostelapplication"> Hostel Applications</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/cancelhostelapplication"> Cancel Hostel Applications</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/libraryapplications"> Library Applications</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/feedback"> Feedback</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/admin/contact"> Contact</Link></li>
                   <li className="nav-item"><Link className="navlink nav-link" to="/admin/notifications">Send Notifications</Link></li>
+
                 </>
               )}
             </ul>

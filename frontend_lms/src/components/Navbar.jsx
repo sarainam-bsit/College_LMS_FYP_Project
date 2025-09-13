@@ -70,7 +70,8 @@ const Navbar = ({ isLoggedIn, handleLogout }) => {
               <li className="nav-item"><Link className="navlink nav-link text-white" to="/home">Home</Link></li>
               <li className="nav-item"><Link className="navlink nav-link text-white" to="/about">About</Link></li>
               <li className="nav-item"><Link className="navlink nav-link text-white" to="/feevoucher">Fee Voucher</Link></li>
-              <li className="nav-item"><Link className="navlink nav-link text-white" to="/programs">BS Programs</Link></li>
+              <li className="nav-item"><Link className="navlink nav-link text-white" to="/programs">Programs</Link></li>
+              <li className="nav-item"><Link className="navlink nav-link text-white" to="/studentgrades">Grades</Link></li>
               <li className="nav-item"><Link className="navlink nav-link text-white" to="/library">Library</Link></li>
               <li className="nav-item"><Link className="navlink nav-link text-white" to="/libraryform">Apply For Library Card</Link></li>
               <li className="nav-item"><Link className="navlink nav-link text-white" to="/librarycard">Library Card</Link></li>

@@ -93,26 +93,20 @@ const CourseCategoriesAdmin = () => {
 
   return (
     <div
+      
       style={{
-        padding: "30px",
-        fontFamily: "Arial, sans-serif",
-        marginTop: "4%",
+        marginTop: "6%",
         backgroundColor: "#ebeaf2ff",
-        color: "rgba(44, 44, 122, 1)",
+        padding: "20px",
+        borderRadius: "12px",
       }}
     >
-      <h1
-        style={{
-          marginBottom: "20px",
-          color: "rgba(44, 44, 122, 1)",
-          textAlign: "center",
-          fontWeight: "bold",
-        }}
+      <h2
+        className="text-center"
+        style={{ color: "rgba(44, 44, 122, 1)", fontWeight: "bold" }}
       >
         Course Categories
-      </h1>
-
-      {/* Form */}
+      </h2>
       <form
         onSubmit={handleSubmit}
         style={{
@@ -124,7 +118,7 @@ const CourseCategoriesAdmin = () => {
         }}
       >
         <div style={{ marginBottom: "15px" }}>
-          <label style={{ display: "block", marginBottom: "5px" }}>Category Type:</label>
+          <label className="fs-5 fw-bold">Category Type:</label>
           <select
             name="Category_Type"
             value={formData.Category_Type}
@@ -144,7 +138,7 @@ const CourseCategoriesAdmin = () => {
         </div>
 
         <div style={{ marginBottom: "15px" }}>
-          <label style={{ display: "block", marginBottom: "5px" }}>Category Name:</label>
+          <label className="fs-5 fw-bold">Category Name:</label>
           <select
             name="Category_Name"
             value={formData.Category_Name}
@@ -172,7 +166,7 @@ const CourseCategoriesAdmin = () => {
         </div>
 
         <div style={{ marginBottom: "15px" }}>
-          <label style={{ display: "block", marginBottom: "5px" }}>Related Department:</label>
+          <label className="fs-5 fw-bold">Related Department:</label>
           <select
             name="Related_Department"
             value={formData.Related_Department}
@@ -235,15 +229,14 @@ const CourseCategoriesAdmin = () => {
         )}
       </form>
 
-      {/* Table */}
       <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "center" }}>
         <thead>
           <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
-            <th style={{ padding: "10px", border: "1px solid white" }}>Category Type</th>
-            <th style={{ padding: "10px", border: "1px solid white" }}>Category Name</th>
-            <th style={{ padding: "10px", border: "1px solid white" }}>Department</th>
-            <th style={{ padding: "10px", border: "1px solid white" }}>Description</th>
-            <th style={{ padding: "10px", border: "1px solid white" }}>Actions</th>
+            <th style={{ padding: "8px", border: "1px solid white", fontSize: '20px' }}>Category Type</th>
+            <th style={{ padding: "8px", border: "1px solid white", fontSize: '20px' }}>Category Name</th>
+            <th style={{ padding: "8px", border: "1px solid white", fontSize: '20px' }}>Department</th>
+            <th style={{ padding: "8px", border: "1px solid white", fontSize: '25px' }}>Description</th>
+            <th style={{ padding: "8px", border: "1px solid white", fontSize: '20px' }}>Actions</th>
           </tr>
         </thead>
         <tbody>

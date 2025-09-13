@@ -28,7 +28,7 @@ const TeacherGradesStuDetail = () => {
     <div className="container" style={{marginTop: '6%'}}>
       <div className="row justify-content-center">
         <div className="col-10 col-sm-8 col-md-6">
-          <h2 className="heading text-center mb-4 mt-3  text-white py-3 px-3 mx-auto rounded shadow-lg" style={{ maxWidth: '400px', backgroundColor: 'rgba(6, 6, 93, 1)' }}>
+          <h2 className="heading text-center mb-5 mt-3  text-white py-3 px-3 mx-auto rounded shadow-lg" style={{ maxWidth: '500px', backgroundColor: 'rgb(4, 4, 63)' }}>
             Students for Selected Courses
           </h2>
         </div>
@@ -43,12 +43,12 @@ const TeacherGradesStuDetail = () => {
               <table className="table table-striped table-hover mb-0">
                 <thead className="table-dark">
                   <tr>
-                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>#</th>
-                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Name</th>
-                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Email</th>
-                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Registration No</th>
-                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Roll No</th>
-                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Upload Grades</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize:'20px'}}>#</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize:'20px'}}>Name</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize:'20px'}}>Email</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize:'20px'}}>Registration No</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize:'20px'}}>Roll No</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize:'20px'}}>Upload Grades</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -86,12 +86,12 @@ const TeacherGradesStuDetail = () => {
               <table className="table table-striped table-hover mb-0">
                 <thead className="table-secondary">
                   <tr>
-                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>#</th>
-                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Name</th>
-                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Email</th>
-                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Registration No</th>
-                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Roll No</th>
-                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white'}}>Upload Grades</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize:'20px'}}>#</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize:'20px'}}>Name</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize:'20px'}}>Email</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize:'20px'}}>Registration No</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize:'20px'}}>Roll No</th>
+                    <th style={{ backgroundColor: "rgb(70, 4, 67)", color: 'white', fontSize:'20px'}}>Upload Grades</th>
                   </tr>
                 </thead>
                 <tbody>

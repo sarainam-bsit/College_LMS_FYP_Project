@@ -1,17 +1,23 @@
-import { Link } from "react-router-dom";
-import React from 'react';
-import Feedback from './Feedback';
-
+import React, {  useEffect } from "react";
+import { Link} from "react-router-dom";
+import Feedback from "./Feedback";
 import Footer from "./Footer";
-const Home = () =>{
- 
+
+
+
+const Home = () => {
+
  
 
+ 
   return (
-    <>
-
+       <>
+       
+     
     <div className="container-fluid p-0" style={{ marginTop: "65px", minHeight: "90vh" }}>
       <div className="card text-bg-dark border-0">
+       
+        
         <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
           <div className="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
@@ -43,16 +49,30 @@ const Home = () =>{
     <h1 className="fw-bold fs-1 fs-md-1">Welcome to Our College LMS</h1>
     <p className="lead d-none d-md-block">Learn better. Grow faster. Stay connected with your<br /> teachers and college — all in one place.</p>
     <p className="lead">
-      <Link to="/about" className="btn btn-lg btn-light fw-bold border-white bg-white">Learn more</Link>
-    </p>
+<Link to="/about" className="btn btn-lg learn-more-btn">
+                  Learn more
+                </Link>    </p>
   </div>
 </div>
       </div>
     </div>
     <Feedback/>
     <Footer />
+    <style>{`
+        .learn-more-btn {
+          background-color: rgb(70, 4, 67);
+          color: white;
+          border: 1px solid white;
+          font-weight: bold;
+          transition: all 0.3s ease;
+        }
+        .learn-more-btn:hover {
+          background-color: rgb(70, 4, 67);
+          transform: scale(1.1);
+        }
+      `}</style>
     </>
   );
-}
+};
 
 export default Home;

@@ -117,28 +117,8 @@ export default function AdminFeeVoucherPage() {
     }
   };
 
-  // --- Supply Voucher ---
-  const generateSupply = async () => {
-    if (!formData.departmentId || !formData.categoryId || !formData.amount) {
-      return toast.warn("Please select department, category, and enter amount.");
-    }
-    try {
-      const res = await axios.post(`${API_URL}generate_supply/`, {
-        department_id: formData.departmentId,
-        category_id: formData.categoryId,
-        amount: formData.amount,
-        fine_date: formData.fineDate,
-        fine_amount: formData.fineAmount,
-        bank_branch: formData.bankBranch,
-      });
-      toast.success(res.data.message || "Supply vouchers generated successfully!");
-      fetchVouchers();
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Error generating supply vouchers");
-    }
-  };
+  
 
-  // --- Modal & Payment ---
   const openModal = (voucher) => {
     setSelectedVoucher({
       ...voucher,
@@ -195,26 +175,23 @@ export default function AdminFeeVoucherPage() {
 
   return (
     <div
+      
       style={{
-        padding: "30px",
-        fontFamily: "Arial, sans-serif",
+        marginTop: "6%",
         backgroundColor: "#ebeaf2ff",
-        color: "rgba(44, 44, 122, 1)",
+        padding: "20px",
+        borderRadius: "12px",
       }}
     >
-      <h1
-        style={{
-          marginTop: "40px",
-          textAlign: "center",
-          marginBottom: "30px",
-          color: "rgba(44, 44, 122, 1)",
-          fontWeight: "bold",
-        }}
+      <h2
+        className="text-center mb-3"
+        style={{ color: "rgba(44, 44, 122, 1)", fontWeight: "bold" }}
       >
-        Manage Fee Vouchers
-      </h1>
+        Fee Vouchers
+      </h2>
+      
 
-      {/* Single Student Voucher */}
+   
       <div
         style={{
           marginBottom: "30px",
@@ -224,7 +201,11 @@ export default function AdminFeeVoucherPage() {
           border: "2px solid white",
         }}
       >
-        <h5>Generate Voucher for Single Student</h5>
+        <h3 style={{
+          marginBottom: "20px",
+          color: "rgb(70, 4, 67)",
+          fontWeight: "bold",
+        }}> Single Student Voucher</h3>
         <div className="row g-3">
           <div className="col-md-6">
             <select
@@ -315,7 +296,11 @@ export default function AdminFeeVoucherPage() {
           border: "2px solid white",
         }}
       >
-        <h5>Generate Vouchers for Department + Category</h5>
+        <h3 style={{
+          marginBottom: "20px",
+          color: "rgb(70, 4, 67)",
+          fontWeight: "bold",
+        }}>  Department and Category Vouchers </h3>
         <div className="row g-3">
           <div className="col-md-6">
             <select
@@ -411,97 +396,7 @@ export default function AdminFeeVoucherPage() {
         </button>
       </div>
 
-      {/* Supply Voucher */}
-      <div
-        style={{
-          marginBottom: "30px",
-          backgroundColor: "#f5ecf4ff",
-          padding: "20px",
-          borderRadius: "10px",
-          border: "2px solid white",
-        }}
-      >
-        <h5>Generate Supply Vouchers (Department + Category)</h5>
-        <div className="row g-3">
-          <div className="col-md-6">
-            <select
-              name="departmentId"
-              className="form-select"
-              onChange={handleChange}
-              value={formData.departmentId}
-            >
-              <option value="">Select Department</option>
-              {departments.map((d) => (
-                <option key={d.id} value={d.id}>
-                  {d.Department_Name}-({d.Discription})
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="col-md-6">
-            <select
-              name="categoryId"
-              className="form-select"
-              onChange={handleChange}
-              value={formData.categoryId}
-            >
-              <option value="">Select Category</option>
-              {categories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  ({c.Related_Department_Name}, {c.Related_Department_Discription}) - {c.Category_Name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="col-md-6">
-            <input
-              name="amount"
-              type="number"
-              placeholder="Amount"
-              className="form-control"
-              onChange={handleChange}
-              value={formData.amount}
-            />
-          </div>
-          <div className="col-md-6">
-            <input
-              name="fineDate"
-              type="date"
-              className="form-control"
-              onChange={handleChange}
-              value={formData.fineDate}
-            />
-          </div>
-          <div className="col-md-6">
-            <input
-              name="fineAmount"
-              type="number"
-              placeholder="Fine Amount"
-              className="form-control"
-              onChange={handleChange}
-              value={formData.fineAmount}
-            />
-          </div>
-          <div className="col-md-6">
-            <input
-              name="bankBranch"
-              type="text"
-              placeholder="Bank Branch"
-              className="form-control"
-              onChange={handleChange}
-              value={formData.bankBranch}
-            />
-          </div>
-        </div>
-        <button
-          onClick={generateSupply}
-          style={{ ...buttonStyle("rgb(70,4,67)"), marginTop: "15px" }}
-        >
-          Generate Supply Vouchers
-        </button>
-      </div>
-
-      {/* Voucher Table */}
+    
       <div
         style={{
           marginBottom: "30px",
@@ -517,27 +412,27 @@ export default function AdminFeeVoucherPage() {
         >
           <thead>
             <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Challan No
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>Student</th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>Type</th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>Amount</th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>Student</th>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>Type</th>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>Amount</th>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Fine Date
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Amount Date
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white" , fontSize: '20px'}}>
                 Fine Amount
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Branch Name
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>Paid</th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>Status</th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>Action</th>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>Paid</th>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>Status</th>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>Action</th>
             </tr>
           </thead>
           <tbody>

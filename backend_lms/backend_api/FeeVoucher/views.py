@@ -96,41 +96,7 @@ class FeeVoucherViewSet(viewsets.ModelViewSet):
         return Response(FeeVoucherSerializer(vouchers, many=True).data, status=status.HTTP_201_CREATED)
 
     # --- Supply Voucher ---
-    @action(detail=False, methods=['post'])
-    def generate_supply(self, request):
-        department_id = request.data.get("department_id")
-        category_id = request.data.get("category_id")
-        amount = request.data.get("amount")
-        fine_date = request.data.get("fine_date")
-        fine_amount = request.data.get("fine_amount") or 0
-        bank_branch = request.data.get("bank_branch") or "Default Branch"
-
-        if not department_id or not category_id or not amount:
-            return Response({"error": "department_id, category_id, amount required"}, status=status.HTTP_400_BAD_REQUEST)
-
-        students = Student.objects.filter(
-            Course_Category__Related_Department_id=department_id,
-            Course_Category_id=category_id
-        ).exclude(Supply_Courses__isnull=True)
-
-        if not students.exists():
-            return Response({"error": "No supply students found in this department & category"}, status=status.HTTP_404_NOT_FOUND)
-
-        vouchers = []
-        for student in students:
-            voucher = FeeVoucher.objects.create(
-                Student=student,
-                Challan_no=str(uuid.uuid4())[:8],
-                Challan_Type="Supply-fee",
-                Amount_to_Pay=amount,
-                Fine_Date=fine_date,
-                Fine_Amount=fine_amount,
-                Bank_Branch=bank_branch,
-                Amount_Date=now().date()  # record admin-set date
-            )
-            vouchers.append(voucher)
-
-        return Response(FeeVoucherSerializer(vouchers, many=True).data, status=status.HTTP_201_CREATED)
+    
 
     # --- Mark Voucher Paid ---
     @action(detail=True, methods=["post"])
@@ -279,3 +245,4 @@ class FeeVoucherViewSet(viewsets.ModelViewSet):
             "message": f"Hostel fee vouchers generated for year {current_year}!",
             "generated_ids": generated_ids
         }, status=201)
+    

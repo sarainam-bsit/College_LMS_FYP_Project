@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const API_NOTIFICATIONS = "http://127.0.0.1:8000/Notification/notifications/";
 
@@ -9,57 +10,110 @@ export default function StudentNotifications() {
 
   const studentId = localStorage.getItem("studentId");
 
-  const loadNotifications = async () => {
-    if (!studentId) return;
-    setLoading(true);
-    try {
-      const { data } = await axios.get(
-        `${API_NOTIFICATIONS}?student_id=${studentId}`
-      );
-      setList(data);
-    } catch (err) {
-      console.error("Failed to load notifications", err);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      if (!studentId) return;
+      setLoading(true);
+      try {
+        const { data } = await axios.get(`${API_NOTIFICATIONS}?student_id=${studentId}`);
+        setList(data);
+      } catch (err) {
+        console.error("Failed to load notifications", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNotifications();
+  }, [studentId]);
+
+  const getBadgeColor = (type) => {
+    switch (type) {
+      case "general":
+        return "bg-secondary";
+      case "hostel":
+        return "bg-warning text-dark";
+      case "fee":
+        return "bg-danger";
+      case "library":
+        return "bg-info text-dark";
+      case "event":
+        return "bg-success";
+      default:
+        return "bg-primary";
     }
   };
 
-  useEffect(() => {
-    loadNotifications();
-  }, []);
-
   return (
-    <div className="container py-4" style={{marginTop: '6%'}}>
-      <h2 className="fw-bold text-primary mb-4 text-center">
-        📢 My Notifications
-      </h2>
+    <div
+      className="container py-5"
+      style={{ backgroundColor: "#ebeaf2ff", minHeight: "100vh", fontFamily: "Arial, sans-serif", marginTop: '3%' }}
+    >
+      <div className="row justify-content-center">
+        <div className="col-10 col-sm-8 col-md-6">
+          <h2
+            className="heading text-center mb-5 mt-4 py-3 px-3 mx-auto rounded shadow-lg"
+            style={{
+              maxWidth: '300px',
+              backgroundColor: "rgb(70, 4, 67)",
+              color: "white",
+              fontWeight: "bold",
+              letterSpacing: "1px"
+            }}
+          >
+            My Notifications
+          </h2>
+        </div>
+      </div>
 
       {loading && (
-        <div className="text-center">
-          <div className="spinner-border text-primary" role="status"></div>
-          <p className="mt-2">Loading notifications...</p>
+        <div className="text-center my-4">
+          <div
+            className="spinner-border"
+            role="status"
+            style={{ color: "rgb(70, 4, 67)" }}
+          ></div>
         </div>
       )}
 
-      {!loading && list.length === 0 && (
-        <div className="alert alert-info text-center shadow-sm">
-          No notifications yet 😊
-        </div>
-      )}
+      <div className="row g-4">
+        {list.length === 0 && !loading && (
+          <div className="col-12 text-center fs-5" style={{ color: "rgba(44, 44, 122, 0.7)" }}>
+            No notifications yet 
+          </div>
+        )}
 
-      <div className="row">
         {list.map((n) => (
-          <div className="col-md-6 mb-3" key={n.id}>
-            <div className="card shadow-sm border-0 h-100">
+          <div key={n.id} className="col-md-6 col-lg-4">
+            <div
+              className="card shadow-sm border-0 h-100"
+              style={{
+                backgroundColor: "#f5ecf4ff",
+                borderLeft: `5px solid rgb(70, 4, 67)`,
+                transition: "transform 0.2s, box-shadow 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.03)";
+                e.currentTarget.style.boxShadow = "0 10px 20px rgba(0,0,0,0.15)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)";
+              }}
+            >
               <div className="card-body">
-                <h5 className="card-title text-primary fw-bold">{n.title}</h5>
-                <p className="card-text">{n.message}</p>
-                <p className="card-text">
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                  <h5 className="card-title fw-bold mb-0" style={{ color: "rgba(44, 44, 122, 1)" }}>
+                    {n.title}
+                  </h5>
                   <small className="text-muted">
-                    {new Date(n.created_at).toLocaleString()} |{" "}
-                    <span className="badge bg-secondary">{n.type}</span>
+                    {new Date(n.created_at).toLocaleString()}
                   </small>
-                </p>
+                </div>
+                <p className="card-text" style={{ color: "rgba(44, 44, 122, 0.9)" }}>{n.message}</p>
+                <span className={`badge ${getBadgeColor(n.type)}`} style={{ fontSize: "0.8rem" }}>
+                  {n.type}
+                </span>
               </div>
             </div>
           </div>

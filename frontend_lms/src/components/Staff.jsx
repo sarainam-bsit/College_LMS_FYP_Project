@@ -40,11 +40,11 @@ const Staff = () => {
             <div style={{ textAlign: "center", marginTop: '3%' }}>
                 <h1 className="text-center mb-5" style={{
                     display: "inline-block",
-                    backgroundColor: "#010810ff",
+                    backgroundColor: "rgb(70, 4, 67)",
                     color: "white",
                     padding: "10px 25px",
                     borderRadius: "5px",
-                    fontSize: "40px",
+                    fontSize: "30px",
                     fontWeight: "bold",
                     boxShadow: "0px 4px 8px rgba(0,0,0,0.2)",
                 }}>
@@ -66,7 +66,7 @@ const Staff = () => {
                         <div
                             style={{
                                 display: "inline-block",
-                                backgroundColor: "#010810ff",
+                                backgroundColor: "rgb(4, 4, 63)",
                                 color: "white",
                                 padding: "10px 25px",
                                 borderRadius: "5px",
@@ -75,7 +75,7 @@ const Staff = () => {
                                 boxShadow: "0px 4px 8px rgba(0,0,0,0.2)",
                             }}
                         >
-                            {dept.Department_Name}
+                            {dept.Department_Name} - {dept.Discription}
                         </div>
                     </div>
 

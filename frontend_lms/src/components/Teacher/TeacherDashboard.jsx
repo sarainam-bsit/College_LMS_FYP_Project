@@ -8,9 +8,6 @@ import Footer from "../Footer";
 const TeacherDashboard = () => {
 
  
-  useEffect(() => {
-    document.title = 'Teacher-Dashboard';  // Ya jo bhi title chahiye
-  }, []);
  
   return (
        <>

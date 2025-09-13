@@ -50,7 +50,7 @@ class GradeViewSet(viewsets.ModelViewSet):
         ).values('id','Student_Name','Student_Email','Reg_No','Roll_No')
         supply_students = Student.objects.filter(
             Supply_Courses__contains=[{"course_id": course.id}],
-            Supply_Fee_Status=True 
+            # Supply_Fee_Status=True 
         ).values("id","Student_Name","Student_Email","Reg_No","Roll_No")
 
         return Response({
@@ -110,53 +110,59 @@ class StudentGradeHistoryViewSet(viewsets.ModelViewSet):
             })
 
         # agar student ke marks diye gaye hain
-            if g.course_obtained is not None and g.sessional_obtained is not None:
-                category[cat_key]["total_obtained"] += g.course_obtained + g.sessional_obtained
-                category[cat_key]["total_max"] += g.course_total + g.sessional_total
+            total_courses_count = Course.objects.filter(C_Category__Category_Name=g.category_name).count()
 
-            # agar course supply hai to usko list me add karo
-                if g.status == "Supply":
-                    category[cat_key]["supply_courses"].append(g.course_title)
-            else:
-            # warna course pending count hoga
-                category[cat_key]["pending_courses"] += 1
+# Uploaded courses by this student
+            uploaded_courses_count = StudentGradeHistory.objects.filter(
+                student_id=student_id,
+                category_name=g.category_name
+            ).count()
 
-    # GPA calculate karna
-        for cat in category.values():
-            total_points = 0
-            total_credits = 0
-            for c in cat["courses"]:
-                if c["grade"]:   # agar grade hai to GPA me shamil hoga
-                    total_points += c["credit_hour"] * self.grade_to_point(c["grade"])
-                    total_credits += c["credit_hour"]
+            category[cat_key]["pending_courses"] = total_courses_count - uploaded_courses_count
 
-            if total_credits > 0:
-                cat["GPA"] = round(total_points / total_credits, 2)
-            else:
-                cat["GPA"] = 0
+# Total obtained and max for uploaded courses
+            category[cat_key]["total_obtained"] += g.course_obtained + g.sessional_obtained
+            category[cat_key]["total_max"] += g.course_total + g.sessional_total
 
-    # CGPA calculate karna
-        total_points = 0
-        total_credits = 0
-        for g in grades:
-            if g.grade:
-                total_points += g.grade_point() * g.credit_hour
-                total_credits += g.credit_hour
+            if g.status == "Supply":
+                category[cat_key]["supply_courses"].append(g.course_title)
 
-        CGPA = round(total_points / total_credits, 2) if total_credits else 0
+    # # GPA calculate karna
+    #     for cat in category.values():
+    #         total_points = 0
+    #         total_credits = 0
+    #         for c in cat["courses"]:
+    #             if c["grade"]:   # agar grade hai to GPA me shamil hoga
+    #                 total_points += c["credit_hour"] * self.grade_to_point(c["grade"])
+    #                 total_credits += c["credit_hour"]
+
+    #         if total_credits > 0:
+    #             cat["GPA"] = round(total_points / total_credits, 2)
+    #         else:
+    #             cat["GPA"] = 0
+
+    # # CGPA calculate karna
+    #     total_points = 0
+    #     total_credits = 0
+    #     for g in grades:
+    #         if g.grade:
+    #             total_points += g.grade_point() * g.credit_hour
+    #             total_credits += g.credit_hour
+
+    #     CGPA = round(total_points / total_credits, 2) if total_credits else 0
 
         return Response({
             "semesters": list(category.values()),
-            "CGPA": CGPA
+            # "CGPA": CGPA
         })
 
 
-    def grade_to_point(self, grade):
-        grade_points = {
-            "A+": 4.0,
-            "A": 3.7,
-            "B": 3.0,
-            "C": 2.0,
-            "F": 0.0
-        }
-        return grade_points.get(grade, 0)
+    # def grade_to_point(self, grade):
+    #     grade_points = {
+    #         "A+": 4.0,
+    #         "A": 3.7,
+    #         "B": 3.0,
+    #         "C": 2.0,
+    #         "F": 0.0
+    #     }
+    #     return grade_points.get(grade, 0)

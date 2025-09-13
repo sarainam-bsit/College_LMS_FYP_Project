@@ -20,17 +20,15 @@ export default function Hostelcancelform() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
 
-  const studentId = localStorage.getItem("studentId"); // get student ID from localStorage
+  const studentId = localStorage.getItem("studentId");
 
-  // handle input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const fetchApplications = async () => {
     try {
-      const res = await axios.get(`${API_URL}?${studentId}`);
-      console.log("API DATA ===>", res.data); 
+      const res = await axios.get(`${API_URL}?student_id=${studentId}`);
       setApplications(res.data);
     } catch (err) {
       console.error(err);
@@ -48,7 +46,7 @@ export default function Hostelcancelform() {
     try {
       await axios.post(API_URL, { ...formData, Student_ID: studentId, status: "Pending" });
       setSubmitted(true);
-      fetchApplications(); // refresh list
+      fetchApplications();
     } catch (err) {
       if (err.response && err.response.data.error) {
         setError(err.response.data.error);
@@ -59,17 +57,42 @@ export default function Hostelcancelform() {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container" style={{ marginTop: "7%", minHeight: "80vh" }}>
       {!submitted && (
-        <form onSubmit={handleSubmit} className="card p-4 shadow-sm mb-4">
-          <h3>Hostel Cancel Application Form</h3>
-          {error && <p className="text-danger">{error}</p>}
+        <form
+          onSubmit={handleSubmit}
+          className="card shadow-sm p-4"
+          style={{
+            backgroundColor: "#f5ecf4ff",
+            borderRadius: "12px",
+            border: "2px solid white",
+          }}
+        >
+          {/* Heading */}
+          <h3
+            className="text-center fw-bold mb-3"
+            style={{
+              backgroundColor: "rgb(70, 4, 67)",
+              color: "white",
+              padding: "10px 15px",
+              borderRadius: "10px",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+              width: "100%",
+              maxWidth: "500px",
+              margin: "0 auto 20px auto",
+            }}
+          >
+            Hostel Cancel Application Form
+          </h3>
 
+          {error && <p className="text-danger text-center">{error}</p>}
+
+          {/* Inputs */}
           <input type="text" name="Student_Name" placeholder="Name" className="form-control mb-2" onChange={handleChange} required />
           <input type="text" name="Father_Name" placeholder="Father Name" className="form-control mb-2" onChange={handleChange} required />
           <input type="email" name="Email" placeholder="Email" className="form-control mb-2" onChange={handleChange} required />
           <input type="text" name="Department" placeholder="Department" className="form-control mb-2" onChange={handleChange} required />
-          
+
           <select name="Gender" className="form-select mb-2" required onChange={handleChange}>
             <option value="">Select Gender</option>
             <option value="Male">Male</option>
@@ -85,20 +108,50 @@ export default function Hostelcancelform() {
 
           <input type="text" name="Phone_No" placeholder="Phone Number" className="form-control mb-2" onChange={handleChange} required />
           <textarea name="Home_Address" placeholder="Home Address" className="form-control mb-2" onChange={handleChange} required />
-<textarea name="Reason" placeholder="Reason" className="form-control mb-2" onChange={handleChange} required />
-          <button type="submit" className="btn btn-primary w-100">Submit Application</button>
+          <textarea name="Reason" placeholder="Reason" className="form-control mb-2" onChange={handleChange} required />
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="fw-bold"
+            style={{
+              backgroundColor: "rgb(70, 4, 67)",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              padding: "10px",
+              cursor: "pointer",
+              transition: "transform 0.2s",
+              width: "100%",
+              maxWidth: "400px",
+              display: "block",
+              margin: "20px auto 0 auto",
+            }}
+            onMouseOver={(e) => (e.target.style.transform = "scale(1.05)")}
+            onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
+          >
+            Submit Application
+          </button>
         </form>
       )}
 
-      <h4 className="mt-4">Your Applications</h4>
-      <table className="table table-bordered mt-2">
-        <thead className="table-light">
+      {/* Applications Table */}
+      <h4
+        className="mt-5 text-center fw-bold fs-3 mb-3"
+        style={{ color: "rgb(70, 4, 67)" }}
+      >
+        Your Applications
+      </h4>
+      <table
+        className="table table-bordered mt-4 shadow-sm"
+        style={{ textAlign: "center" }}
+      >
+        <thead>
           <tr>
-            
-            <th>Email</th>
-            <th>Room Type</th>
-            <th>Phone No</th>
-            <th>Status</th>
+            <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>Email</th>
+            <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>Room Type</th>
+            <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>Phone No</th>
+            <th style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -109,7 +162,6 @@ export default function Hostelcancelform() {
           ) : (
             applications.map((e) => (
               <tr key={e.id}>
-                
                 <td>{e.Email}</td>
                 <td>{e.Room_Type}</td>
                 <td>{e.Phone_No}</td>

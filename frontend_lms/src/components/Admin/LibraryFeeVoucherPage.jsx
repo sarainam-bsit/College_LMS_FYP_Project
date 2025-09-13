@@ -140,8 +140,8 @@ export default function LibraryFeeVoucherPage() {
   });
 
   return (
-    <div
-      className="container"
+  <div
+      
       style={{
         marginTop: "6%",
         backgroundColor: "#ebeaf2ff",
@@ -153,7 +153,7 @@ export default function LibraryFeeVoucherPage() {
         className="text-center"
         style={{ color: "rgba(44, 44, 122, 1)", fontWeight: "bold" }}
       >
-        📚 Library Fee Voucher Management
+        Library Fee Vouchers
       </h2>
 
       {/* Library Generate */}
@@ -166,9 +166,13 @@ export default function LibraryFeeVoucherPage() {
           border: "2px solid white",
         }}
       >
-        <h5 style={{ color: "rgba(44, 44, 122, 1)" }}>
-          Generate Library Fee Voucher
-        </h5>
+        <h3 style={{
+          marginBottom: "20px",
+          color: "rgb(70, 4, 67)",
+          fontWeight: "bold",
+        }}>
+           Library Fee Voucher
+        </h3>
         <div className="row g-3">
           <div className="col-md-6">
             <select
@@ -252,8 +256,6 @@ export default function LibraryFeeVoucherPage() {
           Generate Library Fee
         </button>
       </div>
-
-      {/* Voucher Table */}
       <div
         className="mt-5 shadow"
         style={{
@@ -263,7 +265,11 @@ export default function LibraryFeeVoucherPage() {
           border: "2px solid white",
         }}
       >
-        <h5 style={{ color: "rgba(44, 44, 122, 1)" }}>Library Fee Vouchers</h5>
+        <h3 style={{
+          marginBottom: "20px",
+          color: "rgb(70, 4, 67)",
+          fontWeight: "bold",
+        }}>Library Fee Vouchers</h3>
         <table
           style={{
             width: "100%",
@@ -274,37 +280,37 @@ export default function LibraryFeeVoucherPage() {
         >
           <thead>
             <tr style={{ backgroundColor: "rgb(70, 4, 67)", color: "white" }}>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Challan No
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Challan Type
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Student
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Amount
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Fine Date
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Amount Date
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Fine Amount
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Branch
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Paid
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Status
               </th>
-              <th style={{ padding: "10px", border: "1px solid white" }}>
+              <th style={{ padding: "10px", border: "1px solid white", fontSize: '20px' }}>
                 Action
               </th>
             </tr>
@@ -386,8 +392,6 @@ export default function LibraryFeeVoucherPage() {
           </tbody>
         </table>
       </div>
-
-      {/* Modal */}
       <div className="modal fade" id="markPaidModal" tabIndex="-1">
         <div className="modal-dialog">
           <div className="modal-content">

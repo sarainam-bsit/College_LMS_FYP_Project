@@ -69,7 +69,7 @@ const TeacherNavbar = ({ isLoggedIn, handleLogout }) => {
                   <li className="nav-item"><Link className="navlink nav-link" to="/teacherprofile">Profile</Link></li>
                   <li className="nav-item"><Link className="navlink nav-link" to="/teacherdashboard">Home</Link></li>
                   <li className="nav-item"><Link className="navlink nav-link" to="/about">About</Link></li>
-                  <li className="nav-item"><Link className="navlink nav-link" to="/teacher/programs">Department</Link></li>
+                  <li className="nav-item"><Link className="navlink nav-link" to="/teacher/programs">Programs</Link></li>
                   <li className="nav-item"><Link className="navlink nav-link" to="/teacher/notifications">Notifications</Link></li>
                   <li className="nav-item"><Link className="navlink nav-link" to="/teacher/sendnotification">Send Notifications</Link></li>
                   <li className="nav-item"><Link className="navlink nav-link" to="/teacher/contact">Contact Us</Link></li>
