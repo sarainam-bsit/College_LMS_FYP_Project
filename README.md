@@ -13,7 +13,6 @@ Requirements
 -----------------------------------------------------------
 - Python 3.10 or above
 - Django & Django REST Framework
-- React
 - PostgreSQL (latest stable version)
 - Code Editor (VS Code or PyCharm)
 - Stable internet connection
@@ -108,14 +107,6 @@ How to Use the Web Application
 - Manage feedbacks.
 - Handle contact messages.
 - Send notifications.
-  
-## Code of Conduct
-
-In order to ensure that the Django community is welcoming to all, please review and abide by the [Code of Conduct](https://www.djangoproject.com/conduct/).
-
-## License
-
-The Django framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 
 -----------------------------------------------------------
